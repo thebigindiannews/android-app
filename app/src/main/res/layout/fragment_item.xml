@@ -19,9 +19,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="io.github.hidroh.materialistic.ItemActivity">
+    tools:context="com.enamakel.thebigindiannews.ItemActivity">
 
-    <io.github.hidroh.materialistic.widget.AppBarSwipeRefreshLayout
+    <com.enamakel.thebigindiannews.widget.AppBarSwipeRefreshLayout
         android:id="@id/swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-    </io.github.hidroh.materialistic.widget.AppBarSwipeRefreshLayout>
+    </com.enamakel.thebigindiannews.widget.AppBarSwipeRefreshLayout>
 
     <include layout="@layout/empty_item"
         android:layout_height="match_parent"

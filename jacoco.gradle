@@ -1,5 +1,7 @@
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'android-apt'
+
 
 def jacocoDaggerMap = [:]
 

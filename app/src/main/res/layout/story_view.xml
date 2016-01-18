@@ -79,7 +79,7 @@
 
     </LinearLayout>
 
-    <io.github.hidroh.materialistic.widget.TextView
+    <com.enamakel.thebigindiannews.widget.TextView
         android:id="@id/title"
         android:text="@string/loading_text"
         style="@style/textTitleStyle"
@@ -97,7 +97,7 @@
         android:layout_toRightOf="@id/rank_container"
         android:layout_toLeftOf="@id/comment"
         android:paddingBottom="@dimen/padding">
-        <io.github.hidroh.materialistic.widget.TintableTextView
+        <com.enamakel.thebigindiannews.widget.TintableTextView
             android:id="@id/source"
             android:text="@string/loading_text"
             style="@style/textSubtitleStyle.Italic" />

@@ -24,8 +24,8 @@
     <include layout="@layout/toolbar" />
 
     <fragment
-        android:name="io.github.hidroh.materialistic.SettingsFragment"
-        android:tag="io.github.hidroh.materialistic.SettingsFragment"
+        android:name="com.enamakel.thebigindiannews.SettingsFragment"
+        android:tag="com.enamakel.materialistic.SettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

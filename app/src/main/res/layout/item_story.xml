@@ -20,7 +20,7 @@
     android:layout_height="wrap_content"
     style="@style/AppCardView">
 
-    <io.github.hidroh.materialistic.widget.StoryView
+    <com.enamakel.thebigindiannews.widget.StoryView
         android:id="@id/story_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

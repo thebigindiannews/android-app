@@ -17,7 +17,7 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <string name="app_name">Materialistic</string>
+    <string name="app_name">Big Indian News</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_list">Top Stories</string>
     <string name="title_activity_item">Comments</string>
@@ -75,7 +75,7 @@
     <string name="pref_lazy_load_title">Lazy load content</string>
     <string name="pref_lazy_load_summary">Load content only when you switch to its tab</string>
 
-    <string name="connection_error">Unable to connect to Hacker News. Check your connection or try again.</string>
+    <string name="connection_error">Unable to connect to The Big Indian News. Check your connection or try again.</string>
     <string name="select_story">Select a story to view</string>
     <string name="download_external">View in another app</string>
     <string name="try_me">Long press one to save it for later!</string>
@@ -83,7 +83,7 @@
     <string name="title_activity_show">Show HN</string>
     <string name="title_activity_ask">Ask HN</string>
     <string name="title_activity_new">New Stories</string>
-    <string name="title_activity_search">Search HN</string>
+    <string name="title_activity_search">Search</string>
     <string name="clear_search_history">Clear search history</string>
     <string name="clear_search_history_confirm">Clear search history?</string>
     <plurals name="hide_comments">
@@ -183,7 +183,7 @@
     <string name="username_hint">Username</string>
     <string name="password_hint">Password</string>
     <string name="login">Login</string>
-    <string name="title_activity_login">Login to Hacker News</string>
+    <string name="title_activity_login">Login to The Big Indian News</string>
     <string name="username_required">Username is required</string>
     <string name="password_required">Password is required</string>
     <string name="login_failed">Login/create account failed, please try again</string>
@@ -219,7 +219,7 @@
     <string name="leave_feedback">Leave feedback</string>
     <string name="no_playstore">No Play Store app found</string>
     <string name="submit_content_hint">URL or text</string>
-    <string name="title_activity_submit">Submit to HN</string>
+    <string name="title_activity_submit">Submit an Article</string>
     <string name="url_text_required">URL or text is required</string>
     <string name="submit_failed">Failed to submit. Please try again.</string>
     <string name="submit_successful">Successfully submitted</string>
@@ -244,5 +244,4 @@
     <string name="toggle_list_view">Toggle list view</string>
     <string name="more">More</string>
     <string name="logout">Logout</string>
-
 </resources>
