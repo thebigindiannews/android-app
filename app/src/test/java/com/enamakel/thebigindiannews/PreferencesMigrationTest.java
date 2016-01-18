@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.enamakel.thebigindiannews.test.ParameterizedRobolectricGradleTestRunner;
 import com.enamakel.thebigindiannews.test.ShadowSupportPreferenceManager;
+import com.enamakel.thebigindiannews.util.Preferences;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;

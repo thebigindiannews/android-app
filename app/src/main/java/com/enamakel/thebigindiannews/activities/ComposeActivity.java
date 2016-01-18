@@ -34,7 +34,7 @@ import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 
-import com.enamakel.thebigindiannews.AlertDialogBuilder;
+import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.accounts.UserServices;

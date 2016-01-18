@@ -19,7 +19,7 @@ package com.enamakel.thebigindiannews.data;
 import android.content.Context;
 
 import com.enamakel.thebigindiannews.ActivityModule;
-import com.enamakel.thebigindiannews.Preferences;
+import com.enamakel.thebigindiannews.util.Preferences;
 
 import javax.inject.Inject;
 import javax.inject.Named;

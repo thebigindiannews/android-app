@@ -31,9 +31,10 @@ public class SessionManager {
 
     /**
      * Checks if an item has been viewed previously
-     * @param contentResolver   an instance of {@link ContentResolver}
-     * @param itemId            item ID to check
-     * @param callbacks         listener to be informed upon checking completed
+     *
+     * @param contentResolver an instance of {@link ContentResolver}
+     * @param itemId          item ID to check
+     * @param callbacks       listener to be informed upon checking completed
      */
     void isViewed(ContentResolver contentResolver, final String itemId,
                   final OperationCallbacks callbacks) {
@@ -49,10 +50,12 @@ public class SessionManager {
                 new String[]{itemId}, null);
     }
 
+
     /**
      * Marks an item as already being viewed
-     * @param context   an instance of {@link Context}
-     * @param itemId    item ID that has been viewed
+     *
+     * @param context an instance of {@link Context}
+     * @param itemId  item ID that has been viewed
      */
     public void view(Context context, final String itemId) {
         if (TextUtils.isEmpty(itemId)) {
@@ -71,13 +74,15 @@ public class SessionManager {
                 null);
     }
 
+
     /**
      * Callback interface for asynchronous session operations
      */
     interface OperationCallbacks {
         /**
          * Fired when checking of view status is completed
-         * @param isViewed  true if is viewed, false otherwise
+         *
+         * @param isViewed true if is viewed, false otherwise
          */
         void onCheckViewedComplete(boolean isViewed);
     }
@@ -86,16 +91,19 @@ public class SessionManager {
         private final String mItemId;
         private OperationCallbacks mCallback;
 
+
         public SessionHandler(ContentResolver cr, @NonNull String itemId) {
             super(cr);
             mItemId = itemId;
         }
+
 
         public SessionHandler(ContentResolver cr, @NonNull String itemId,
                               @NonNull OperationCallbacks callback) {
             this(cr, itemId);
             mCallback = callback;
         }
+
 
         @Override
         protected void onQueryComplete(int token, Object cookie, Cursor cursor) {

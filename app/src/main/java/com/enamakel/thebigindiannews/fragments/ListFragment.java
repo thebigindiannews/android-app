@@ -31,7 +31,7 @@ import android.widget.Toast;
 
 import com.enamakel.thebigindiannews.ActivityModule;
 import com.enamakel.thebigindiannews.AppUtils;
-import com.enamakel.thebigindiannews.Preferences;
+import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.AlgoliaClient;
 import com.enamakel.thebigindiannews.data.AlgoliaPopularClient;

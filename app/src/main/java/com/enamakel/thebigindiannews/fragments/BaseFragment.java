@@ -23,8 +23,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 
 import com.enamakel.thebigindiannews.Application;
-import com.enamakel.thebigindiannews.Injectable;
-import com.enamakel.thebigindiannews.MenuTintDelegate;
+import com.enamakel.thebigindiannews.util.Injectable;
+import com.enamakel.thebigindiannews.util.MenuTintDelegate;
 
 /**
  * Base fragment which performs injection using parent's activity object graphs if any

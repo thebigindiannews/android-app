@@ -30,7 +30,7 @@ import java.lang.ref.WeakReference;
 import javax.inject.Inject;
 
 import com.enamakel.thebigindiannews.BuildConfig;
-import com.enamakel.thebigindiannews.Preferences;
+import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.accounts.UserServices;
 

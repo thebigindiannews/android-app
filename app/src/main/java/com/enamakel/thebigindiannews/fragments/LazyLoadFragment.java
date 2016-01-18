@@ -19,7 +19,7 @@ package com.enamakel.thebigindiannews.fragments;
 import android.os.Bundle;
 
 import com.enamakel.thebigindiannews.AppUtils;
-import com.enamakel.thebigindiannews.Preferences;
+import com.enamakel.thebigindiannews.util.Preferences;
 
 /**
  * Base fragment that controls load timing depends on WIFI and visibility

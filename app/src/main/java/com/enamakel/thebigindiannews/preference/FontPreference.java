@@ -24,7 +24,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.enamakel.thebigindiannews.Application;
-import com.enamakel.thebigindiannews.FontCache;
+import com.enamakel.thebigindiannews.util.FontCache;
 import com.enamakel.thebigindiannews.R;
 
 public class FontPreference extends SpinnerPreference {

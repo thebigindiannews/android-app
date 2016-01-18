@@ -22,7 +22,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ScrollView;
 
-import com.enamakel.thebigindiannews.Preferences;
+import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
 
 public class HelpLazyLoadView extends ScrollView {

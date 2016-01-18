@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 
 import com.enamakel.thebigindiannews.BuildConfig;
-import com.enamakel.thebigindiannews.Preferences;
+import com.enamakel.thebigindiannews.util.Preferences;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;

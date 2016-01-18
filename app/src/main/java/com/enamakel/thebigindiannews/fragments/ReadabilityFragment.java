@@ -40,9 +40,9 @@ import java.lang.ref.WeakReference;
 import javax.inject.Inject;
 
 import com.enamakel.thebigindiannews.AppUtils;
-import com.enamakel.thebigindiannews.Preferences;
+import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.Scrollable;
+import com.enamakel.thebigindiannews.util.Scrollable;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ReadabilityClient;
 

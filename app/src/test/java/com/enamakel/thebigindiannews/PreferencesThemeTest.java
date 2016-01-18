@@ -10,6 +10,7 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import com.enamakel.thebigindiannews.test.ShadowSupportPreferenceManager;
+import com.enamakel.thebigindiannews.util.Preferences;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.robolectric.Shadows.shadowOf;

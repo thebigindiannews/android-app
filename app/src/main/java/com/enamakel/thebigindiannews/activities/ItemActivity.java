@@ -44,12 +44,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.enamakel.thebigindiannews.ActivityModule;
-import com.enamakel.thebigindiannews.AlertDialogBuilder;
+import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.BuildConfig;
-import com.enamakel.thebigindiannews.Preferences;
+import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.Scrollable;
+import com.enamakel.thebigindiannews.util.Scrollable;
 import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ItemManager;

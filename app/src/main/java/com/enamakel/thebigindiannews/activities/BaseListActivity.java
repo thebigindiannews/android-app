@@ -39,12 +39,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.enamakel.thebigindiannews.ActionViewResolver;
-import com.enamakel.thebigindiannews.AlertDialogBuilder;
+import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.AppUtils;
-import com.enamakel.thebigindiannews.MultiPaneListener;
-import com.enamakel.thebigindiannews.Preferences;
+import com.enamakel.thebigindiannews.util.MultiPaneListener;
+import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.Scrollable;
+import com.enamakel.thebigindiannews.util.Scrollable;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.SessionManager;
 import com.enamakel.thebigindiannews.widget.ItemPagerAdapter;

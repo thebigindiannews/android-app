@@ -56,9 +56,11 @@ public class StoryView extends RelativeLayout implements Checkable {
     private final View mMoreButton;
     private boolean mChecked;
 
+
     public StoryView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
+
 
     public StoryView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -90,6 +92,7 @@ public class StoryView extends RelativeLayout implements Checkable {
         a.recycle();
     }
 
+
     @Override
     public void setChecked(boolean checked) {
         if (mChecked == checked) {
@@ -99,15 +102,18 @@ public class StoryView extends RelativeLayout implements Checkable {
         setBackgroundColor(mChecked ? mHighlightColor : mBackgroundColor);
     }
 
+
     @Override
     public boolean isChecked() {
         return mChecked;
     }
 
+
     @Override
     public void toggle() {
         setChecked(!mChecked);
     }
+
 
     public void setStory(@NonNull ItemManager.WebItem story) {
         if (!mIsLocal && story instanceof ItemManager.Item) {
@@ -149,12 +155,14 @@ public class StoryView extends RelativeLayout implements Checkable {
         }
     }
 
+
     public void reset() {
         if (!mIsLocal) {
             mRankTextView.setText(R.string.loading_text);
             mScoreTextView.setText(R.string.loading_text);
             mBookmarked.setVisibility(INVISIBLE);
         }
+
         mTitleTextView.setText(getContext().getString(R.string.loading_text));
         mPostedTextView.setText(R.string.loading_text);
         mSourceTextView.setText(R.string.loading_text);
@@ -162,54 +170,54 @@ public class StoryView extends RelativeLayout implements Checkable {
         mCommentButton.setVisibility(View.GONE);
     }
 
+
     public void setViewed(boolean isViewed) {
-        if (mIsLocal) {
-            return; // local always means viewed, do not decorate
-        }
+        if (mIsLocal) return; // local always means viewed, do not decorate
         mTitleTextView.setTextColor(isViewed ? mSecondaryTextColorResId : mTertiaryTextColorResId);
     }
 
+
     public void setPromoted(boolean isPromoted) {
-        if (mIsLocal) {
-            return; // local item cannot change rank
-        }
+        if (mIsLocal) return; // local items do not change rank
         mRankTextView.setTextColor(isPromoted ? mPromotedColorResId : mTertiaryTextColorResId);
     }
 
+
     public void setFavorite(boolean isFavorite) {
-        if (mIsLocal) {
-            return; // local item must be favorite, do not decorate
-        }
+        if (mIsLocal) return; // local item must be favorite, do not decorate
         mBookmarked.setVisibility(isFavorite ? View.VISIBLE : View.INVISIBLE);
     }
+
 
     public void setOnCommentClickListener(View.OnClickListener listener) {
         mCommentButton.setOnClickListener(listener);
     }
 
+
     public void setUpdated(@NonNull ItemManager.Item story, boolean updated, boolean promoted) {
-        if (mIsLocal) {
-            return; // local items do not change
-        }
-        mRankTextView.setText(decorateUpdated(
-                String.valueOf(story.getRank()), updated));
+        if (mIsLocal) return; // local items do not change
+
+        mRankTextView.setText(
+                decorateUpdated(String.valueOf(story.getRank()), updated));
+
         setPromoted(promoted);
         if (story.getKidCount() > 0) {
             ((Button) mCommentButton).setText(decorateUpdated(getContext().getResources()
-                    .getQuantityString(R.plurals.comments_count, story.getKidCount(), story.getKidCount()),
+                            .getQuantityString(R.plurals.comments_count, story.getKidCount(), story.getKidCount()),
                     story.hasNewKids()));
         }
     }
 
+
     private void animateVote(final int newScore) {
-        if (mIsLocal) {
-            return;
-        }
+        if (mIsLocal) return; // local items do not animate
+
         mVoteSwitcher.getInAnimation().setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 // no op
             }
+
 
             @Override
             public void onAnimationEnd(Animation animation) {
@@ -224,6 +232,7 @@ public class StoryView extends RelativeLayout implements Checkable {
                 mVoteSwitcher.getInAnimation().setAnimationListener(null);
             }
 
+
             @Override
             public void onAnimationRepeat(Animation animation) {
                 // no op
@@ -232,17 +241,21 @@ public class StoryView extends RelativeLayout implements Checkable {
         mVoteSwitcher.showNext();
     }
 
+
     public View getMoreOptions() {
         return mMoreButton;
     }
 
+
     private Spannable decorateUpdated(String text, boolean updated) {
         SpannableStringBuilder sb = new SpannableStringBuilder(text);
+
         if (updated) {
             sb.append("*");
             sb.setSpan(new AsteriskSpan(getContext()), sb.length() - 1, sb.length(),
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
+
         return sb;
     }
 }

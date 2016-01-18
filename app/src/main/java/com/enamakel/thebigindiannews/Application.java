@@ -19,6 +19,8 @@ package com.enamakel.thebigindiannews;
 import android.content.Context;
 import android.graphics.Typeface;
 
+import com.enamakel.thebigindiannews.util.FontCache;
+import com.enamakel.thebigindiannews.util.Preferences;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -29,10 +31,12 @@ public class Application extends android.app.Application {
     private RefWatcher mRefWatcher;
     private ObjectGraph mApplicationGraph;
 
+
     public static RefWatcher getRefWatcher(Context context) {
         Application application = (Application) context.getApplicationContext();
         return application.mRefWatcher;
     }
+
 
     @Override
     public void onCreate() {
@@ -43,6 +47,7 @@ public class Application extends android.app.Application {
         TYPE_FACE = FontCache.getInstance().get(this, Preferences.Theme.getTypeface(this));
         AppUtils.registerAccountsUpdatedListener(this);
     }
+
 
     public ObjectGraph getApplicationGraph() {
         return mApplicationGraph;

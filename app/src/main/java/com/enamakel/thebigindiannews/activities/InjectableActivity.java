@@ -20,7 +20,7 @@ import android.os.Bundle;
 
 import com.enamakel.thebigindiannews.ActivityModule;
 import com.enamakel.thebigindiannews.Application;
-import com.enamakel.thebigindiannews.Injectable;
+import com.enamakel.thebigindiannews.util.Injectable;
 
 import dagger.ObjectGraph;
 

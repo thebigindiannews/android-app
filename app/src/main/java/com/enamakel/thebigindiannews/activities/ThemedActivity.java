@@ -21,8 +21,8 @@ import android.support.annotation.CallSuper;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 
-import com.enamakel.thebigindiannews.MenuTintDelegate;
-import com.enamakel.thebigindiannews.Preferences;
+import com.enamakel.thebigindiannews.util.MenuTintDelegate;
+import com.enamakel.thebigindiannews.util.Preferences;
 
 public abstract class ThemedActivity extends AppCompatActivity {
     private final MenuTintDelegate mMenuTintDelegate = new MenuTintDelegate();

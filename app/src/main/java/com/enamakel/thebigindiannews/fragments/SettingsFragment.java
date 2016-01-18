@@ -22,7 +22,7 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 import com.enamakel.thebigindiannews.AppUtils;
-import com.enamakel.thebigindiannews.Preferences;
+import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
