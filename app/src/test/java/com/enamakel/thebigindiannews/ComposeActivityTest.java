@@ -24,6 +24,8 @@ import org.robolectric.util.ActivityController;
 import javax.inject.Inject;
 
 import com.enamakel.thebigindiannews.accounts.UserServices;
+import com.enamakel.thebigindiannews.activities.ComposeActivity;
+import com.enamakel.thebigindiannews.activities.LoginActivity;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;

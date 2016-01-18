@@ -13,6 +13,17 @@ import org.robolectric.util.ActivityController;
 import java.util.Arrays;
 import java.util.List;
 
+import com.enamakel.thebigindiannews.activities.AboutActivity;
+import com.enamakel.thebigindiannews.activities.AskActivity;
+import com.enamakel.thebigindiannews.activities.FavoriteActivity;
+import com.enamakel.thebigindiannews.activities.JobsActivity;
+import com.enamakel.thebigindiannews.activities.ListActivity;
+import com.enamakel.thebigindiannews.activities.LoginActivity;
+import com.enamakel.thebigindiannews.activities.NewActivity;
+import com.enamakel.thebigindiannews.activities.PopularActivity;
+import com.enamakel.thebigindiannews.activities.SettingsActivity;
+import com.enamakel.thebigindiannews.activities.ShowActivity;
+import com.enamakel.thebigindiannews.activities.SubmitActivity;
 import com.enamakel.thebigindiannews.test.ParameterizedRobolectricGradleTestRunner;
 import com.enamakel.thebigindiannews.test.TestListActivity;
 

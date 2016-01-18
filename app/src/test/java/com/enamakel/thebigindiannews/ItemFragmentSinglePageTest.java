@@ -34,8 +34,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.enamakel.thebigindiannews.accounts.UserServices;
+import com.enamakel.thebigindiannews.activities.ComposeActivity;
+import com.enamakel.thebigindiannews.activities.LoginActivity;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
+import com.enamakel.thebigindiannews.fragments.ItemFragment;
 import com.enamakel.thebigindiannews.test.ShadowRecyclerView;
 import com.enamakel.thebigindiannews.test.ShadowSupportPreferenceManager;
 import com.enamakel.thebigindiannews.test.ShadowTextView;

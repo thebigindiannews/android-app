@@ -24,10 +24,13 @@ import org.robolectric.shadows.ShadowNetworkInfo;
 
 import javax.inject.Inject;
 
+import com.enamakel.thebigindiannews.activities.LoginActivity;
 import com.enamakel.thebigindiannews.data.HackerNewsClient;
 import com.enamakel.thebigindiannews.data.TestHnItem;
 import com.enamakel.thebigindiannews.test.ShadowSupportPreferenceManager;
 import com.enamakel.thebigindiannews.test.TestItemActivity;
+import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
+import com.enamakel.thebigindiannews.util.Preferences;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;

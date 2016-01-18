@@ -4,6 +4,8 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.support.v4.content.ShadowContentResolverCompatJellybean;
 
+import com.enamakel.thebigindiannews.activities.FavoriteActivity;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

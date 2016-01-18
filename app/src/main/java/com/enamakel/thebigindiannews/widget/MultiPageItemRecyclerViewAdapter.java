@@ -20,7 +20,7 @@ import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.enamakel.thebigindiannews.ItemActivity;
+import com.enamakel.thebigindiannews.activities.ItemActivity;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.ItemManager;
 

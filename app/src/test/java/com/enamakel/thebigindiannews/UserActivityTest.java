@@ -25,6 +25,9 @@ import org.robolectric.util.ActivityController;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.enamakel.thebigindiannews.activities.ItemActivity;
+import com.enamakel.thebigindiannews.activities.ThreadPreviewActivity;
+import com.enamakel.thebigindiannews.activities.UserActivity;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.TestHnItem;

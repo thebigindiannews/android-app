@@ -58,11 +58,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.enamakel.thebigindiannews.activities.LoginActivity;
 import com.enamakel.thebigindiannews.data.HackerNewsClient;
 import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
+import com.enamakel.thebigindiannews.util.Preferences;
+import com.enamakel.thebigindiannews.util.ScrollAwareFABBehavior;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AppUtils {
     private static final String ABBR_YEAR = "y";
@@ -71,6 +75,7 @@ public class AppUtils {
     private static final String ABBR_HOUR = "h";
     private static final String ABBR_MINUTE = "m";
     private static final String PLAY_STORE_URL = "market://details?id=" + BuildConfig.APPLICATION_ID;
+
 
     public static void openWebUrlExternal(Context context, String title, String url) {
         Intent intent = createViewIntent(context, title, url);
@@ -102,6 +107,7 @@ public class AppUtils {
                             intents.toArray(new Parcelable[intents.size()])));
         }
     }
+
 
     public static void setTextWithLinks(TextView textView, String htmlText) {
         setHtmlText(textView, htmlText);
@@ -143,9 +149,11 @@ public class AppUtils {
         });
     }
 
+
     public static void setHtmlText(TextView textView, String htmlText) {
         textView.setText(TextUtils.isEmpty(htmlText) ? null : trim(Html.fromHtml(htmlText)));
     }
+
 
     public static Intent makeEmailIntent(String subject, String text) {
         final Intent intent = new Intent(Intent.ACTION_SENDTO);
@@ -154,6 +162,7 @@ public class AppUtils {
         intent.putExtra(Intent.EXTRA_TEXT, text);
         return intent;
     }
+
 
     public static void openExternal(@NonNull final Context context,
                                     @NonNull AlertDialogBuilder alertDialogBuilder,
@@ -189,6 +198,7 @@ public class AppUtils {
 
     }
 
+
     public static void share(@NonNull final Context context,
                              @NonNull AlertDialogBuilder alertDialogBuilder,
                              @NonNull final ItemManager.WebItem item) {
@@ -222,12 +232,14 @@ public class AppUtils {
                 .show();
     }
 
+
     public static int getThemedResId(Context context, @AttrRes int attr) {
         TypedArray a = context.getTheme().obtainStyledAttributes(new int[]{attr});
         final int resId = a.getResourceId(0, 0);
         a.recycle();
         return resId;
     }
+
 
     public static float getDimension(Context context, @StyleRes int styleResId, @AttrRes int attr) {
         TypedArray a = context.getTheme().obtainStyledAttributes(styleResId, new int[]{attr});
@@ -236,15 +248,18 @@ public class AppUtils {
         return size;
     }
 
+
     public static boolean isHackerNewsUrl(ItemManager.WebItem item) {
         return !TextUtils.isEmpty(item.getUrl()) &&
                 item.getUrl().equals(String.format(HackerNewsClient.WEB_ITEM_PATH, item.getId()));
     }
 
+
     public static int getDimensionInDp(Context context, @DimenRes int dimenResId) {
         return (int) (context.getResources().getDimension(dimenResId) /
-                        context.getResources().getDisplayMetrics().density);
+                context.getResources().getDisplayMetrics().density);
     }
+
 
     public static void restart(Activity activity) {
         activity.finish();
@@ -252,6 +267,7 @@ public class AppUtils {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
         activity.startActivity(intent);
     }
+
 
     public static String getAbbreviatedTimeSpan(long timeMillis) {
         long span = Math.max(System.currentTimeMillis() - timeMillis, 0);
@@ -270,6 +286,7 @@ public class AppUtils {
         return (span / DateUtils.MINUTE_IN_MILLIS) + ABBR_MINUTE;
     }
 
+
     public static boolean isOnWiFi(Context context) {
         NetworkInfo activeNetwork = ((ConnectivityManager) context.getSystemService(
                 Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
@@ -277,6 +294,7 @@ public class AppUtils {
                 activeNetwork.isConnectedOrConnecting() &&
                 activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
     }
+
 
     public static Pair<String, String> getCredentials(Context context) {
         String username = Preferences.getUsername(context);
@@ -293,12 +311,14 @@ public class AppUtils {
         return null;
     }
 
+
     /**
      * Displays UI to allow user to login
      * If no accounts exist in user's device, regardless of login status, prompt to login again
      * If 1 or more accounts in user's device, and already logged in, prompt to update password
      * If 1 or more accounts in user's device, and logged out, show account chooser
-     * @param context activity context
+     *
+     * @param context            activity context
      * @param alertDialogBuilder dialog builder
      */
     public static void showLogin(Context context, AlertDialogBuilder alertDialogBuilder) {
@@ -311,6 +331,7 @@ public class AppUtils {
             showAccountChooser(context, alertDialogBuilder, accounts);
         }
     }
+
 
     public static void registerAccountsUpdatedListener(final Context context) {
         AccountManager.get(context).addOnAccountsUpdatedListener(new OnAccountsUpdateListener() {
@@ -330,6 +351,7 @@ public class AppUtils {
         }, null, true);
     }
 
+
     @SuppressWarnings("deprecation")
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static void openPlayStore(Context context) {
@@ -348,8 +370,9 @@ public class AppUtils {
         }
     }
 
+
     public static void showAccountChooser(final Context context, AlertDialogBuilder alertDialogBuilder,
-                                           Account[] accounts) {
+                                          Account[] accounts) {
         String username = Preferences.getUsername(context);
         final String[] items = new String[accounts.length + 1];
         int checked = -1;
@@ -384,6 +407,7 @@ public class AppUtils {
                 .show();
     }
 
+
     public static void toggleFab(FloatingActionButton fab, boolean visible) {
         CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
         if (visible) {
@@ -394,6 +418,7 @@ public class AppUtils {
             p.setBehavior(null);
         }
     }
+
 
     private static CharSequence trim(CharSequence charSequence) {
         if (TextUtils.isEmpty(charSequence)) {
@@ -406,6 +431,7 @@ public class AppUtils {
         return charSequence.subSequence(0, end + 1);
     }
 
+
     private static Intent makeShareIntent(String subject, String text) {
         final Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
@@ -414,12 +440,14 @@ public class AppUtils {
         return intent;
     }
 
+
     private static Intent makeChooserShareIntent(Context context, String subject, String text) {
         Intent shareIntent = AppUtils.makeShareIntent(subject, text);
         Intent chooserIntent = Intent.createChooser(shareIntent, context.getString(R.string.share));
         chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         return chooserIntent;
     }
+
 
     @NonNull
     private static Intent createViewIntent(Context context, String title, String url) {
@@ -441,6 +469,7 @@ public class AppUtils {
             return new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         }
     }
+
 
     public static class ShareBroadcastReceiver extends BroadcastReceiver {
         @Override

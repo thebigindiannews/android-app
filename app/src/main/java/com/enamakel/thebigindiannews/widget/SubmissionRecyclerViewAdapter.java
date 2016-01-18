@@ -22,9 +22,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.enamakel.thebigindiannews.ItemActivity;
+import com.enamakel.thebigindiannews.activities.ItemActivity;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.ThreadPreviewActivity;
+import com.enamakel.thebigindiannews.activities.ThreadPreviewActivity;
 import com.enamakel.thebigindiannews.data.ItemManager;
 
 public class SubmissionRecyclerViewAdapter extends ItemRecyclerViewAdapter<SubmissionViewHolder> {

@@ -19,7 +19,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:clickable="true"
-    tools:context="com.enamakel.thebigindiannews.DrawerFragment">
+    tools:context="com.enamakel.thebigindiannews.fragments.DrawerFragment">
 
     <FrameLayout
         android:background="?attr/colorPrimary"

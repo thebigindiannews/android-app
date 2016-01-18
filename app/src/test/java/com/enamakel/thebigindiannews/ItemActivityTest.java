@@ -36,6 +36,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.enamakel.thebigindiannews.accounts.UserServices;
+import com.enamakel.thebigindiannews.activities.ComposeActivity;
+import com.enamakel.thebigindiannews.activities.ItemActivity;
+import com.enamakel.thebigindiannews.activities.LoginActivity;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.HackerNewsClient;
 import com.enamakel.thebigindiannews.data.ItemManager;

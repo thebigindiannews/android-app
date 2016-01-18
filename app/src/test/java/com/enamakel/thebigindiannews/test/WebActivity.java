@@ -2,9 +2,9 @@ package com.enamakel.thebigindiannews.test;
 
 import android.os.Bundle;
 
-import com.enamakel.thebigindiannews.InjectableActivity;
+import com.enamakel.thebigindiannews.activities.InjectableActivity;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.WebFragment;
+import com.enamakel.thebigindiannews.fragments.WebFragment;
 import com.enamakel.thebigindiannews.data.ItemManager;
 
 public class WebActivity extends InjectableActivity {

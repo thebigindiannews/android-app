@@ -19,7 +19,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.enamakel.thebigindiannews.ItemActivity">
+    tools:context="com.enamakel.thebigindiannews.activities.ItemActivity">
 
     <com.enamakel.thebigindiannews.widget.AppBarSwipeRefreshLayout
         android:id="@id/swipe_layout"

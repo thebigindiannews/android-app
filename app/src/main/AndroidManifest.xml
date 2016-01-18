@@ -37,7 +37,7 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ListActivity">
+        <activity android:name=".activities.ListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -82,7 +82,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FavoriteActivity"
+            android:name=".activities.FavoriteActivity"
             android:label="@string/title_activity_favorite"
             android:launchMode="singleTop"> <!-- required to get search intents -->
             <meta-data
@@ -93,27 +93,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewActivity"
+            android:name=".activities.NewActivity"
             android:label="@string/title_activity_new">
         </activity>
         <activity
-            android:name=".ShowActivity"
+            android:name=".activities.ShowActivity"
             android:label="@string/title_activity_show">
         </activity>
         <activity
-            android:name=".AskActivity"
+            android:name=".activities.AskActivity"
             android:label="@string/title_activity_ask">
         </activity>
         <activity
-            android:name=".JobsActivity"
+            android:name=".activities.JobsActivity"
             android:label="@string/title_activity_jobs">
         </activity>
         <activity
-            android:name=".PopularActivity"
+            android:name=".activities.PopularActivity"
             android:label="@string/title_activity_popular">
         </activity>
         <activity
-            android:name=".SearchActivity"
+            android:name=".activities.SearchActivity"
             android:label="@string/title_activity_search">
             <meta-data
                 android:name="android.app.searchable"
@@ -123,20 +123,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AboutActivity"
+            android:name=".activities.AboutActivity"
             android:label="@string/title_activity_about">
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:label="@string/action_settings">
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppAlertDialog">
         </activity>
         <activity
-            android:name=".SubmitActivity"
+            android:name=".activities.SubmitActivity"
             android:label="@string/title_activity_submit">
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
@@ -145,11 +145,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ComposeActivity"
+            android:name=".activities.ComposeActivity"
             android:label="@string/title_activity_compose">
         </activity>
         <activity
-            android:name=".UserActivity"
+            android:name=".activities.UserActivity"
             android:label="@string/title_activity_user">
             <intent-filter android:label="@string/filter_title_item">
                 <action android:name="android.intent.action.VIEW"/>
@@ -186,7 +186,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ThreadPreviewActivity"
+            android:name=".activities.ThreadPreviewActivity"
             android:label="@string/title_activity_thread_preview"
             android:theme="@style/AppAlertDialog">
         </activity>

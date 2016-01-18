@@ -40,9 +40,9 @@ import javax.inject.Named;
 
 import com.enamakel.thebigindiannews.ActivityModule;
 import com.enamakel.thebigindiannews.AppUtils;
-import com.enamakel.thebigindiannews.ComposeActivity;
+import com.enamakel.thebigindiannews.activities.ComposeActivity;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.UserActivity;
+import com.enamakel.thebigindiannews.activities.UserActivity;
 import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ItemManager;

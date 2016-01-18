@@ -36,8 +36,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.enamakel.thebigindiannews.AppUtils;
-import com.enamakel.thebigindiannews.ComposeActivity;
-import com.enamakel.thebigindiannews.MenuTintDelegate;
+import com.enamakel.thebigindiannews.activities.ComposeActivity;
+import com.enamakel.thebigindiannews.util.MenuTintDelegate;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.data.FavoriteManager;

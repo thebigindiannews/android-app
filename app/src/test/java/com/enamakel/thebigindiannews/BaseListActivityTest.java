@@ -20,6 +20,7 @@ import org.robolectric.shadows.ShadowLooper;
 import org.robolectric.shadows.ShadowResolveInfo;
 import org.robolectric.util.ActivityController;
 
+import com.enamakel.thebigindiannews.activities.ItemActivity;
 import com.enamakel.thebigindiannews.test.ShadowRecyclerView;
 import com.enamakel.thebigindiannews.test.ShadowSupportPreferenceManager;
 import com.enamakel.thebigindiannews.test.TestListActivity;

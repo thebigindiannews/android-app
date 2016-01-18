@@ -16,9 +16,12 @@ import org.robolectric.shadows.ShadowAlertDialog;
 import org.robolectric.shadows.ShadowDialog;
 import org.robolectric.util.ActivityController;
 
+import com.enamakel.thebigindiannews.activities.SettingsActivity;
 import com.enamakel.thebigindiannews.data.AlgoliaClient;
+import com.enamakel.thebigindiannews.fragments.SettingsFragment;
 import com.enamakel.thebigindiannews.test.ShadowSearchRecentSuggestions;
 import com.enamakel.thebigindiannews.test.ShadowSupportPreferenceManager;
+import com.enamakel.thebigindiannews.util.Preferences;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;

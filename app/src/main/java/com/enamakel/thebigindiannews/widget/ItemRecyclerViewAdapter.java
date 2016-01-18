@@ -33,20 +33,20 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.enamakel.thebigindiannews.AppUtils;
+import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.accounts.UserServices;
+import com.enamakel.thebigindiannews.activities.ComposeActivity;
+import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.ResponseListener;
+import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
+import com.enamakel.thebigindiannews.util.Injectable;
+
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.inject.Inject;
-
-import com.enamakel.thebigindiannews.AlertDialogBuilder;
-import com.enamakel.thebigindiannews.AppUtils;
-import com.enamakel.thebigindiannews.ComposeActivity;
-import com.enamakel.thebigindiannews.Injectable;
-import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.accounts.UserServices;
-import com.enamakel.thebigindiannews.data.ItemManager;
-import com.enamakel.thebigindiannews.data.ResponseListener;
 
 public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter.ItemViewHolder>
         extends RecyclerView.Adapter<VH> {
@@ -66,10 +66,12 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
     private String mUsername;
     private final Set<String> mLineCounted = new HashSet<>();
 
+
     public ItemRecyclerViewAdapter(ItemManager itemManager) {
         mItemManager = itemManager;
         setHasStableIds(true);
     }
+
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
@@ -92,11 +94,13 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
         ta.recycle();
     }
 
+
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
         mContext = null;
     }
+
 
     @Override
     public void onBindViewHolder(final VH holder, int position) {
@@ -109,26 +113,32 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
         }
     }
 
+
     @Override
     public long getItemId(int position) {
         return getItem(position).getLongId();
     }
+
 
     public void setMaxLines(int maxLines) {
         mContentMaxLines = maxLines;
         notifyDataSetChanged();
     }
 
+
     public void setHighlightUsername(String username) {
         mUsername = username;
         notifyDataSetChanged();
     }
 
+
     public boolean isAttached() {
         return mContext != null;
     }
 
+
     protected abstract ItemManager.Item getItem(int position);
+
 
     @CallSuper
     protected void bind(final VH holder, final ItemManager.Item item) {
@@ -141,19 +151,20 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
         if (mLineCounted.contains(item.getId())) {
             toggleCollapsibleContent(holder, item);
         } else {
-        holder.mContentTextView.post(new Runnable() {
-            @Override
-            public void run() {
-                if (mContext == null) {
-                    return;
+            holder.mContentTextView.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mContext == null) {
+                        return;
+                    }
+                    toggleCollapsibleContent(holder, item);
+                    mLineCounted.add(item.getId());
                 }
-                toggleCollapsibleContent(holder, item);
-                mLineCounted.add(item.getId());
-            }
-        });
+            });
         }
         bindActions(holder, item);
     }
+
 
     protected void clear(VH holder) {
         holder.mCommentButton.setVisibility(View.GONE);
@@ -163,15 +174,18 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
         holder.mReadMoreTextView.setVisibility(View.GONE);
     }
 
+
     private void load(int adapterPosition, ItemManager.Item item) {
         mItemManager.getItem(item.getId(), new ItemResponseListener(this, adapterPosition, item));
     }
+
 
     protected void onItemLoaded(int position, ItemManager.Item item) {
         if (position < getItemCount()) {
             notifyItemChanged(position);
         }
     }
+
 
     private void highlightUserItem(VH holder, ItemManager.Item item) {
         boolean highlight = !TextUtils.isEmpty(mUsername) &&
@@ -180,10 +194,12 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
                 mCardHighlightColorResId : mCardBackgroundColorResId);
     }
 
+
     private void decorateDead(VH holder, ItemManager.Item item) {
         holder.mContentTextView.setTextColor(item.isDead() ?
                 mSecondaryTextColorResId : mTertiaryTextColorResId);
     }
+
 
     private void toggleCollapsibleContent(final VH holder, final ItemManager.Item item) {
         final int lineCount = holder.mContentTextView.getLineCount();
@@ -214,11 +230,13 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
         });
     }
 
+
     private void setTextIsSelectable(TextView textView, boolean isSelectable) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             textView.setTextIsSelectable(isSelectable);
         }
     }
+
 
     private void bindActions(final VH holder, final ItemManager.Item item) {
         if (item.isDead() || item.isDeleted()) {
@@ -252,9 +270,11 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
         });
     }
 
+
     private void vote(final ItemManager.Item item) {
         mUserServices.voteUp(mContext, item.getId(), new VoteCallback(this));
     }
+
 
     private void onVoted(Boolean successful) {
         if (successful == null) {
@@ -266,6 +286,7 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
         }
     }
 
+
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         final TextView mPostedTextView;
         final TextView mContentTextView;
@@ -273,6 +294,7 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
         final Button mCommentButton;
         final View mMoreButton;
         final View mContentView;
+
 
         public ItemViewHolder(View itemView) {
             super(itemView);
@@ -292,12 +314,14 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
         private final int mPosition;
         private final ItemManager.Item mPartialItem;
 
+
         public ItemResponseListener(ItemRecyclerViewAdapter adapter, int position,
                                     ItemManager.Item partialItem) {
             mAdapter = new WeakReference<>(adapter);
             mPosition = position;
             mPartialItem = partialItem;
         }
+
 
         @Override
         public void onResponse(ItemManager.Item response) {
@@ -308,6 +332,7 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
             }
         }
 
+
         @Override
         public void onError(String errorMessage) {
             // do nothing
@@ -317,9 +342,11 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
     private static class VoteCallback extends UserServices.Callback {
         private final WeakReference<ItemRecyclerViewAdapter> mAdapter;
 
+
         public VoteCallback(ItemRecyclerViewAdapter adapter) {
             mAdapter = new WeakReference<>(adapter);
         }
+
 
         @Override
         public void onDone(boolean successful) {
@@ -327,6 +354,7 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
                 mAdapter.get().onVoted(successful);
             }
         }
+
 
         @Override
         public void onError() {

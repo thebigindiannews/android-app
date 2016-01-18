@@ -27,9 +27,11 @@ import org.robolectric.shadows.support.v4.SupportFragmentTestUtil;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.enamakel.thebigindiannews.activities.ItemActivity;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.TestHnItem;
+import com.enamakel.thebigindiannews.fragments.ItemFragment;
 import com.enamakel.thebigindiannews.test.ShadowRecyclerView;
 import com.enamakel.thebigindiannews.test.ShadowRecyclerViewAdapter;
 import com.enamakel.thebigindiannews.test.ShadowSupportPreferenceManager;

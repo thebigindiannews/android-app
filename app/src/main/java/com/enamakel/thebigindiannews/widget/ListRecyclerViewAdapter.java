@@ -24,21 +24,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import javax.inject.Inject;
-
-import com.enamakel.thebigindiannews.AlertDialogBuilder;
-import com.enamakel.thebigindiannews.Injectable;
-import com.enamakel.thebigindiannews.ItemActivity;
-import com.enamakel.thebigindiannews.MultiPaneListener;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.accounts.UserServices;
+import com.enamakel.thebigindiannews.activities.ItemActivity;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
+import com.enamakel.thebigindiannews.util.Injectable;
+import com.enamakel.thebigindiannews.util.MultiPaneListener;
+
+import javax.inject.Inject;
 
 /**
  * Base {@link android.support.v7.widget.RecyclerView.Adapter} class for list items
- * @param <VH>  view holder type, should contain title, posted, source and comment views
- * @param <T>   item type, should provide title, posted, source
+ *
+ * @param <VH> view holder type, should contain title, posted, source and comment views
+ * @param <T>  item type, should provide title, posted, source
  */
 public abstract class ListRecyclerViewAdapter
         <VH extends ListRecyclerViewAdapter.ItemViewHolder, T extends ItemManager.WebItem>
@@ -59,9 +60,11 @@ public abstract class ListRecyclerViewAdapter
     private int mCardRadius;
     private boolean mCardViewEnabled = true;
 
+
     public ListRecyclerViewAdapter() {
         setHasStableIds(true);
     }
+
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
@@ -77,6 +80,7 @@ public abstract class ListRecyclerViewAdapter
                 .getDimensionPixelSize(R.dimen.cardview_default_radius);
     }
 
+
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
@@ -84,6 +88,7 @@ public abstract class ListRecyclerViewAdapter
         mMultiPaneListener = null;
         mRecyclerView = null;
     }
+
 
     @Override
     public final void onBindViewHolder(final VH holder, int position) {
@@ -119,18 +124,22 @@ public abstract class ListRecyclerViewAdapter
         bindItem(holder);
     }
 
+
     @Override
     public final long getItemId(int position) {
         return getItem(position).getLongId();
     }
 
+
     public final boolean isCardViewEnabled() {
         return mCardViewEnabled;
     }
 
+
     public final void setCardViewEnabled(boolean cardViewEnabled) {
         this.mCardViewEnabled = cardViewEnabled;
     }
+
 
     public Bundle saveState() {
         Bundle savedState = new Bundle();
@@ -139,29 +148,35 @@ public abstract class ListRecyclerViewAdapter
         return savedState;
     }
 
+
     public void restoreState(Bundle savedState) {
-        if (savedState == null) {
-            return;
-        }
+        if (savedState == null) return;
+
         mCardViewEnabled = savedState.getBoolean(STATE_CARD_VIEW_ENABLED, true);
         mLastSelectedPosition = savedState.getInt(STATE_LAST_SELECTION_POSITION);
     }
+
 
     public final boolean isAttached() {
         return mContext != null;
     }
 
+
     protected void loadItem(int adapterPosition) {
         // override to load item if needed
     }
 
+
     protected abstract void bindItem(VH holder);
+
 
     protected abstract boolean isItemAvailable(T item);
 
+
     /**
      * Clears previously bind data from given view holder
-     * @param holder    view holder to clear
+     *
+     * @param holder view holder to clear
      */
     protected final void clearViewHolder(VH holder) {
         holder.mStoryView.reset();
@@ -169,10 +184,12 @@ public abstract class ListRecyclerViewAdapter
         holder.itemView.setOnLongClickListener(null);
     }
 
+
     /**
      * Checks if item with given ID has been selected
-     * @param itemId    item ID to check
-     * @return  true if selected, false otherwise or if selection is disabled
+     *
+     * @param itemId item ID to check
+     * @return true if selected, false otherwise or if selection is disabled
      */
     protected boolean isSelected(String itemId) {
         return mMultiPaneListener.isMultiPane() &&
@@ -180,17 +197,21 @@ public abstract class ListRecyclerViewAdapter
                 itemId.equals(mMultiPaneListener.getSelectedItem().getId());
     }
 
+
     /**
      * Gets item at position
-     * @param position    item position
+     *
+     * @param position item position
      * @return item at given position or null
      */
     protected abstract T getItem(int position);
 
+
     /**
      * Handles item click
-     * @param item      clicked item
-     * @param holder    clicked item view holder
+     *
+     * @param item   clicked item
+     * @param holder clicked item view holder
      */
     protected void handleItemClick(T item, VH holder) {
         mMultiPaneListener.onItemSelected(item);
@@ -203,11 +224,13 @@ public abstract class ListRecyclerViewAdapter
         }
     }
 
+
     private void openItem(T item) {
         mContext.startActivity(new Intent(mContext, ItemActivity.class)
                 .putExtra(ItemActivity.EXTRA_ITEM, item)
                 .putExtra(ItemActivity.EXTRA_OPEN_COMMENTS, true));
     }
+
 
     /**
      * Base {@link android.support.v7.widget.RecyclerView.ViewHolder} class for list item view
@@ -215,6 +238,7 @@ public abstract class ListRecyclerViewAdapter
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         public final StoryView mStoryView;
         public final CardView mCardView;
+
 
         public ItemViewHolder(View itemView) {
             super(itemView);

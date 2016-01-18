@@ -19,8 +19,11 @@ import org.robolectric.shadows.ShadowAlertDialog;
 import org.robolectric.shadows.support.v4.Shadows;
 import org.robolectric.util.ActivityController;
 
+import com.enamakel.thebigindiannews.activities.LoginActivity;
+import com.enamakel.thebigindiannews.activities.UserActivity;
 import com.enamakel.thebigindiannews.test.ShadowSupportPreferenceManager;
 import com.enamakel.thebigindiannews.test.TestListActivity;
+import com.enamakel.thebigindiannews.util.Preferences;
 
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;

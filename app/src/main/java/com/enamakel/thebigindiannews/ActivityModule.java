@@ -19,6 +19,13 @@ package com.enamakel.thebigindiannews;
 import android.accounts.AccountManager;
 import android.content.Context;
 
+import com.enamakel.thebigindiannews.accounts.UserServices;
+import com.enamakel.thebigindiannews.accounts.UserServicesClient;
+import com.enamakel.thebigindiannews.activities.*;
+import com.enamakel.thebigindiannews.data.*;
+import com.enamakel.thebigindiannews.fragments.*;
+import com.enamakel.thebigindiannews.util.*;
+import com.enamakel.thebigindiannews.widget.*;
 import com.squareup.okhttp.OkHttpClient;
 
 import javax.inject.Named;
@@ -26,25 +33,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import com.enamakel.thebigindiannews.accounts.UserServices;
-import com.enamakel.thebigindiannews.accounts.UserServicesClient;
-import com.enamakel.thebigindiannews.data.AlgoliaClient;
-import com.enamakel.thebigindiannews.data.AlgoliaPopularClient;
-import com.enamakel.thebigindiannews.data.FavoriteManager;
-import com.enamakel.thebigindiannews.data.FeedbackClient;
-import com.enamakel.thebigindiannews.data.HackerNewsClient;
-import com.enamakel.thebigindiannews.data.ItemManager;
-import com.enamakel.thebigindiannews.data.ReadabilityClient;
-import com.enamakel.thebigindiannews.data.RestServiceFactory;
-import com.enamakel.thebigindiannews.data.SessionManager;
-import com.enamakel.thebigindiannews.data.UserManager;
-import com.enamakel.thebigindiannews.widget.FavoriteRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.widget.MultiPageItemRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.widget.PopupMenu;
-import com.enamakel.thebigindiannews.widget.SinglePageItemRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.widget.StoryRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.widget.SubmissionRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.widget.ThreadPreviewRecyclerViewAdapter;
 
 @Module(
         injects = {
@@ -86,79 +74,110 @@ public class ActivityModule {
 
     private final Context mContext;
 
+
     public ActivityModule(Context context) {
         mContext = context;
     }
 
-    @Provides @Singleton
+
+    @Provides
+    @Singleton
     public Context provideContext() {
         return mContext;
     }
 
-    @Provides @Singleton @Named(HN)
+
+    @Provides
+    @Singleton
+    @Named(HN)
     public ItemManager provideHackerNewsClient(HackerNewsClient client) {
         return client;
     }
 
-    @Provides @Singleton @Named(ALGOLIA)
+
+    @Provides
+    @Singleton
+    @Named(ALGOLIA)
     public ItemManager provideAlgoliaClient(AlgoliaClient client) {
         return client;
     }
 
-    @Provides @Singleton @Named(POPULAR)
+
+    @Provides
+    @Singleton
+    @Named(POPULAR)
     public ItemManager provideAlgoliaPopularClient(AlgoliaPopularClient client) {
         return client;
     }
 
-    @Provides @Singleton
+
+    @Provides
+    @Singleton
     public UserManager provideUserManager(HackerNewsClient client) {
         return client;
     }
 
-    @Provides @Singleton
+
+    @Provides
+    @Singleton
     public FeedbackClient provideFeedbackClient(FeedbackClient.Impl client) {
         return client;
     }
 
-    @Provides @Singleton
+
+    @Provides
+    @Singleton
     public ReadabilityClient provideReadabilityClient(ReadabilityClient.Impl client) {
         return client;
     }
 
-    @Provides @Singleton
+
+    @Provides
+    @Singleton
     public FavoriteManager provideFavoriteManager() {
         return new FavoriteManager();
     }
 
-    @Provides @Singleton
+
+    @Provides
+    @Singleton
     public SessionManager provideSessionManager() {
         return new SessionManager();
     }
 
-    @Provides @Singleton
+
+    @Provides
+    @Singleton
     public RestServiceFactory provideRestServiceFactory(Context context) {
         return new RestServiceFactory.Impl(context);
     }
 
-    @Provides @Singleton
+
+    @Provides
+    @Singleton
     public ActionViewResolver provideActionViewResolver() {
         return new ActionViewResolver();
     }
+
 
     @Provides
     public AlertDialogBuilder provideAlertDialogBuilder(Context context) {
         return new AlertDialogBuilder.Impl();
     }
 
-    @Provides @Singleton
+
+    @Provides
+    @Singleton
     public UserServices provideUserServices() {
         return new UserServicesClient(new OkHttpClient());
     }
+
 
     @Provides
     public AccountManager provideAccountManager(Context context) {
         return AccountManager.get(context);
     }
+
 
     @Provides
     public PopupMenu providePopupMenu() {

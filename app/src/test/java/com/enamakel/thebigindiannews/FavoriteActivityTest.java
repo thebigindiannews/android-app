@@ -57,10 +57,15 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import com.enamakel.thebigindiannews.accounts.UserServices;
+import com.enamakel.thebigindiannews.activities.ComposeActivity;
+import com.enamakel.thebigindiannews.activities.FavoriteActivity;
+import com.enamakel.thebigindiannews.activities.ListActivity;
+import com.enamakel.thebigindiannews.activities.LoginActivity;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.MaterialisticProvider;
 import com.enamakel.thebigindiannews.data.TestHnItem;
+import com.enamakel.thebigindiannews.fragments.FavoriteFragment;
 import com.enamakel.thebigindiannews.test.ShadowItemTouchHelper;
 import com.enamakel.thebigindiannews.test.ShadowRecyclerView;
 import com.enamakel.thebigindiannews.test.ShadowRecyclerViewAdapter;

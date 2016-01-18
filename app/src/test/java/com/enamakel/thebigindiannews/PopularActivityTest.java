@@ -16,10 +16,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.enamakel.thebigindiannews.activities.PopularActivity;
 import com.enamakel.thebigindiannews.data.AlgoliaPopularClient;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.test.ParameterizedRobolectricGradleTestRunner;
+import com.enamakel.thebigindiannews.util.Preferences;
 
 import static junit.framework.Assert.assertEquals;
 import static org.assertj.android.appcompat.v7.api.Assertions.assertThat;

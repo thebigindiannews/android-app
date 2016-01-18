@@ -21,6 +21,9 @@ import org.robolectric.util.ActivityController;
 import javax.inject.Inject;
 
 import com.enamakel.thebigindiannews.accounts.UserServices;
+import com.enamakel.thebigindiannews.activities.LoginActivity;
+import com.enamakel.thebigindiannews.activities.NewActivity;
+import com.enamakel.thebigindiannews.activities.SubmitActivity;
 
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;

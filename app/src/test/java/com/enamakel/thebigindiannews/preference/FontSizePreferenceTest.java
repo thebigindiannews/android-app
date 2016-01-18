@@ -12,9 +12,9 @@ import org.robolectric.Robolectric;
 import java.util.Arrays;
 import java.util.List;
 
-import com.enamakel.thebigindiannews.Preferences;
+import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.SettingsActivity;
+import com.enamakel.thebigindiannews.activities.SettingsActivity;
 import com.enamakel.thebigindiannews.test.ParameterizedRobolectricGradleTestRunner;
 
 import static junit.framework.Assert.assertEquals;

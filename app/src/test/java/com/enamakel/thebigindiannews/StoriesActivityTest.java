@@ -6,6 +6,10 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.util.ActivityController;
 
+import com.enamakel.thebigindiannews.activities.AskActivity;
+import com.enamakel.thebigindiannews.activities.JobsActivity;
+import com.enamakel.thebigindiannews.activities.NewActivity;
+import com.enamakel.thebigindiannews.activities.ShowActivity;
 import com.enamakel.thebigindiannews.data.ItemManager;
 
 import static junit.framework.Assert.assertEquals;

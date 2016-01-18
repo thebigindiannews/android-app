@@ -2,6 +2,8 @@ package com.enamakel.thebigindiannews;
 
 import android.widget.TextView;
 
+import com.enamakel.thebigindiannews.activities.AboutActivity;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;

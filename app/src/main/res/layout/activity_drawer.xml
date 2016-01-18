@@ -29,7 +29,7 @@
         android:scrollbars="none"
         android:layout_height="match_parent">
         <fragment
-            android:name="com.enamakel.thebigindiannews.DrawerFragment"
+            android:name="com.enamakel.thebigindiannews.fragments.DrawerFragment"
             android:tag="com.enamakel.materialistic.DrawerFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

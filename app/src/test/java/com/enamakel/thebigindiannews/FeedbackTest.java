@@ -19,6 +19,7 @@ import org.robolectric.util.ActivityController;
 
 import javax.inject.Inject;
 
+import com.enamakel.thebigindiannews.activities.AboutActivity;
 import com.enamakel.thebigindiannews.data.FeedbackClient;
 
 import static junit.framework.Assert.assertEquals;

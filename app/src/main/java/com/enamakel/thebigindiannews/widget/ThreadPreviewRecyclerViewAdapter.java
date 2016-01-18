@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.enamakel.thebigindiannews.AppUtils;
-import com.enamakel.thebigindiannews.ItemActivity;
+import com.enamakel.thebigindiannews.activities.ItemActivity;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.ItemManager;
 

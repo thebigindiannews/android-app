@@ -24,10 +24,12 @@ import org.robolectric.util.ActivityController;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.enamakel.thebigindiannews.activities.ListActivity;
 import com.enamakel.thebigindiannews.data.HackerNewsClient;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.TestHnItem;
+import com.enamakel.thebigindiannews.fragments.ListFragment;
 import com.enamakel.thebigindiannews.test.ListActivity;
 import com.enamakel.thebigindiannews.test.ShadowRecyclerView;
 import com.enamakel.thebigindiannews.test.ShadowRecyclerViewAdapter;

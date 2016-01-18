@@ -24,7 +24,7 @@
     <include layout="@layout/toolbar" />
 
     <fragment
-        android:name="com.enamakel.thebigindiannews.SettingsFragment"
+        android:name="com.enamakel.thebigindiannews.fragments.SettingsFragment"
         android:tag="com.enamakel.materialistic.SettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

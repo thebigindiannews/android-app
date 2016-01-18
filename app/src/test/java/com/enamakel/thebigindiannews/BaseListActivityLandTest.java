@@ -22,6 +22,7 @@ import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.ShadowLooper;
 import org.robolectric.util.ActivityController;
 
+import com.enamakel.thebigindiannews.activities.ComposeActivity;
 import com.enamakel.thebigindiannews.data.TestHnItem;
 import com.enamakel.thebigindiannews.test.ShadowFloatingActionButton;
 import com.enamakel.thebigindiannews.test.ShadowRecyclerView;

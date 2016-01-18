@@ -2,7 +2,7 @@ package com.enamakel.thebigindiannews.test;
 
 import android.support.v7.view.ActionMode;
 
-import com.enamakel.thebigindiannews.FavoriteActivity;
+import com.enamakel.thebigindiannews.activities.FavoriteActivity;
 
 public class TestFavoriteActivity extends FavoriteActivity {
     public ActionMode.Callback actionModeCallback;

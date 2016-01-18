@@ -15,6 +15,7 @@ import org.robolectric.util.ActivityController;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.enamakel.thebigindiannews.activities.SearchActivity;
 import com.enamakel.thebigindiannews.data.AlgoliaClient;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;

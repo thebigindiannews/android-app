@@ -13,7 +13,7 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 import com.enamakel.thebigindiannews.BuildConfig;
-import com.enamakel.thebigindiannews.LoginActivity;
+import com.enamakel.thebigindiannews.activities.LoginActivity;
 
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.junit.Assert.assertNull;

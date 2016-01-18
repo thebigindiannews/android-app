@@ -23,10 +23,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
 
-import com.enamakel.thebigindiannews.ItemFragment;
+import com.enamakel.thebigindiannews.fragments.ItemFragment;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.ReadabilityFragment;
-import com.enamakel.thebigindiannews.WebFragment;
+import com.enamakel.thebigindiannews.fragments.ReadabilityFragment;
+import com.enamakel.thebigindiannews.fragments.WebFragment;
 import com.enamakel.thebigindiannews.data.ItemManager;
 
 public class ItemPagerAdapter extends FragmentStatePagerAdapter {

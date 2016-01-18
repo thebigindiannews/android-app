@@ -22,7 +22,9 @@ import org.robolectric.util.ActivityController;
 import javax.inject.Inject;
 
 import com.enamakel.thebigindiannews.accounts.UserServices;
+import com.enamakel.thebigindiannews.activities.LoginActivity;
 import com.enamakel.thebigindiannews.test.ShadowSupportPreferenceManager;
+import com.enamakel.thebigindiannews.util.Preferences;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
