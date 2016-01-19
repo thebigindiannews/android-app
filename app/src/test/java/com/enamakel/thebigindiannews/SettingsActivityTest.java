@@ -17,7 +17,7 @@ import org.robolectric.shadows.ShadowDialog;
 import org.robolectric.util.ActivityController;
 
 import com.enamakel.thebigindiannews.activities.SettingsActivity;
-import com.enamakel.thebigindiannews.data.AlgoliaClient;
+import com.enamakel.thebigindiannews.data.clients.AlgoliaClient;
 import com.enamakel.thebigindiannews.fragments.SettingsFragment;
 import com.enamakel.thebigindiannews.test.ShadowSearchRecentSuggestions;
 import com.enamakel.thebigindiannews.test.ShadowSupportPreferenceManager;

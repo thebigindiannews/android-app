@@ -1,5 +1,7 @@
 package com.enamakel.thebigindiannews.data;
 
+import com.enamakel.thebigindiannews.data.clients.FeedbackClient;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

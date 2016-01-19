@@ -1,5 +1,6 @@
 package com.enamakel.thebigindiannews.data;
 
+import com.enamakel.thebigindiannews.data.clients.AlgoliaClient;
 import com.google.gson.GsonBuilder;
 
 import org.junit.Before;

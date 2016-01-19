@@ -40,19 +40,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
-import javax.inject.Inject;
-
 import com.enamakel.thebigindiannews.ActionViewResolver;
-import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.FavoriteActivity;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
-import com.enamakel.thebigindiannews.data.MaterialisticProvider;
+import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.widget.FavoriteRecyclerViewAdapter;
 import com.enamakel.thebigindiannews.widget.ListRecyclerViewAdapter;
+
+import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 public class FavoriteFragment extends BaseListFragment
         implements LoaderManager.LoaderCallbacks<Cursor>,
@@ -80,12 +80,14 @@ public class FavoriteFragment extends BaseListFragment
     private View mEmptySearchView;
     private View mEmptyView;
 
+
     @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
         LocalBroadcastManager.getInstance(context).registerReceiver(mBroadcastReceiver,
                 FavoriteManager.makeGetIntentFilter());
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,6 +99,7 @@ public class FavoriteFragment extends BaseListFragment
             mFilter = getArguments().getString(EXTRA_FILTER);
         }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -112,7 +115,7 @@ public class FavoriteFragment extends BaseListFragment
                     public boolean onLongClick(View v) {
                         View bookmark = mEmptyView.findViewById(R.id.bookmarked);
                         bookmark.setVisibility(bookmark.getVisibility() == View.VISIBLE ?
-                                        View.INVISIBLE : View.VISIBLE);
+                                View.INVISIBLE : View.VISIBLE);
                         return true;
                     }
                 });
@@ -120,11 +123,13 @@ public class FavoriteFragment extends BaseListFragment
         return view;
     }
 
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getLoaderManager().restartLoader(FavoriteManager.LOADER, null, this);
     }
+
 
     @Override
     protected void createOptionsMenu(final Menu menu, MenuInflater inflater) {
@@ -136,6 +141,7 @@ public class FavoriteFragment extends BaseListFragment
         }
     }
 
+
     @Override
     protected void prepareOptionsMenu(Menu menu) {
         // allow clearing filter if empty, or filter if non-empty
@@ -145,6 +151,7 @@ public class FavoriteFragment extends BaseListFragment
             super.prepareOptionsMenu(menu);
         }
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -159,12 +166,14 @@ public class FavoriteFragment extends BaseListFragment
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(STATE_FILTER, mFilter);
         outState.putBoolean(STATE_SEARCH_VIEW_EXPANDED, mSearchViewExpanded);
     }
+
 
     @Override
     public void onDetach() {
@@ -176,6 +185,7 @@ public class FavoriteFragment extends BaseListFragment
         }
     }
 
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (!TextUtils.isEmpty(mFilter)) {
@@ -184,18 +194,22 @@ public class FavoriteFragment extends BaseListFragment
         return new FavoriteManager.CursorLoader(getActivity());
     }
 
+
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         swapCursor(data == null ? null : new FavoriteManager.Cursor(data));
     }
+
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         swapCursor(null);
     }
 
+
     /**
      * Filters list data by given query
+     *
      * @param query query used to filter data
      */
     public void filter(String query) {
@@ -204,10 +218,12 @@ public class FavoriteFragment extends BaseListFragment
         getLoaderManager().restartLoader(FavoriteManager.LOADER, null, this);
     }
 
+
     @Override
     protected ListRecyclerViewAdapter getAdapter() {
         return mAdapter;
     }
+
 
     @Override
     public boolean startActionMode(ActionMode.Callback callback) {
@@ -220,15 +236,18 @@ public class FavoriteFragment extends BaseListFragment
         return true;
     }
 
+
     @Override
     public boolean isInActionMode() {
         return mActionMode != null && !mSearchViewExpanded;
     }
 
+
     @Override
     public void stopActionMode() {
         mActionMode = null;
     }
+
 
     private void swapCursor(FavoriteManager.Cursor cursor) {
         if (cursor != null) {
@@ -241,6 +260,7 @@ public class FavoriteFragment extends BaseListFragment
             getActivity().supportInvalidateOptionsMenu();
         }
     }
+
 
     private void toggleEmptyView(boolean isEmpty, String filter) {
         if (isEmpty) {
@@ -258,6 +278,7 @@ public class FavoriteFragment extends BaseListFragment
             mEmptySearchView.setVisibility(View.INVISIBLE);
         }
     }
+
 
     private void createSearchView(MenuItem menuSearch) {
         final SearchView searchView = (SearchView) mActionViewResolver.getActionView(menuSearch);
@@ -284,6 +305,7 @@ public class FavoriteFragment extends BaseListFragment
         });
     }
 
+
     private void clear() {
         mAlertDialogBuilder
                 .init(getActivity())
@@ -299,6 +321,7 @@ public class FavoriteFragment extends BaseListFragment
                 .create().show();
     }
 
+
     private void startExport() {
         if (mProgressDialog == null) {
             mProgressDialog = ProgressDialog.show(getActivity(), null,
@@ -308,6 +331,7 @@ public class FavoriteFragment extends BaseListFragment
         }
         mFavoriteManager.get(getActivity(), mFilter);
     }
+
 
     private void export(ArrayList<FavoriteManager.Favorite> favorites) {
         if (mProgressDialog != null) {
@@ -320,6 +344,7 @@ public class FavoriteFragment extends BaseListFragment
             startActivity(intent);
         }
     }
+
 
     private String makeEmailContent(ArrayList<FavoriteManager.Favorite> favorites) {
         return TextUtils.join("\n\n", favorites);

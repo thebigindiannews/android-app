@@ -26,11 +26,12 @@ import android.view.MenuItem;
 
 import javax.inject.Inject;
 
+import com.enamakel.thebigindiannews.activities.parent.DrawerActivity;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.data.SearchRecentSuggestionsProvider;
+import com.enamakel.thebigindiannews.data.providers.SearchRecentSuggestionsProvider;
 
 public class SettingsActivity extends DrawerActivity {
     @Inject AlertDialogBuilder mAlertDialogBuilder;

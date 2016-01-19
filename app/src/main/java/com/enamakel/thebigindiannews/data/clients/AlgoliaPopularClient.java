@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.data;
+package com.enamakel.thebigindiannews.data.clients;
 
 import android.content.Context;
 import android.support.annotation.StringDef;
 import android.text.format.DateUtils;
+
+import com.enamakel.thebigindiannews.data.RestServiceFactory;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

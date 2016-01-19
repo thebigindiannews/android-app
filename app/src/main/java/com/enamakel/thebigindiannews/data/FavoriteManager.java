@@ -33,10 +33,12 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 
+import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
+import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+
 import java.util.ArrayList;
 import java.util.Collection;
-
-import com.enamakel.thebigindiannews.R;
 
 /**
  * Data repository for {@link com.enamakel.thebigindiannews.data.FavoriteManager.Favorite}
@@ -57,11 +59,13 @@ public class FavoriteManager {
     private static final String URI_PATH_REMOVE = "remove";
     private static final String URI_PATH_CLEAR = "clear";
 
+
     /**
      * Gets all favorites matched given query, a {@link #ACTION_GET} broadcast will be sent upon
      * completion
-     * @param context   an instance of {@link android.content.Context}
-     * @param query     query to filter stories to be retrieved
+     *
+     * @param context an instance of {@link android.content.Context}
+     * @param query   query to filter stories to be retrieved
      * @see #makeGetIntentFilter()
      */
     public void get(Context context, String query) {
@@ -86,10 +90,12 @@ public class FavoriteManager {
                 null, selection, selectionArgs, null);
     }
 
+
     /**
      * Adds given story as favorite
-     * @param context   an instance of {@link android.content.Context}
-     * @param story     story to be added as favorite
+     *
+     * @param context an instance of {@link android.content.Context}
+     * @param story   story to be added as favorite
      */
     public void add(Context context, ItemManager.WebItem story) {
         final ContentValues contentValues = new ContentValues();
@@ -106,11 +112,13 @@ public class FavoriteManager {
         cr.notifyChange(buildAdded().appendPath(story.getId()).build(), null);
     }
 
+
     /**
      * Clears all stories matched given query from favorites
      * will be sent upon completion
-     * @param context   an instance of {@link android.content.Context}
-     * @param query     query to filter stories to be cleared
+     *
+     * @param context an instance of {@link android.content.Context}
+     * @param query   query to filter stories to be cleared
      */
     public void clear(Context context, String query) {
         final String selection;
@@ -128,14 +136,16 @@ public class FavoriteManager {
         cr.notifyChange(buildCleared().build(), null);
     }
 
+
     /**
      * Checks if a story with given ID is a favorite
-     * @param contentResolver   an instance of {@link ContentResolver}
-     * @param itemId            story ID to check
-     * @param callbacks         listener to be informed upon checking completed
+     *
+     * @param contentResolver an instance of {@link ContentResolver}
+     * @param itemId          story ID to check
+     * @param callbacks       listener to be informed upon checking completed
      */
-    void check(ContentResolver contentResolver, final String itemId,
-                      final OperationCallbacks callbacks) {
+    public void check(ContentResolver contentResolver, final String itemId,
+               final OperationCallbacks callbacks) {
         if (itemId == null) {
             return;
         }
@@ -152,11 +162,13 @@ public class FavoriteManager {
                 new String[]{itemId}, null);
     }
 
+
     /**
      * Removes story with given ID from favorites
      * upon completion
-     * @param context   an instance of {@link android.content.Context}
-     * @param itemId    story ID to be removed from favorites
+     *
+     * @param context an instance of {@link android.content.Context}
+     * @param itemId  story ID to be removed from favorites
      */
     public void remove(Context context, String itemId) {
         if (itemId == null) {
@@ -170,11 +182,13 @@ public class FavoriteManager {
         cr.notifyChange(buildRemoved().appendPath(itemId).build(), null);
     }
 
+
     /**
      * Removes multiple stories with given IDs from favorites
      * be sent upon completion
-     * @param context   an instance of {@link android.content.Context}
-     * @param itemIds   array of story IDs to be removed from favorites
+     *
+     * @param context an instance of {@link android.content.Context}
+     * @param itemIds array of story IDs to be removed from favorites
      */
     public void remove(Context context, Collection<String> itemIds) {
         if (itemIds == null || itemIds.isEmpty()) {
@@ -198,8 +212,10 @@ public class FavoriteManager {
         }
     }
 
+
     /**
      * Creates an intent filter for get action broadcast
+     *
      * @return get intent filter
      * @see #get(android.content.Context, String)
      */
@@ -207,35 +223,43 @@ public class FavoriteManager {
         return new IntentFilter(ACTION_GET);
     }
 
+
     public static boolean isAdded(Uri uri) {
         return uri.toString().startsWith(buildAdded().toString());
     }
+
 
     public static boolean isRemoved(Uri uri) {
         return uri.toString().startsWith(buildRemoved().toString());
     }
 
+
     public static boolean isCleared(Uri uri) {
         return uri.toString().startsWith(buildCleared().toString());
     }
+
 
     private static Uri.Builder buildAdded() {
         return MaterialisticProvider.URI_FAVORITE.buildUpon().appendPath(URI_PATH_ADD);
     }
 
+
     private static Uri.Builder buildRemoved() {
         return MaterialisticProvider.URI_FAVORITE.buildUpon().appendPath(URI_PATH_REMOVE);
     }
 
+
     private static Uri.Builder buildCleared() {
         return MaterialisticProvider.URI_FAVORITE.buildUpon().appendPath(URI_PATH_CLEAR);
     }
+
 
     private static Intent makeGetBroadcastIntent(ArrayList<Favorite> favorites) {
         final Intent intent = new Intent(ACTION_GET);
         intent.putExtra(ACTION_GET_EXTRA_DATA, favorites);
         return intent;
     }
+
 
     /**
      * Represents a favorite item
@@ -252,11 +276,13 @@ public class FavoriteManager {
                 return new Favorite(source);
             }
 
+
             @Override
             public Favorite[] newArray(int size) {
                 return new Favorite[size];
             }
         };
+
 
         private Favorite(String itemId, String url, String title, long time) {
             this.itemId = itemId;
@@ -265,50 +291,59 @@ public class FavoriteManager {
             this.time = time;
         }
 
+
         private Favorite(Parcel source) {
             itemId = source.readString();
             url = source.readString();
             title = source.readString();
         }
 
+
         @Override
         public String getUrl() {
             return url;
         }
+
 
         @Override
         public boolean isStoryType() {
             return true;
         }
 
+
         @Override
         public String getId() {
             return itemId;
         }
+
 
         @Override
         public long getLongId() {
             return Long.valueOf(itemId);
         }
 
+
         @Override
         public String getDisplayedTitle() {
             return title;
         }
 
+
         @Override
         public Spannable getDisplayedTime(Context context, boolean abbreviate, boolean authorLink) {
             return new SpannableString(context.getString(R.string.saved,
                     DateUtils.getRelativeDateTimeString(context, time,
-                        DateUtils.MINUTE_IN_MILLIS,
-                        DateUtils.YEAR_IN_MILLIS,
-                        DateUtils.FORMAT_ABBREV_MONTH)));
+                            DateUtils.MINUTE_IN_MILLIS,
+                            DateUtils.YEAR_IN_MILLIS,
+                            DateUtils.FORMAT_ABBREV_MONTH)));
         }
+
 
         @Override
         public String getSource() {
             return TextUtils.isEmpty(url) ? null : Uri.parse(url).getHost();
         }
+
 
         @NonNull
         @Override
@@ -317,15 +352,18 @@ public class FavoriteManager {
             return STORY_TYPE;
         }
 
+
         @Override
         public String toString() {
             return String.format("%s (%s) - %s", title, url, String.format(HackerNewsClient.WEB_ITEM_PATH, itemId));
         }
 
+
         @Override
         public int describeContents() {
             return 0;
         }
+
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
@@ -343,6 +381,7 @@ public class FavoriteManager {
             super(cursor);
         }
 
+
         public Favorite getFavorite() {
             final String itemId = getString(getColumnIndexOrThrow(MaterialisticProvider.FavoriteEntry.COLUMN_NAME_ITEM_ID));
             final String url = getString(getColumnIndexOrThrow(MaterialisticProvider.FavoriteEntry.COLUMN_NAME_URL));
@@ -358,17 +397,20 @@ public class FavoriteManager {
     public static class CursorLoader extends android.support.v4.content.CursorLoader {
         /**
          * Constructs a cursor loader to query all {@link com.enamakel.thebigindiannews.data.FavoriteManager.Favorite}
-         * @param context    an instance of {@link android.content.Context}
+         *
+         * @param context an instance of {@link android.content.Context}
          */
         public CursorLoader(Context context) {
             super(context, MaterialisticProvider.URI_FAVORITE, null, null, null, null);
         }
 
+
         /**
          * Constructs a cursor loader to query {@link com.enamakel.thebigindiannews.data.FavoriteManager.Favorite}
          * with title matching given query
-         * @param context   an instance of {@link android.content.Context}
-         * @param query     query to filter
+         *
+         * @param context an instance of {@link android.content.Context}
+         * @param query   query to filter
          */
         public CursorLoader(Context context, String query) {
             super(context, MaterialisticProvider.URI_FAVORITE, null,
@@ -383,7 +425,8 @@ public class FavoriteManager {
     public interface OperationCallbacks {
         /**
          * Fired when checking of favorite status is completed
-         * @param isFavorite    true if is favorite, false otherwise
+         *
+         * @param isFavorite true if is favorite, false otherwise
          */
         void onCheckComplete(boolean isFavorite);
     }
@@ -391,14 +434,17 @@ public class FavoriteManager {
     private static class FavoriteHandler extends AsyncQueryHandler {
         private FavoriteCallback mCallback;
 
+
         public FavoriteHandler(ContentResolver cr, @NonNull FavoriteCallback callback) {
             this(cr);
             mCallback = callback;
         }
 
+
         public FavoriteHandler(ContentResolver cr) {
             super(cr);
         }
+
 
         @Override
         protected void onQueryComplete(int token, Object cookie, android.database.Cursor cursor) {
@@ -426,7 +472,11 @@ public class FavoriteManager {
     }
 
     private static abstract class FavoriteCallback {
-        void onQueryComplete(ArrayList<Favorite> favorites) {}
-        void onCheckComplete(boolean isFavorite) {}
+        void onQueryComplete(ArrayList<Favorite> favorites) {
+        }
+
+
+        void onCheckComplete(boolean isFavorite) {
+        }
     }
 }

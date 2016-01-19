@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.activities;
+package com.enamakel.thebigindiannews.activities.parent;
 
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;

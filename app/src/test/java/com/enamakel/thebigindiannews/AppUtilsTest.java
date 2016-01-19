@@ -25,7 +25,7 @@ import org.robolectric.shadows.ShadowNetworkInfo;
 import javax.inject.Inject;
 
 import com.enamakel.thebigindiannews.activities.LoginActivity;
-import com.enamakel.thebigindiannews.data.HackerNewsClient;
+import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
 import com.enamakel.thebigindiannews.data.TestHnItem;
 import com.enamakel.thebigindiannews.test.ShadowSupportPreferenceManager;
 import com.enamakel.thebigindiannews.test.TestItemActivity;

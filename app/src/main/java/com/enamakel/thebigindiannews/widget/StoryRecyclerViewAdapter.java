@@ -46,7 +46,7 @@ import com.enamakel.thebigindiannews.activities.UserActivity;
 import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ItemManager;
-import com.enamakel.thebigindiannews.data.MaterialisticProvider;
+import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 
 public class StoryRecyclerViewAdapter extends

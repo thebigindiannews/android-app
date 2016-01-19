@@ -30,7 +30,7 @@ import android.text.TextUtils;
 import java.util.Map;
 
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.data.AlgoliaPopularClient;
+import com.enamakel.thebigindiannews.data.clients.AlgoliaPopularClient;
 import com.enamakel.thebigindiannews.preference.ThemePreference;
 
 public class Preferences {

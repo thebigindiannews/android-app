@@ -2,6 +2,8 @@ package com.enamakel.thebigindiannews.data;
 
 import android.content.ContentResolver;
 
+import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.data;
+package com.enamakel.thebigindiannews.data.clients;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -33,6 +33,12 @@ import android.text.style.StrikethroughSpan;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.BuildConfig;
 import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.data.FavoriteManager;
+import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.ResponseListener;
+import com.enamakel.thebigindiannews.data.RestServiceFactory;
+import com.enamakel.thebigindiannews.data.SessionManager;
+import com.enamakel.thebigindiannews.data.UserManager;
 
 import javax.inject.Inject;
 

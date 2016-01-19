@@ -38,7 +38,7 @@ import com.enamakel.thebigindiannews.activities.SubmitActivity;
 import com.enamakel.thebigindiannews.activities.ThreadPreviewActivity;
 import com.enamakel.thebigindiannews.activities.UserActivity;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
-import com.enamakel.thebigindiannews.data.FeedbackClient;
+import com.enamakel.thebigindiannews.data.clients.FeedbackClient;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ReadabilityClient;
 import com.enamakel.thebigindiannews.data.SessionManager;

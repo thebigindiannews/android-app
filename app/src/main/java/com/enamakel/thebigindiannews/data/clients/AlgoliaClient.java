@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.data;
+package com.enamakel.thebigindiannews.data.clients;
 
 import android.content.Context;
 
 import com.enamakel.thebigindiannews.ActivityModule;
+import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.ResponseListener;
+import com.enamakel.thebigindiannews.data.RestServiceFactory;
 import com.enamakel.thebigindiannews.util.Preferences;
 
 import javax.inject.Inject;

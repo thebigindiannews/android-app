@@ -39,7 +39,7 @@ import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.AboutActivity;
 import com.enamakel.thebigindiannews.activities.AskActivity;
-import com.enamakel.thebigindiannews.activities.DrawerActivity;
+import com.enamakel.thebigindiannews.activities.parent.DrawerActivity;
 import com.enamakel.thebigindiannews.activities.FavoriteActivity;
 import com.enamakel.thebigindiannews.activities.JobsActivity;
 import com.enamakel.thebigindiannews.activities.ListActivity;

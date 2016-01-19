@@ -38,6 +38,7 @@ import com.enamakel.thebigindiannews.ActivityModule;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.BuildConfig;
 import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.activities.parent.InjectableActivity;
 import com.enamakel.thebigindiannews.util.Scrollable;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;

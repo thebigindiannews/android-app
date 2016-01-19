@@ -19,6 +19,7 @@ import org.robolectric.shadows.support.v4.ShadowLocalBroadcastManager;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
 import com.enamakel.thebigindiannews.test.TestWebItem;
 
 import static junit.framework.Assert.assertEquals;

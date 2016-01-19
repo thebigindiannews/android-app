@@ -19,6 +19,7 @@ package com.enamakel.thebigindiannews.activities;
 import android.support.annotation.NonNull;
 
 import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.activities.parent.BaseStoriesActivity;
 import com.enamakel.thebigindiannews.data.ItemManager;
 
 public class AskActivity extends BaseStoriesActivity {

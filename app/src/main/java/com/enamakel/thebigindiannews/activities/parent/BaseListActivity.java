@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.activities;
+package com.enamakel.thebigindiannews.activities.parent;
 
 import android.app.SearchManager;
 import android.content.ComponentName;
@@ -39,6 +39,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.enamakel.thebigindiannews.ActionViewResolver;
+import com.enamakel.thebigindiannews.activities.ComposeActivity;
+import com.enamakel.thebigindiannews.activities.ItemActivity;
+import com.enamakel.thebigindiannews.activities.SearchActivity;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.util.MultiPaneListener;

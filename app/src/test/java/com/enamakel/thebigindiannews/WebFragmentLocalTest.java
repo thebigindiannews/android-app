@@ -23,7 +23,7 @@ import org.robolectric.util.ActivityController;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.enamakel.thebigindiannews.data.HackerNewsClient;
+import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.test.ShadowSupportPreferenceManager;

@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.enamakel.thebigindiannews.activities.SearchActivity;
-import com.enamakel.thebigindiannews.data.AlgoliaClient;
+import com.enamakel.thebigindiannews.data.clients.AlgoliaClient;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.test.ShadowSearchRecentSuggestions;

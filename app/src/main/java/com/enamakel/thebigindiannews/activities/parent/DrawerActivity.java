@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.activities;
+package com.enamakel.thebigindiannews.activities.parent;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -35,7 +35,7 @@ import android.widget.Toast;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.data.FeedbackClient;
+import com.enamakel.thebigindiannews.data.clients.FeedbackClient;
 
 import java.lang.ref.WeakReference;
 
@@ -118,14 +118,14 @@ public abstract class DrawerActivity extends InjectableActivity {
     }
 
 
-    void navigate(Class<? extends Activity> activityClass, @Nullable Bundle extras) {
+    public void navigate(Class<? extends Activity> activityClass, @Nullable Bundle extras) {
         mPendingNavigation = !getClass().equals(activityClass) ? activityClass : null;
         mPendingNavigationExtras = extras;
         closeDrawers();
     }
 
 
-    void showFeedback() {
+    public void showFeedback() {
         showFeedbackDialog(getLayoutInflater().inflate(R.layout.dialog_feedback, mDrawerLayout, false));
         closeDrawers();
     }

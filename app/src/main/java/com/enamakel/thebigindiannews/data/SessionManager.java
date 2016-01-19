@@ -24,6 +24,8 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+
 /**
  * Data repository for session state
  */
@@ -36,7 +38,7 @@ public class SessionManager {
      * @param itemId          item ID to check
      * @param callbacks       listener to be informed upon checking completed
      */
-    void isViewed(ContentResolver contentResolver, final String itemId,
+    public void isViewed(ContentResolver contentResolver, final String itemId,
                   final OperationCallbacks callbacks) {
         if (TextUtils.isEmpty(itemId)) {
             return;
@@ -78,7 +80,7 @@ public class SessionManager {
     /**
      * Callback interface for asynchronous session operations
      */
-    interface OperationCallbacks {
+    public interface OperationCallbacks {
         /**
          * Fired when checking of view status is completed
          *

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.activities;
+package com.enamakel.thebigindiannews.activities.parent;
 
 import android.os.Bundle;
 import android.support.annotation.CallSuper;

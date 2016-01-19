@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.data;
+package com.enamakel.thebigindiannews.data.providers;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -43,11 +43,13 @@ public class MaterialisticProvider extends ContentProvider {
     private static final String READABILITY_MAX_ENTRIES = "50";
     private DbHelper mDbHelper;
 
+
     @Override
     public boolean onCreate() {
         mDbHelper = new DbHelper(getContext());
         return true;
     }
+
 
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
@@ -71,6 +73,7 @@ public class MaterialisticProvider extends ContentProvider {
         return null;
     }
 
+
     @Override
     public String getType(@NonNull Uri uri) {
         if (URI_FAVORITE.equals(uri)) {
@@ -82,6 +85,7 @@ public class MaterialisticProvider extends ContentProvider {
         }
         return null;
     }
+
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
@@ -118,6 +122,7 @@ public class MaterialisticProvider extends ContentProvider {
         return null;
     }
 
+
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
@@ -135,6 +140,7 @@ public class MaterialisticProvider extends ContentProvider {
         }
         return db.delete(table, selection, selectionArgs);
     }
+
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
@@ -155,7 +161,8 @@ public class MaterialisticProvider extends ContentProvider {
         return db.update(table, values, selection, selectionArgs);
     }
 
-    interface FavoriteEntry extends BaseColumns {
+
+    public interface FavoriteEntry extends BaseColumns {
         String TABLE_NAME = "favorite";
         String MIME_TYPE = "vnd.android.cursor.dir/vnd." + PROVIDER_AUTHORITY + "." + TABLE_NAME;
         String COLUMN_NAME_ITEM_ID = "itemid";
@@ -164,13 +171,13 @@ public class MaterialisticProvider extends ContentProvider {
         String COLUMN_NAME_TIME = "time";
     }
 
-    interface ViewedEntry extends BaseColumns {
+    public interface ViewedEntry extends BaseColumns {
         String TABLE_NAME = "viewed";
         String MIME_TYPE = "vnd.android.cursor.dir/vnd." + PROVIDER_AUTHORITY + "." + TABLE_NAME;
         String COLUMN_NAME_ITEM_ID = "itemid";
     }
 
-    interface ReadabilityEntry extends BaseColumns {
+    public interface ReadabilityEntry extends BaseColumns {
         String TABLE_NAME = "readability";
         String MIME_TYPE = "vnd.android.cursor.dir/vnd." + PROVIDER_AUTHORITY + "." + TABLE_NAME;
         String COLUMN_NAME_ITEM_ID = "itemid";
@@ -187,20 +194,20 @@ public class MaterialisticProvider extends ContentProvider {
         private static final String ORDER_DESC = " DESC";
         private static final String SQL_CREATE_FAVORITE_TABLE =
                 "CREATE TABLE " + FavoriteEntry.TABLE_NAME + " (" +
-                        FavoriteEntry._ID +                 INTEGER_TYPE +  PRIMARY_KEY + COMMA_SEP +
+                        FavoriteEntry._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP +
                         FavoriteEntry.COLUMN_NAME_ITEM_ID + TEXT_TYPE + COMMA_SEP +
-                        FavoriteEntry.COLUMN_NAME_URL +     TEXT_TYPE + COMMA_SEP +
-                        FavoriteEntry.COLUMN_NAME_TITLE +   TEXT_TYPE + COMMA_SEP +
-                        FavoriteEntry.COLUMN_NAME_TIME +    TEXT_TYPE +
-                " )";
+                        FavoriteEntry.COLUMN_NAME_URL + TEXT_TYPE + COMMA_SEP +
+                        FavoriteEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
+                        FavoriteEntry.COLUMN_NAME_TIME + TEXT_TYPE +
+                        " )";
         private static final String SQL_CREATE_VIEWED_TABLE =
                 "CREATE TABLE " + ViewedEntry.TABLE_NAME + " (" +
-                        ViewedEntry._ID +                 INTEGER_TYPE +  PRIMARY_KEY + COMMA_SEP +
+                        ViewedEntry._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP +
                         ViewedEntry.COLUMN_NAME_ITEM_ID + TEXT_TYPE +
                         " )";
         private static final String SQL_CREATE_READABILITY_TABLE =
                 "CREATE TABLE " + ReadabilityEntry.TABLE_NAME + " (" +
-                        ReadabilityEntry._ID +                 INTEGER_TYPE +  PRIMARY_KEY + COMMA_SEP +
+                        ReadabilityEntry._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP +
                         ReadabilityEntry.COLUMN_NAME_ITEM_ID + TEXT_TYPE + COMMA_SEP +
                         ReadabilityEntry.COLUMN_NAME_CONTENT + TEXT_TYPE +
                         " )";
@@ -220,12 +227,14 @@ public class MaterialisticProvider extends ContentProvider {
             super(context, DB_NAME, null, DB_VERSION);
         }
 
+
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(SQL_CREATE_FAVORITE_TABLE);
             db.execSQL(SQL_CREATE_VIEWED_TABLE);
             db.execSQL(SQL_CREATE_READABILITY_TABLE);
         }
+
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

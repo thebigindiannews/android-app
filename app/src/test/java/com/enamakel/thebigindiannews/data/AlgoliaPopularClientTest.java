@@ -15,6 +15,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.ObjectGraph;
 import dagger.Provides;
+
+import com.enamakel.thebigindiannews.data.clients.AlgoliaPopularClient;
 import com.enamakel.thebigindiannews.test.ParameterizedRobolectricGradleTestRunner;
 import retrofit.Call;
 import retrofit.Callback;

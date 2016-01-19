@@ -59,7 +59,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.enamakel.thebigindiannews.activities.LoginActivity;
-import com.enamakel.thebigindiannews.data.HackerNewsClient;
+import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.util.Preferences;

@@ -21,10 +21,11 @@ import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.enamakel.thebigindiannews.activities.parent.BaseListActivity;
 import com.enamakel.thebigindiannews.fragments.ListFragment;
 import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.data.AlgoliaPopularClient;
+import com.enamakel.thebigindiannews.data.clients.AlgoliaPopularClient;
 
 public class PopularActivity extends BaseListActivity {
     private static final String STATE_RANGE = "state:range";

@@ -17,7 +17,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.enamakel.thebigindiannews.activities.PopularActivity;
-import com.enamakel.thebigindiannews.data.AlgoliaPopularClient;
+import com.enamakel.thebigindiannews.data.clients.AlgoliaPopularClient;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.test.ParameterizedRobolectricGradleTestRunner;

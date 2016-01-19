@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.data;
+package com.enamakel.thebigindiannews.data.providers;
 
 public class SearchRecentSuggestionsProvider extends android.content.SearchRecentSuggestionsProvider {
     public static final String PROVIDER_AUTHORITY = "com.enamakel.com.enamakel.com.enamakel.thebigindiannews.recentprovider";

@@ -203,11 +203,11 @@
         </service>
 
         <provider
-            android:name=".data.MaterialisticProvider"
+            android:name=".data.providers.MaterialisticProvider"
             android:authorities=".provider"
             android:exported="false"/>
         <provider
-            android:name=".data.SearchRecentSuggestionsProvider"
+            android:name=".data.providers.SearchRecentSuggestionsProvider"
             android:authorities=".recentprovider"
             android:exported="false"/>
 

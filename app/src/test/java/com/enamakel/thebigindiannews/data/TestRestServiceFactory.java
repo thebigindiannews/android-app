@@ -1,5 +1,9 @@
 package com.enamakel.thebigindiannews.data;
 
+import com.enamakel.thebigindiannews.data.clients.AlgoliaClient;
+import com.enamakel.thebigindiannews.data.clients.FeedbackClient;
+import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
+
 import static org.mockito.Mockito.mock;
 
 public class TestRestServiceFactory implements RestServiceFactory {

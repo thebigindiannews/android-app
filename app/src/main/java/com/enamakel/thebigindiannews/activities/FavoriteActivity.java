@@ -25,15 +25,15 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
+import com.enamakel.thebigindiannews.activities.parent.BaseListActivity;
 import com.enamakel.thebigindiannews.fragments.FavoriteFragment;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ItemManager;
-import com.enamakel.thebigindiannews.data.MaterialisticProvider;
+import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
 
 public class FavoriteActivity extends BaseListActivity {
-
-    static final String EMPTY_QUERY = MaterialisticProvider.class.getName();
+    public static final String EMPTY_QUERY = MaterialisticProvider.class.getName();
     private static final String STATE_FILTER = "state:filter";
     private final ContentObserver mObserver = new ContentObserver(new Handler()) {
         @Override

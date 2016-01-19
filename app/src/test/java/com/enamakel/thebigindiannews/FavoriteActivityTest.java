@@ -63,7 +63,7 @@ import com.enamakel.thebigindiannews.activities.ListActivity;
 import com.enamakel.thebigindiannews.activities.LoginActivity;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ItemManager;
-import com.enamakel.thebigindiannews.data.MaterialisticProvider;
+import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
 import com.enamakel.thebigindiannews.data.TestHnItem;
 import com.enamakel.thebigindiannews.fragments.FavoriteFragment;
 import com.enamakel.thebigindiannews.test.ShadowItemTouchHelper;

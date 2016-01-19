@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.data;
+package com.enamakel.thebigindiannews.data.clients;
 
 import android.os.Build;
 
 import javax.inject.Inject;
 
 import com.enamakel.thebigindiannews.BuildConfig;
+import com.enamakel.thebigindiannews.data.RestServiceFactory;
+
 import retrofit.Call;
 import retrofit.Response;
 import retrofit.Retrofit;

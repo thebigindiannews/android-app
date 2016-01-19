@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.activities;
+package com.enamakel.thebigindiannews.activities.parent;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,10 +23,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
 
-import com.enamakel.thebigindiannews.fragments.ListFragment;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.data.HackerNewsClient;
 import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
+import com.enamakel.thebigindiannews.fragments.ListFragment;
 
 public abstract class BaseStoriesActivity extends BaseListActivity
         implements ListFragment.RefreshCallback {
@@ -49,6 +49,7 @@ public abstract class BaseStoriesActivity extends BaseListActivity
     };
     private final Handler mHandler = new Handler();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +58,7 @@ public abstract class BaseStoriesActivity extends BaseListActivity
         }
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -64,11 +66,13 @@ public abstract class BaseStoriesActivity extends BaseListActivity
         mHandler.post(mLastUpdateTask);
     }
 
+
     @Override
     protected void onPause() {
         super.onPause();
         mHandler.removeCallbacks(mLastUpdateTask);
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -78,6 +82,7 @@ public abstract class BaseStoriesActivity extends BaseListActivity
         }
     }
 
+
     @Override
     public void onRefreshed() {
         onItemSelected(null);
@@ -86,9 +91,11 @@ public abstract class BaseStoriesActivity extends BaseListActivity
         mHandler.post(mLastUpdateTask);
     }
 
+
     @NonNull
     @ItemManager.FetchMode
     protected abstract String getFetchMode();
+
 
     @Override
     protected Fragment instantiateListFragment() {

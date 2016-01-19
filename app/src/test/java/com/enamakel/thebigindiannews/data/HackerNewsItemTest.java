@@ -9,6 +9,7 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
 import com.enamakel.thebigindiannews.test.TestItem;
 
 import static junit.framework.Assert.assertEquals;

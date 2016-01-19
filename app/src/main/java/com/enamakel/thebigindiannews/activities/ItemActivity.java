@@ -44,6 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.enamakel.thebigindiannews.ActivityModule;
+import com.enamakel.thebigindiannews.activities.parent.InjectableActivity;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.BuildConfig;
@@ -53,7 +54,7 @@ import com.enamakel.thebigindiannews.util.Scrollable;
 import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ItemManager;
-import com.enamakel.thebigindiannews.data.MaterialisticProvider;
+import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.SessionManager;
 import com.enamakel.thebigindiannews.widget.ItemPagerAdapter;

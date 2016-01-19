@@ -27,6 +27,8 @@ import android.text.TextUtils;
 import javax.inject.Inject;
 
 import com.enamakel.thebigindiannews.BuildConfig;
+import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+
 import retrofit.Call;
 import retrofit.Response;
 import retrofit.Retrofit;
