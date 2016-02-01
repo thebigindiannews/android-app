@@ -16,45 +16,61 @@
 
 package com.enamakel.thebigindiannews.preference;
 
+
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.enamakel.thebigindiannews.Application;
-import com.enamakel.thebigindiannews.util.FontCache;
 import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.util.FontCache;
+
 
 public class FontPreference extends SpinnerPreference {
-    private final LayoutInflater mLayoutInflater;
+    private final LayoutInflater layoutInflater;
+
 
     public FontPreference(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
+
     public FontPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        mLayoutInflater = LayoutInflater.from(getContext());
+        layoutInflater = LayoutInflater.from(getContext());
     }
+
 
     @Override
     protected View createDropDownView(int position, ViewGroup parent) {
-        return mLayoutInflater.inflate(R.layout.support_simple_spinner_dropdown_item, parent, false);
+        return layoutInflater.inflate(R.layout.support_simple_spinner_dropdown_item, parent, false);
     }
+
 
     @Override
     protected void bindDropDownView(int position, View view) {
         TextView textView = (TextView) view.findViewById(android.R.id.text1);
-        textView.setTypeface(FontCache.getInstance().get(getContext(), mEntryValues[position]));
-        textView.setText(mEntries[position]);
+        textView.setTypeface(getFont(entryValues[position]));
+        textView.setText(entries[position]);
     }
+
 
     @Override
     protected boolean persistString(String value) {
-        Application.TYPE_FACE = FontCache.getInstance().get(getContext(), value);
+        Log.d("font", value);
+        Application.TYPE_FACE = getFont(value);
+        Application.TYPE_FACE_BOLD = getFont(value + "-bold");
         return super.persistString(value);
     }
 
+
+    Typeface getFont(String name) {
+        String fontName = name + ".tff";
+        return FontCache.getInstance().get(getContext(), fontName);
+    }
 }
