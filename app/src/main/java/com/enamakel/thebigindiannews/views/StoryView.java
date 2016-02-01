@@ -27,7 +27,6 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -67,8 +66,7 @@ public class StoryView extends RelativeLayout implements Checkable {
     @ViewById TextView title;
     @ViewById TextView source;
     @ViewById View comment;
-    @ViewById ViewSwitcher voteSwitcher;
-    @ViewById LinearLayout rankContainer;
+    @ViewById LinearLayout imageContainer;
     @ViewById View buttonMore;
     @ViewById ImageView thumbnail;
     @ViewById TextView description;
@@ -119,8 +117,9 @@ public class StoryView extends RelativeLayout implements Checkable {
 
 
     public void setStory(@NonNull StoryModel story) {
-        Log.d("hello", story.getId());
         reset();
+        setChecked(false);
+//        story.getThumbnail().setFilename(null);
         if (!isLocal) {
 //            if (item.getKidCount() > 0) {
 //                ((Button) comment).setText(getContext().getResources()
@@ -132,8 +131,8 @@ public class StoryView extends RelativeLayout implements Checkable {
         }
 
         // show The Image in a ImageView
-        if (story.getThumbnail().getFilename() != null) {
-            rankContainer.setBackgroundColor(Color.parseColor(story.getThumbnail().getColor()));
+        if (story.hasImage()) {
+            imageContainer.setBackgroundColor(Color.parseColor(story.getThumbnail().getColor()));
             Picasso.with(context)
                     .load(story.getThumbnail().getUrl())
                     .into(thumbnail, new Callback() {
@@ -147,10 +146,11 @@ public class StoryView extends RelativeLayout implements Checkable {
 
                         @Override
                         public void onError() {
-                            rankContainer.setVisibility(GONE);
+                            imageContainer.setVisibility(GONE);
                         }
                     });
-        }
+        } else imageContainer.setVisibility(GONE);
+
 
         title.setText(story.getTitle());
         description.setText(story.getExcerpt().replace('\n', ' '));

@@ -37,7 +37,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/rank_container"
+            android:id="@+id/image_container"
             android:layout_width="@dimen/cardview_min_height"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
@@ -45,42 +45,6 @@
             android:gravity="center|center_vertical"
             android:orientation="vertical"
             android:background="?attr/colorCardHighlight">
-
-            <ViewSwitcher
-                android:id="@+id/vote_switcher"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:inAnimation="@anim/slide_in_right"
-                android:outAnimation="@anim/slide_out_right"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@id/rank"
-                    style="@style/textRankStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="46"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical|center_horizontal"
-                    android:contentDescription="@string/voted"
-                    android:src="@drawable/ic_thumb_up_white_24dp"
-                    android:tint="@color/greenA700"/>
-
-            </ViewSwitcher>
-
-            <TextView
-                android:id="@id/score"
-                style="@style/textSubtitleStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:singleLine="false"
-                android:text="128 pts"
-                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/thumbnail"
@@ -96,14 +60,15 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="5dp">
 
             <com.enamakel.thebigindiannews.views.TextView
                 android:id="@id/title"
                 style="@style/textTitleStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/rank_container"
+                android:layout_toRightOf="@id/image_container"
                 android:paddingTop="@dimen/padding"
                 android:textStyle="bold"
                 android:text="@string/loading_text"
@@ -115,10 +80,10 @@
                 android:maxLines = "4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/rank_container"
+                android:layout_toRightOf="@id/image_container"
                 android:padding="@dimen/padding"
                 android:text="@string/loading_text"
-                android:textColor="#666"/>
+                android:textColor="#999"/>
 
 
             <LinearLayout
@@ -127,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title"
                 android:layout_toLeftOf="@id/comment"
-                android:layout_toRightOf="@id/rank_container"
+                android:layout_toRightOf="@id/image_container"
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/padding">
 

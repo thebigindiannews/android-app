@@ -90,7 +90,7 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
     };
 
 
-    protected StoryModel selectedItem;
+    protected BaseCardModel selectedItem;
 
 
     @Override
@@ -220,26 +220,24 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
 
     @Override
     public void onItemSelected(@Nullable BaseCardModel item) {
-        if (isMultiPane) return;
-//        return;
-//        if (isMultiPane) {
-//            StoryModel previousItem = selectedItem;
-//
-//            if (previousItem != null && item != null &&
-//                    TextUtils.equals(item.getId(), previousItem.getId())) return;
-//
-//
-//            if (previousItem == null && item != null ||
-//                    previousItem != null && item == null) supportInvalidateOptionsMenu();
-//
-//            openMultiPaneItem(item);
-//        } else if (item != null) openSinglePaneItem(item);
-//        selectedItem = item;
+        if (isMultiPane) {
+            BaseCardModel previousItem = selectedItem;
+
+            if (previousItem != null && item != null &&
+                    TextUtils.equals(item.getId(), previousItem.getId())) return;
+
+
+            if (previousItem == null && item != null ||
+                    previousItem != null && item == null) supportInvalidateOptionsMenu();
+
+            openMultiPaneItem(item);
+        } else if (item != null) openSinglePaneItem(item);
+        selectedItem = item;
     }
 
 
     @Override
-    public StoryModel getSelectedItem() {
+    public BaseCardModel getSelectedItem() {
         return selectedItem;
     }
 
@@ -276,9 +274,11 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
     protected abstract Fragment instantiateListFragment();
 
 
-    private void openSinglePaneItem(ItemManager.WebItem item) {
-        if (useExternalBrowser) {
-            AppUtils.openWebUrlExternal(this, item.getDisplayedTitle(), item.getUrl());
+    private void openSinglePaneItem(BaseCardModel item) {
+        if (item instanceof StoryModel) {
+//        if (useExternalBrowser && item instanceof StoryModel) {
+            StoryModel story = (StoryModel) item;
+            AppUtils.openWebUrlExternal(this, story.getTitle(), story.getUrl());
         } else {
             startActivity(new Intent(this, SingleStoryActivity.class)
                     .putExtra(SingleStoryActivity.EXTRA_ITEM, item));

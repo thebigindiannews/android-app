@@ -25,7 +25,6 @@ import lombok.ToString;
 public class StoryModel extends BaseCardModel<StoryModel> {
     private static final String FORMAT_LINK_USER = "<a href=\"%1$s://user/%2$s\">%2$s</a>";
 
-
     @Expose String excerpt;
     @Expose String image_url;
     @Expose String kind;
@@ -47,10 +46,10 @@ public class StoryModel extends BaseCardModel<StoryModel> {
     boolean dead;
     boolean viewed;
 
+
     @Data public class Thumbnail {
         @Expose String color;
         @Expose String filename;
-        @Expose String image_url;
         @Expose double height;
         @Expose double width;
 
@@ -131,10 +130,20 @@ public class StoryModel extends BaseCardModel<StoryModel> {
     }
 
 
+    public boolean hasImage() {
+        return image_url != null && thumbnail.filename != null;
+    }
+
+
+    /**
+     * Return the amount of time remaining needed to read the article.
+     *
+     * @return {String} describing the time to read. eg: "2 min"
+     */
     public String getReadtime() {
         String lessThanAMinute = "less than a minute";
         String minShortForm = "min";
-        double readingTimeMinutes, readingTimeSeconds;
+        int readingTimeMinutes;
 
         // The average human reading speed (WPM)
         float wordsPerMinute = 250;
