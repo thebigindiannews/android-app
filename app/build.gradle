@@ -40,6 +40,7 @@ ext {
     AAVersion = "3.3.2"
     lombokVersion = "1.16.6"
     autoParcelVersion = "0.1"
+    picassoVersion = "2.5.2"
 }
 
 apt {
@@ -79,6 +80,7 @@ dependencies {
     compile "org.projectlombok:lombok:$lombokVersion"
     compile "me.tatarka:auto-parcel-gson:$autoParcelVersion"
     apt "me.tatarka:auto-parcel-gson-processor:$autoParcelVersion"
+    compile "com.squareup.picasso:picasso:$picassoVersion"
 }
 
 apply from: "${rootProject.getRootDir()}/robolectric.gradle"
