@@ -34,18 +34,18 @@
 
     <!-- Font -->
     <string-array name="font_options">
-        <item>Default</item>
+        <item>Default (Roboto)</item>
         <item>Droid Sans</item>
         <item>Droid Serif</item>
         <item>Libre Baskerville</item>
         <item>Roboto Slab</item>
     </string-array>
     <string-array name="font_values">
-        <item/>
-        <item>DroidSans.ttf</item>
-        <item>DroidSerif.ttf</item>
-        <item>LibreBaskerville.ttf</item>
-        <item>RobotoSlab.ttf</item>
+        <item>Roboto</item>
+        <item>DroidSans</item>
+        <item>DroidSerif</item>
+        <item>LibreBaskerville</item>
+        <item>RobotoSlab</item>
     </string-array>
 
     <!-- Comment display -->

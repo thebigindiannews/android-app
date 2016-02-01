@@ -24,13 +24,12 @@ import android.text.TextUtils;
 
 
 public class FontCache {
-    static FontCache fontCache;
+    static FontCache instance;
     final ArrayMap<String, Typeface> typefaceMap = new ArrayMap<>();
 
 
-    public static FontCache getInstance() {
-        if (fontCache == null) fontCache = new FontCache();
-        return fontCache;
+    static {
+        instance = new FontCache();
     }
 
 
@@ -39,11 +38,15 @@ public class FontCache {
     }
 
 
+    public static FontCache getInstance() {
+        return instance;
+    }
+
+
     public Typeface get(Context context, String typefaceName) {
         if (TextUtils.isEmpty(typefaceName)) return null;
-        if (!typefaceMap.containsKey(typefaceName)) {
+        if (!typefaceMap.containsKey(typefaceName))
             typefaceMap.put(typefaceName, Typeface.createFromAsset(context.getAssets(), typefaceName));
-        }
         return typefaceMap.get(typefaceName);
     }
 }
