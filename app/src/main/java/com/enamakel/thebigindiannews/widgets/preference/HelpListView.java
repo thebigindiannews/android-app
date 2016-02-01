@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.widget.preference;
+package com.enamakel.thebigindiannews.widgets.preference;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -29,7 +29,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.widget.AsteriskSpan;
+import com.enamakel.thebigindiannews.widgets.AsteriskSpan;
 
 public class HelpListView extends ScrollView {
     public HelpListView(Context context, AttributeSet attrs) {

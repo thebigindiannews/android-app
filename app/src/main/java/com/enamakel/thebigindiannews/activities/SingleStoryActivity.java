@@ -58,16 +58,16 @@ import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.util.Scrollable;
-import com.enamakel.thebigindiannews.widget.ItemPagerAdapter;
+import com.enamakel.thebigindiannews.adaptors.ItemPagerAdapter;
 
 import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-public class ItemActivity extends InjectableActivity implements Scrollable {
-    public static final String EXTRA_ITEM = ItemActivity.class.getName() + ".EXTRA_ITEM";
-    public static final String EXTRA_OPEN_COMMENTS = ItemActivity.class.getName() + ".EXTRA_OPEN_COMMENTS";
+public class SingleStoryActivity extends InjectableActivity implements Scrollable {
+    public static final String EXTRA_ITEM = SingleStoryActivity.class.getName() + ".EXTRA_ITEM";
+    public static final String EXTRA_OPEN_COMMENTS = SingleStoryActivity.class.getName() + ".EXTRA_OPEN_COMMENTS";
     private static final String PARAM_ID = "id";
     private static final String STATE_ITEM = "state:item";
     private static final String STATE_ITEM_ID = "state:itemId";
@@ -204,12 +204,12 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
         }
 
         if (item.getItemId() == R.id.menu_external) {
-//            AppUtils.openExternal(ItemActivity.this, mAlertDialogBuilder, story);
+//            AppUtils.openExternal(SingleStoryActivity.this, mAlertDialogBuilder, story);
             return true;
         }
 
         if (item.getItemId() == R.id.menu_share) {
-//            AppUtils.share(ItemActivity.this, mAlertDialogBuilder, story);
+//            AppUtils.share(SingleStoryActivity.this, mAlertDialogBuilder, story);
             return true;
         }
 
@@ -258,10 +258,10 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
             public void onClick(View v) {
                 final int toastMessageResId;
                 if (!story.isFavorite()) {
-                    favoriteManager.add(ItemActivity.this, story);
+                    favoriteManager.add(SingleStoryActivity.this, story);
                     toastMessageResId = R.string.toast_saved;
                 } else {
-                    favoriteManager.remove(ItemActivity.this, story);
+                    favoriteManager.remove(SingleStoryActivity.this, story);
                     toastMessageResId = R.string.toast_removed;
                 }
                 if (!mUndo) {
@@ -292,7 +292,7 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
 //        replyButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                startActivity(new Intent(ItemActivity.this, ComposeActivity.class)
+//                startActivity(new Intent(SingleStoryActivity.this, ComposeActivity.class)
 //                        .putExtra(ComposeActivity.EXTRA_PARENT_ID, story.getId())
 //                        .putExtra(ComposeActivity.EXTRA_PARENT_TEXT, story.getText()));
 //            }
@@ -360,7 +360,7 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
 //            findViewById(R.id.header_card_view).setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
-//                    AppUtils.openWebUrlExternal(ItemActivity.this,
+//                    AppUtils.openWebUrlExternal(SingleStoryActivity.this,
 //                            story.getDisplayedTitle(),
 //                            story.getUrl());
 //                }
@@ -380,13 +380,13 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
     //    @Click
     void voteButtonClicked() {
         StoryModel story = this.story;
-        mUserServices.voteUp(ItemActivity.this, story.getId(), new VoteCallback(this));
+        mUserServices.voteUp(SingleStoryActivity.this, story.getId(), new VoteCallback(this));
     }
 
 
     //    @Click
     void replyButtonClicked() {
-//        startActivity(new Intent(ItemActivity.this, ComposeActivity.class)
+//        startActivity(new Intent(SingleStoryActivity.this, ComposeActivity.class)
 //                .putExtra(ComposeActivity.EXTRA_PARENT_ID, story.getId())
 //                .putExtra(ComposeActivity.EXTRA_PARENT_TEXT, story.getText()));
     }
@@ -406,11 +406,11 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
 
 
     private static class ItemResponseListener implements ResponseListener<StoryModel> {
-        private final WeakReference<ItemActivity> itemActivity;
+        private final WeakReference<SingleStoryActivity> itemActivity;
 
 
-        public ItemResponseListener(ItemActivity itemActivity) {
-            this.itemActivity = new WeakReference<>(itemActivity);
+        public ItemResponseListener(SingleStoryActivity singleStoryActivity) {
+            this.itemActivity = new WeakReference<>(singleStoryActivity);
         }
 
 
@@ -430,11 +430,11 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
 
 
     private static class VoteCallback extends UserServices.Callback {
-        private final WeakReference<ItemActivity> weakReference;
+        private final WeakReference<SingleStoryActivity> weakReference;
 
 
-        public VoteCallback(ItemActivity itemActivity) {
-            weakReference = new WeakReference<>(itemActivity);
+        public VoteCallback(SingleStoryActivity singleStoryActivity) {
+            weakReference = new WeakReference<>(singleStoryActivity);
         }
 
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.widget;
+package com.enamakel.thebigindiannews.widgets;
 
 import android.view.View;
 import android.widget.TextView;
@@ -22,11 +22,12 @@ import android.widget.TextView;
 import com.enamakel.thebigindiannews.R;
 
 public class SubmissionViewHolder extends ItemViewHolder {
-    final TextView mTitleTextView;
+    final TextView titleTextView;
+
 
     public SubmissionViewHolder(View itemView) {
         super(itemView);
-        mTitleTextView = (android.widget.TextView) itemView.findViewById(R.id.title);
+        titleTextView = (android.widget.TextView) itemView.findViewById(R.id.title);
         commentButton.setText(R.string.view_story);
     }
 }

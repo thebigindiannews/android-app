@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.widget;
+package com.enamakel.thebigindiannews.views;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatTextView;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.widget;
+package com.enamakel.thebigindiannews.widgets;
 
 import android.content.Context;
 import android.support.annotation.MenuRes;
@@ -29,13 +29,14 @@ public interface PopupMenu {
      * gravity. Must be called right after construction.
      *
      * @param context Context the popup menu is running in, through which it
-     *        can access the current theme, resources, etc.
-     * @param anchor Anchor view for this popup. The popup will appear below
-     *        the anchor if there is room, or above it if there is not.
+     *                can access the current theme, resources, etc.
+     * @param anchor  Anchor view for this popup. The popup will appear below
+     *                the anchor if there is room, or above it if there is not.
      * @param gravity The {@link Gravity} value for aligning the popup with its
-     *        anchor.
+     *                anchor.
      */
     void create(Context context, View anchor, int gravity);
+
 
     /**
      * Inflate a menu resource into this PopupMenu. This is equivalent to calling
@@ -45,12 +46,14 @@ public interface PopupMenu {
      */
     void inflate(@MenuRes int menuRes);
 
+
     /**
      * @return the {@link Menu} associated with this popup. Populate the returned Menu with
      * items before calling {@link #show()}.
      * @see #show()
      */
     Menu getMenu();
+
 
     /**
      * Set a listener that will be notified when the user selects an item from the menu.
@@ -59,10 +62,12 @@ public interface PopupMenu {
      */
     void setOnMenuItemClickListener(OnMenuItemClickListener listener);
 
+
     /**
      * Show the menu popup anchored to the view specified during construction.
      */
     void show();
+
 
     /**
      * Interface responsible for receiving menu item click events if the items themselves
@@ -82,20 +87,24 @@ public interface PopupMenu {
     class Impl implements PopupMenu {
         private android.support.v7.widget.PopupMenu mSupportPopupMenu;
 
+
         @Override
         public void create(Context context, View anchor, int gravity) {
             mSupportPopupMenu = new android.support.v7.widget.PopupMenu(context, anchor, gravity);
         }
+
 
         @Override
         public void inflate(@MenuRes int menuRes) {
             mSupportPopupMenu.inflate(menuRes);
         }
 
+
         @Override
         public Menu getMenu() {
             return mSupportPopupMenu.getMenu();
         }
+
 
         @Override
         public void setOnMenuItemClickListener(final OnMenuItemClickListener listener) {
@@ -106,6 +115,7 @@ public interface PopupMenu {
                 }
             });
         }
+
 
         @Override
         public void show() {

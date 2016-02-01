@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.widget;
+package com.enamakel.thebigindiannews.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -40,6 +40,7 @@ import android.widget.ViewSwitcher;
 
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
+import com.enamakel.thebigindiannews.widget.AsteriskSpan;
 
 import org.androidannotations.annotations.EView;
 import org.androidannotations.annotations.ViewById;

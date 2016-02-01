@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.widget;
+package com.enamakel.thebigindiannews.adaptors;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -30,6 +30,7 @@ import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.activities.ItemActivity;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.widget.SubmissionViewHolder;
 
 public class ThreadPreviewRecyclerViewAdapter extends ItemRecyclerViewAdapter<SubmissionViewHolder> {
     private final List<ItemManager.Item> mItems = new ArrayList<>();

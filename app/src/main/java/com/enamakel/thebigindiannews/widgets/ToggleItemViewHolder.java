@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.widget;
+package com.enamakel.thebigindiannews.widgets;
 
 import android.view.View;
 import android.widget.TextView;
@@ -23,15 +23,16 @@ import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
 
 public class ToggleItemViewHolder extends ItemViewHolder {
-    public final TextView mToggle;
-    public final View mLevel;
-    public final TextView mParent;
+    public final TextView toggle;
+    public final View level;
+    public final TextView parent;
+
 
     public ToggleItemViewHolder(View itemView) {
         super(itemView);
-        mToggle = (TextView) itemView.findViewById(R.id.toggle);
-        mLevel = itemView.findViewById(R.id.level);
-        mParent = (TextView) itemView.findViewById(R.id.parent);
-        AppUtils.setHtmlText(mParent, mParent.getResources().getString(R.string.parent));
+        toggle = (TextView) itemView.findViewById(R.id.toggle);
+        level = itemView.findViewById(R.id.level);
+        parent = (TextView) itemView.findViewById(R.id.parent);
+        AppUtils.setHtmlText(parent, parent.getResources().getString(R.string.parent));
     }
 }

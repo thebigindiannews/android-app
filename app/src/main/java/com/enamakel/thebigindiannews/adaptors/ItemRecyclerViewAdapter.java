@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.widget;
+package com.enamakel.thebigindiannews.adaptors;
 
 import android.content.Context;
 import android.content.Intent;
@@ -39,6 +39,8 @@ import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.util.Injectable;
+import com.enamakel.thebigindiannews.widget.ItemViewHolder;
+import com.enamakel.thebigindiannews.widget.PopupMenu;
 
 import java.lang.ref.WeakReference;
 import java.util.HashSet;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.widget;
+package com.enamakel.thebigindiannews.widgets;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -24,16 +24,18 @@ import android.view.View;
 import com.enamakel.thebigindiannews.R;
 
 public class CommentItemDecoration extends RecyclerView.ItemDecoration {
-    private final int mHorizontalMargin;
+    final int mHorizontalMargin;
+
 
     public CommentItemDecoration(Context context) {
         mHorizontalMargin = context.getResources()
                 .getDimensionPixelSize(R.dimen.cardview_horizontal_margin);
-
     }
 
+
     @Override
-    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
+                               RecyclerView.State state) {
         outRect.set(mHorizontalMargin, 0, mHorizontalMargin, 0);
     }
 }

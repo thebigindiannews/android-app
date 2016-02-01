@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.widget.preference;
+package com.enamakel.thebigindiannews.widgets.preference;
 
 import android.content.Context;
 import android.content.res.TypedArray;

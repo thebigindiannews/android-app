@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.widget;
+package com.enamakel.thebigindiannews.adaptors;
 
 import android.content.Intent;
 import android.view.View;
@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import com.enamakel.thebigindiannews.activities.ItemActivity;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.widget.ItemViewHolder;
 
 public class MultiPageItemRecyclerViewAdapter
         extends ItemRecyclerViewAdapter<ItemViewHolder> {

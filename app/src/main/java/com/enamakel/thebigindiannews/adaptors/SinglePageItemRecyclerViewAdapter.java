@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.widget;
+package com.enamakel.thebigindiannews.adaptors;
 
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -31,6 +31,7 @@ import java.util.Arrays;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.widget.ToggleItemViewHolder;
 
 public class SinglePageItemRecyclerViewAdapter
         extends ItemRecyclerViewAdapter<ToggleItemViewHolder> {
