@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.preference;
 
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.v7.app.AlertDialog;
@@ -24,29 +25,31 @@ import android.util.AttributeSet;
 
 import com.enamakel.thebigindiannews.R;
 
+
 public class PreferenceHelp extends PreferenceGroup {
-    private final int mLayoutResId;
-    private final String mTitle;
+    final int layoutResId;
+    final String title;
+
 
     public PreferenceHelp(Context context, AttributeSet attrs) {
         super(context, attrs, R.attr.preferenceHelpStyle);
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PreferenceHelp);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.PreferenceHelp);
+
         try {
-            mLayoutResId = a.getResourceId(R.styleable.PreferenceHelp_dialogLayout, 0);
-            mTitle = a.getString(R.styleable.PreferenceHelp_dialogTitle);
+            layoutResId = typedArray.getResourceId(R.styleable.PreferenceHelp_dialogLayout, 0);
+            title = typedArray.getString(R.styleable.PreferenceHelp_dialogTitle);
         } finally {
-            a.recycle();
+            typedArray.recycle();
         }
     }
 
+
     @Override
     protected void onClick() {
-        if (mLayoutResId == 0) {
-            return;
-        }
+        if (layoutResId == 0) return;
         new AlertDialog.Builder(getContext())
-                .setTitle(mTitle)
-                .setView(mLayoutResId)
+                .setTitle(title)
+                .setView(layoutResId)
                 .setPositiveButton(R.string.got_it, null)
                 .create()
                 .show();

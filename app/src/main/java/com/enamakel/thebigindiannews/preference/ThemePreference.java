@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.preference;
 
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.StringRes;
@@ -29,6 +30,7 @@ import android.view.View;
 
 import com.enamakel.thebigindiannews.R;
 
+
 public class ThemePreference extends Preference {
 
     public static final @StyleRes int THEME_DEFAULT = R.style.AppTheme;
@@ -41,6 +43,8 @@ public class ThemePreference extends Preference {
     private static final String VALUE_SOLARIZED_DARK = "solarized_dark";
     private static final ArrayMap<Integer, String> BUTTON_VALUE = new ArrayMap<>();
     private static final ArrayMap<String, ThemeSpec> VALUE_THEME = new ArrayMap<>();
+
+
     static {
         BUTTON_VALUE.put(R.id.theme_light, VALUE_LIGHT);
         BUTTON_VALUE.put(R.id.theme_dark, VALUE_DARK);
@@ -63,43 +67,54 @@ public class ThemePreference extends Preference {
                 new ThemeSpec(R.string.theme_solarized_dark, R.style.AppTheme_Dark_Solarized, R.style.AppAlertDialog_Dark_Solarized));
     }
 
-    public static @StyleRes int getTheme(String value) {
+
+    public static
+    @StyleRes
+    int getTheme(String value) {
         if (!VALUE_THEME.containsKey(value)) {
             return THEME_DEFAULT;
         }
         return VALUE_THEME.get(value).theme;
     }
 
-    public static @StyleRes int getDialogTheme(String value) {
+
+    public static
+    @StyleRes
+    int getDialogTheme(String value) {
         if (!VALUE_THEME.containsKey(value)) {
             return DIALOG_THEME_DEFAULT;
         }
         return VALUE_THEME.get(value).dialogTheme;
     }
 
+
     public ThemePreference(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
+
 
     public ThemePreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setLayoutResource(R.layout.preference_theme);
     }
 
+
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
         return VALUE_LIGHT;
     }
 
+
     @Override
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
         super.onSetInitialValue(restorePersistedValue, defaultValue);
-        String value = restorePersistedValue ? getPersistedString(null): (String) defaultValue;
+        String value = restorePersistedValue ? getPersistedString(null) : (String) defaultValue;
         if (TextUtils.isEmpty(value)) {
             value = VALUE_LIGHT;
         }
         setSummary(VALUE_THEME.get(value).summary);
     }
+
 
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
@@ -120,10 +135,12 @@ public class ThemePreference extends Preference {
         }
     }
 
+
     private static class ThemeSpec {
         public final @StringRes int summary;
         public final @StyleRes int theme;
         public final @StyleRes int dialogTheme;
+
 
         private ThemeSpec(@StringRes int summary, @StyleRes int theme, @StyleRes int dialogTheme) {
             this.summary = summary;
