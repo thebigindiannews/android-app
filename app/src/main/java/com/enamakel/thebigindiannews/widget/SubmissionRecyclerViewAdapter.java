@@ -37,7 +37,7 @@ public class SubmissionRecyclerViewAdapter extends ItemRecyclerViewAdapter<Submi
 
     @Override
     public SubmissionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new SubmissionViewHolder(mLayoutInflater.inflate(R.layout.item_submission, parent, false));
+        return new SubmissionViewHolder(layoutInflater.inflate(R.layout.item_submission, parent, false));
     }
 
     @Override
@@ -57,23 +57,23 @@ public class SubmissionRecyclerViewAdapter extends ItemRecyclerViewAdapter<Submi
             return;
         }
         final boolean isComment = TextUtils.equals(item.getType(), ItemManager.Item.COMMENT_TYPE);
-        holder.mPostedTextView.setText(item.getDisplayedTime(mContext, false, false));
+        holder.postedTextView.setText(item.getDisplayedTime(context, false, false));
         if (isComment) {
             holder.mTitleTextView.setText(null);
-            holder.mCommentButton.setText(R.string.view_thread);
+            holder.commentButton.setText(R.string.view_thread);
         } else {
-            holder.mPostedTextView.append(" - ");
-            holder.mPostedTextView.append(mContext.getResources()
+            holder.postedTextView.append(" - ");
+            holder.postedTextView.append(context.getResources()
                     .getQuantityString(R.plurals.score, item.getScore(), item.getScore()));
             holder.mTitleTextView.setText(item.getDisplayedTitle());
-            holder.mCommentButton.setText(R.string.view_story);
+            holder.commentButton.setText(R.string.view_story);
         }
         holder.mTitleTextView.setVisibility(holder.mTitleTextView.length() > 0 ?
                 View.VISIBLE : View.GONE);
-        holder.mContentTextView.setVisibility(holder.mContentTextView.length() > 0 ?
+        holder.contentTextView.setVisibility(holder.contentTextView.length() > 0 ?
                 View.VISIBLE : View.GONE);
-        holder.mCommentButton.setVisibility(item.isDeleted() ? View.GONE : View.VISIBLE);
-        holder.mCommentButton.setOnClickListener(new View.OnClickListener() {
+        holder.commentButton.setVisibility(item.isDeleted() ? View.GONE : View.VISIBLE);
+        holder.commentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isComment) {
@@ -86,12 +86,12 @@ public class SubmissionRecyclerViewAdapter extends ItemRecyclerViewAdapter<Submi
     }
 
     private void openItem(ItemManager.Item item) {
-        mContext.startActivity(new Intent(mContext, ItemActivity.class)
+        context.startActivity(new Intent(context, ItemActivity.class)
                 .putExtra(ItemActivity.EXTRA_ITEM, item));
     }
 
     private void openPreview(ItemManager.Item item) {
-        mContext.startActivity(new Intent(mContext, ThreadPreviewActivity.class)
+        context.startActivity(new Intent(context, ThreadPreviewActivity.class)
                 .putExtra(ThreadPreviewActivity.EXTRA_ITEM, item));
     }
 }

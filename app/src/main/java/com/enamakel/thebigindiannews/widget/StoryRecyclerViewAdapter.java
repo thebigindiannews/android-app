@@ -23,7 +23,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
-import android.support.v4.util.LongSparseArray;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -32,238 +31,242 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.enamakel.thebigindiannews.ActivityModule;
+import com.enamakel.thebigindiannews.AppUtils;
+import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.accounts.UserServices;
+import com.enamakel.thebigindiannews.activities.ComposeActivity;
+import com.enamakel.thebigindiannews.activities.UserActivity;
+import com.enamakel.thebigindiannews.data.FavoriteManager;
+import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.ResponseListener;
+import com.enamakel.thebigindiannews.data.models.StoryModel;
+import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.enamakel.thebigindiannews.ActivityModule;
-import com.enamakel.thebigindiannews.AppUtils;
-import com.enamakel.thebigindiannews.activities.ComposeActivity;
-import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.activities.UserActivity;
-import com.enamakel.thebigindiannews.accounts.UserServices;
-import com.enamakel.thebigindiannews.data.FavoriteManager;
-import com.enamakel.thebigindiannews.data.ItemManager;
-import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
-import com.enamakel.thebigindiannews.data.ResponseListener;
+import lombok.Getter;
+import lombok.Setter;
 
 public class StoryRecyclerViewAdapter extends
-        ListRecyclerViewAdapter<ListRecyclerViewAdapter.ItemViewHolder, ItemManager.Item> {
+        ListRecyclerViewAdapter<ListRecyclerViewAdapter.ItemViewHolder, StoryModel> {
     private static final String STATE_ITEMS = "state:items";
     private static final String STATE_UPDATED = "state:updated";
     private static final String STATE_PROMOTED = "state:promoted";
     private static final String STATE_SHOW_ALL = "state:showAll";
-    private static final String STATE_HIGHLIGHT_UPDATED = "state:highlightUpdated";
+    private static final String STATE_HIGHLIGHT_UPDATED = "state:isHighlightUpdated";
     private static final String STATE_FAVORITE_REVISION = "state:favoriteRevision";
     private static final String STATE_USERNAME = "state:username";
-    private final ContentObserver mObserver = new ContentObserver(new Handler()) {
+
+    private final ContentObserver contentObserver = new ContentObserver(new Handler()) {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             if (FavoriteManager.isCleared(uri)) {
-                mFavoriteRevision++; // invalidate all favorite statuses
+                favoriteRevision++; // invalidate all favorite statuses
                 notifyDataSetChanged();
                 return;
             }
-            Integer position = mItemPositions.get(Long.valueOf(uri.getLastPathSegment()));
-            if (position == null) {
-                return;
-            }
-            ItemManager.Item item = mItems.get(position);
-            if (FavoriteManager.isAdded(uri)) {
-                item.setFavorite(true);
-                item.setLocalRevision(mFavoriteRevision);
-            } else if (FavoriteManager.isRemoved(uri)) {
-                item.setFavorite(false);
-                item.setLocalRevision(mFavoriteRevision);
-            } else {
-                item.setIsViewed(true);
-            }
-            notifyItemChanged(position);
+
+//            String position = itemPositions.get(Long.valueOf(uri.getLastPathSegment()));
+//            if (position == null) return;
+
+//            ItemManager.Item item = items.get(position);
+//            if (FavoriteManager.isAdded(uri)) {
+//                item.setFavorite(true);
+//                item.setLocalRevision(favoriteRevision);
+//            } else if (FavoriteManager.isRemoved(uri)) {
+//                item.setFavorite(false);
+//                item.setLocalRevision(favoriteRevision);
+//            } else item.setIsViewed(true);
+//
+//            notifyItemChanged(position);
         }
     };
-    @Inject @Named(ActivityModule.HN) ItemManager mItemManager;
-    private ArrayList<ItemManager.Item> mItems;
-    private ArrayList<ItemManager.Item> mUpdated = new ArrayList<>();
-    private ArrayList<String> mPromoted = new ArrayList<>();
-    private final LongSparseArray<Integer> mItemPositions = new LongSparseArray<>();
-    private final LongSparseArray<Integer> mUpdatedPositions = new LongSparseArray<>();
-    private int mFavoriteRevision = -1;
-    private String mUsername;
-    private boolean mHighlightUpdated = true;
-    private boolean mShowAll = true;
+
+    @Inject @Named(ActivityModule.HN) ItemManager itemManager;
+    private @Getter ArrayList<StoryModel> items;
+    private ArrayList<StoryModel> updatedItems = new ArrayList<>();
+    private ArrayList<String> promotedList = new ArrayList<>();
+    //    private final LongSparseArray<String> itemPositions = new LongSparseArray<>();
+    //    private final LongSparseArray<String> updatedPositions = new LongSparseArray<>();
+    private final HashMap<String, Integer> itemPositions = new HashMap<>();
+    private final HashMap<String, Integer> updatedPositions = new HashMap<>();
+    private int favoriteRevision = -1;
+    private @Setter String username;
+    private boolean isHighlightUpdated = true;
+    private boolean shouldShowAll = true;
+
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         ContentResolver cr = recyclerView.getContext().getContentResolver();
-        cr.registerContentObserver(MaterialisticProvider.URI_VIEWED, true, mObserver);
-        cr.registerContentObserver(MaterialisticProvider.URI_FAVORITE, true, mObserver);
+        cr.registerContentObserver(MaterialisticProvider.URI_VIEWED, true, contentObserver);
+        cr.registerContentObserver(MaterialisticProvider.URI_FAVORITE, true, contentObserver);
     }
+
 
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
-        recyclerView.getContext().getContentResolver().unregisterContentObserver(mObserver);
+        recyclerView.getContext().getContentResolver().unregisterContentObserver(contentObserver);
     }
+
 
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ItemViewHolder(mInflater.inflate(R.layout.item_story, parent, false));
+        return new ItemViewHolder(inflater.inflate(R.layout.item_story, parent, false));
     }
+
 
     @Override
     public int getItemCount() {
-        if (mShowAll) {
-            return mItemPositions.size();
-        } else {
-            return mUpdatedPositions.size();
-        }
+        if (shouldShowAll) return itemPositions.size();
+        else return updatedPositions.size();
     }
+
 
     @Override
     public Bundle saveState() {
         Bundle savedState = super.saveState();
-        savedState.putParcelableArrayList(STATE_ITEMS, mItems);
-        savedState.putParcelableArrayList(STATE_UPDATED, mUpdated);
-        savedState.putStringArrayList(STATE_PROMOTED, mPromoted);
-        savedState.putBoolean(STATE_SHOW_ALL, mShowAll);
-        savedState.putBoolean(STATE_HIGHLIGHT_UPDATED, mHighlightUpdated);
-        savedState.putInt(STATE_FAVORITE_REVISION, mFavoriteRevision);
-        savedState.putString(STATE_USERNAME, mUsername);
+        savedState.putParcelableArrayList(STATE_ITEMS, items);
+        savedState.putParcelableArrayList(STATE_UPDATED, updatedItems);
+        savedState.putStringArrayList(STATE_PROMOTED, promotedList);
+        savedState.putBoolean(STATE_SHOW_ALL, shouldShowAll);
+        savedState.putBoolean(STATE_HIGHLIGHT_UPDATED, isHighlightUpdated);
+        savedState.putInt(STATE_FAVORITE_REVISION, favoriteRevision);
+        savedState.putString(STATE_USERNAME, username);
         return savedState;
     }
 
+
     @Override
     public void restoreState(Bundle savedState) {
-        if (savedState == null) {
-            return;
-        }
+        if (savedState == null) return;
+
         super.restoreState(savedState);
-        ArrayList<ItemManager.Item> savedItems = savedState.getParcelableArrayList(STATE_ITEMS);
+        ArrayList<StoryModel> savedItems = savedState.getParcelableArrayList(STATE_ITEMS);
         setItemsInternal(savedItems);
-        mUpdated = savedState.getParcelableArrayList(STATE_UPDATED);
-        if (mUpdated != null) {
-            for (int i = 0; i < mUpdated.size(); i++) {
-                mUpdatedPositions.put(mUpdated.get(i).getLongId(), i);
-            }
-        }
-        mPromoted = savedState.getStringArrayList(STATE_PROMOTED);
-        mShowAll = savedState.getBoolean(STATE_SHOW_ALL, true);
-        mHighlightUpdated = savedState.getBoolean(STATE_HIGHLIGHT_UPDATED, true);
-        mFavoriteRevision = savedState.getInt(STATE_FAVORITE_REVISION);
-        mUsername = savedState.getString(STATE_USERNAME);
+        updatedItems = savedState.getParcelableArrayList(STATE_UPDATED);
+
+        if (updatedItems != null)
+            for (int i = 0; i < updatedItems.size(); i++)
+                updatedPositions.put(updatedItems.get(i).get_id(), i);
+
+
+        promotedList = savedState.getStringArrayList(STATE_PROMOTED);
+        shouldShowAll = savedState.getBoolean(STATE_SHOW_ALL, true);
+        isHighlightUpdated = savedState.getBoolean(STATE_HIGHLIGHT_UPDATED, true);
+        favoriteRevision = savedState.getInt(STATE_FAVORITE_REVISION);
+        username = savedState.getString(STATE_USERNAME);
     }
 
-    public ArrayList<ItemManager.Item> getItems() {
-        return mItems;
-    }
 
-    public void setItems(ArrayList<ItemManager.Item> items) {
+    public void setItems(ArrayList<StoryModel> items) {
         setUpdated(items);
         setItemsInternal(items);
         notifyDataSetChanged();
     }
 
-    public void setUsername(String username) {
-        mUsername = username;
-    }
 
     public void setHighlightUpdated(boolean highlightUpdated) {
-        mHighlightUpdated = highlightUpdated;
+        this.isHighlightUpdated = highlightUpdated;
     }
 
+
     public void setShowAll(boolean showAll) {
-        mShowAll = showAll;
+        shouldShowAll = showAll;
     }
+
 
     @Override
     protected void loadItem(final int adapterPosition) {
-        ItemManager.Item item = getItem(adapterPosition);
-        mItemManager.getItem(item.getId(), new ItemResponseListener(this, item));
+        StoryModel item = getItem(adapterPosition);
+        itemManager.getItem(item.getId(), new ItemResponseListener(this, item));
     }
+
 
     @Override
     protected void bindItem(final ItemViewHolder holder) {
-        final ItemManager.Item story = getItem(holder.getAdapterPosition());
+        final StoryModel story = getItem(holder.getAdapterPosition());
         bindItemUpdated(holder, story);
         highlightUserPost(holder, story);
-        holder.mStoryView.setViewed(story.isViewed());
-        if (story.getLocalRevision() < mFavoriteRevision) {
-            story.setFavorite(false);
-        }
-        holder.mStoryView.setFavorite(story.isFavorite());
+        holder.storyView.setViewed(false);
+        holder.storyView.setViewed(story.isViewed());
+//        if (story.getLocalRevision() < favoriteRevision) story.setFavorite(false);
+
+        holder.storyView.setFavorite(story.isFavorite());
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                showMoreOptions(holder.mStoryView.getMoreOptions(), story, holder);
+                showMoreOptions(holder.storyView.getMoreOptions(), story, holder);
                 return true;
             }
         });
-        holder.mStoryView.getMoreOptions().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showMoreOptions(v, story, holder);
-            }
-        });
+//        holder.storyView.getMoreOptions().setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showMoreOptions(v, story, holder);
+//            }
+//        });
     }
 
+
     @Override
-    protected boolean isItemAvailable(ItemManager.Item item) {
+    protected boolean isItemAvailable(StoryModel item) {
         return item != null && !TextUtils.isEmpty(item.getTitle());
     }
 
+
     @Override
-    protected ItemManager.Item getItem(int position) {
-        if (mShowAll) {
-            return mItems.get(position);
-        } else {
-            return mUpdated.get(position);
-        }
+    protected StoryModel getItem(int position) {
+        if (shouldShowAll) return items.get(position);
+        else return updatedItems.get(position);
     }
 
-    private void setItemsInternal(ArrayList<ItemManager.Item> items) {
-        mItems = items;
-        mItemPositions.clear();
-        if (items != null) {
-            for (int i = 0; i < items.size(); i++) {
-                mItemPositions.put(items.get(i).getLongId(), i);
-            }
-        }
+
+    private void setItemsInternal(ArrayList<StoryModel> items) {
+        this.items = items;
+        itemPositions.clear();
+
+        if (items != null)
+            for (int i = 0; i < items.size(); i++) itemPositions.put(items.get(i).get_id(), i);
     }
 
-    private void setUpdated(ArrayList<ItemManager.Item> items) {
-        if (!mHighlightUpdated || getItems() == null) {
-            return;
-        }
-        mUpdated.clear();
-        mUpdatedPositions.clear();
-        mPromoted.clear();
-        for (ItemManager.Item item : items) {
-            Integer position = mItemPositions.get(item.getLongId());
+
+    private void setUpdated(ArrayList<StoryModel> stories) {
+        if (!isHighlightUpdated || getItems() == null) return;
+
+        updatedItems.clear();
+        updatedPositions.clear();
+        promotedList.clear();
+
+        for (StoryModel story : stories) {
+            Integer position = itemPositions.get(story.get_id());
+
             if (position == null) {
-                mUpdated.add(item);
-                mUpdatedPositions.put(item.getLongId(), mUpdated.size() - 1);
+                updatedItems.add(story);
+                updatedPositions.put(story.get_id(), updatedItems.size() - 1);
             } else {
-                ItemManager.Item currentRevision = mItems.get(position);
-                item.setLastKidCount(currentRevision.getLastKidCount());
-                int lastRank = currentRevision.getRank();
-                if (lastRank > item.getRank()) {
-                    mPromoted.add(item.getId());
-                }
+                StoryModel currentRevision = this.items.get(position);
+//                item.setLastKidCount(currentRevision.getLastKidCount());
             }
         }
-        if (!mUpdated.isEmpty()) {
-            notifyUpdated();
-        }
+
+        if (!updatedItems.isEmpty()) notifyUpdated();
     }
+
 
     private void notifyUpdated() {
-        if (mShowAll) {
-            Snackbar.make(mRecyclerView,
-                    mContext.getResources().getQuantityString(R.plurals.new_stories_count,
-                            mUpdated.size(), mUpdated.size()),
+        if (shouldShowAll) {
+            Snackbar.make(recyclerView,
+                    context.getResources().getQuantityString(R.plurals.new_stories_count,
+                            updatedItems.size(), updatedItems.size()),
                     Snackbar.LENGTH_LONG)
                     .setAction(R.string.show_me, new View.OnClickListener() {
                         @Override
@@ -275,15 +278,15 @@ public class StoryRecyclerViewAdapter extends
                     })
                     .show();
         } else {
-            final Snackbar snackbar = Snackbar.make(mRecyclerView,
-                    mContext.getResources().getQuantityString(R.plurals.showing_new_stories,
-                            mUpdated.size(), mUpdated.size()),
+            final Snackbar snackbar = Snackbar.make(recyclerView,
+                    context.getResources().getQuantityString(R.plurals.showing_new_stories,
+                            updatedItems.size(), updatedItems.size()),
                     Snackbar.LENGTH_INDEFINITE);
             snackbar.setAction(R.string.show_all, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     snackbar.dismiss();
-                    mUpdated.clear();
+                    updatedItems.clear();
                     setShowAll(true);
                     notifyDataSetChanged();
                 }
@@ -291,67 +294,81 @@ public class StoryRecyclerViewAdapter extends
         }
     }
 
-    private void onItemLoaded(ItemManager.Item item) {
-        Integer position = mShowAll ? mItemPositions.get(item.getLongId()) :
-                mUpdatedPositions.get(item.getLongId());
+
+    private void onItemLoaded(StoryModel item) {
+        Integer position = shouldShowAll ? itemPositions.get(item.get_id()) :
+                updatedPositions.get(item.get_id());
+
         // ignore changes if item was invalidated by refresh / filter
         if (position != null && position >= 0 && position < getItemCount()) {
             notifyItemChanged(position);
         }
     }
 
-    private void bindItemUpdated(ItemViewHolder holder, ItemManager.Item story) {
-        if (mHighlightUpdated) {
-            holder.mStoryView.setUpdated(story,
-                    mUpdatedPositions.indexOfKey(story.getLongId()) >= 0,
-                    mPromoted.contains(story.getId()));
+
+    private void bindItemUpdated(ItemViewHolder holder, StoryModel story) {
+        if (isHighlightUpdated) {
+//            boolean a = updatedPositions.indexOfKey(story.getLongId()) >= 0;
+            boolean a = false;
+            holder.storyView.setUpdated(story,
+                    a,
+                    promotedList.contains(story.get_id()));
         }
     }
 
-    private void showMoreOptions(View v, final ItemManager.Item story, final ItemViewHolder holder) {
-        mPopupMenu.create(mContext, v, Gravity.NO_GRAVITY);
-        mPopupMenu.inflate(R.menu.menu_contextual_story);
-        mPopupMenu.getMenu().findItem(R.id.menu_contextual_save)
+
+    private void showMoreOptions(View view, final StoryModel story, final ItemViewHolder holder) {
+        popupMenu.create(context, view, Gravity.NO_GRAVITY);
+        popupMenu.inflate(R.menu.menu_contextual_story);
+
+        popupMenu.getMenu().findItem(R.id.menu_contextual_save)
                 .setTitle(story.isFavorite() ? R.string.unsave : R.string.save);
-        mPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.menu_contextual_save) {
                     toggleSave(story);
                     return true;
                 }
+
                 if (item.getItemId() == R.id.menu_contextual_vote) {
-                    vote(story, holder);
+                    readStory(story, holder);
                     return true;
                 }
+
                 if (item.getItemId() == R.id.menu_contextual_comment) {
-                    mContext.startActivity(new Intent(mContext, ComposeActivity.class)
-                            .putExtra(ComposeActivity.EXTRA_PARENT_ID, story.getId())
-                            .putExtra(ComposeActivity.EXTRA_PARENT_TEXT,
-                                    story.getDisplayedTitle()));
+                    context.startActivity(new Intent(context, ComposeActivity.class)
+                            .putExtra(ComposeActivity.EXTRA_PARENT_ID, story.get_id())
+                            .putExtra(ComposeActivity.EXTRA_PARENT_TEXT, story.getTitle()));
                     return true;
                 }
+
                 if (item.getItemId() == R.id.menu_contextual_profile) {
-                    mContext.startActivity(new Intent(mContext, UserActivity.class)
-                            .putExtra(UserActivity.EXTRA_USERNAME, story.getBy()));
+                    context.startActivity(new Intent(context, UserActivity.class)
+                            .putExtra(UserActivity.EXTRA_USERNAME, story.getCreated_by()));
                     return true;
                 }
+
                 return false;
             }
         });
-        mPopupMenu.show();
+        popupMenu.show();
     }
 
-    private void toggleSave(final ItemManager.Item story) {
+
+    private void toggleSave(final StoryModel story) {
         final int toastMessageResId;
+
         if (!story.isFavorite()) {
-            mFavoriteManager.add(mContext, story);
+            favoriteManager.add(context, story);
             toastMessageResId = R.string.toast_saved;
         } else {
-            mFavoriteManager.remove(mContext, story.getId());
+            favoriteManager.remove(context, story);
             toastMessageResId = R.string.toast_removed;
         }
-        Snackbar.make(mRecyclerView, toastMessageResId, Snackbar.LENGTH_SHORT)
+
+        Snackbar.make(recyclerView, toastMessageResId, Snackbar.LENGTH_SHORT)
                 .setAction(R.string.undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -361,48 +378,50 @@ public class StoryRecyclerViewAdapter extends
                 .show();
     }
 
-    private void vote(final ItemManager.Item story, final ItemViewHolder holder) {
-        mUserServices.voteUp(mContext, story.getId(),
-                new VoteCallback(this, holder.getAdapterPosition(), story));
+
+    private void readStory(final StoryModel story, final ItemViewHolder holder) {
+        userServices.voteUp(context, story.get_id(),
+                new StoryReadCallback(this, holder.getAdapterPosition(), story));
     }
+
 
     private void onVoted(int position, Boolean successful) {
         if (successful == null) {
-            Toast.makeText(mContext, R.string.vote_failed, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.vote_failed, Toast.LENGTH_SHORT).show();
         } else if (successful) {
-            Toast.makeText(mContext, R.string.voted, Toast.LENGTH_SHORT).show();
-            if (position < getItemCount()) {
-                notifyItemChanged(position);
-            }
+            Toast.makeText(context, R.string.voted, Toast.LENGTH_SHORT).show();
+            if (position < getItemCount()) notifyItemChanged(position);
         } else {
-            AppUtils.showLogin(mContext, mAlertDialogBuilder);
+            AppUtils.showLogin(context, alertDialogBuilder);
         }
     }
 
-    private void highlightUserPost(ItemViewHolder holder,
-                                   ItemManager.Item story) {
-        holder.mStoryView.setChecked(isSelected(story.getId()) ||
-                !TextUtils.isEmpty(mUsername) &&
-                TextUtils.equals(mUsername, story.getBy()));
+
+    private void highlightUserPost(ItemViewHolder holder, StoryModel story) {
+        holder.storyView.setChecked(isSelected(story.get_id()) ||
+                !TextUtils.isEmpty(username) && TextUtils.equals(username, story.getCreated_by()));
     }
 
-    private static class ItemResponseListener implements ResponseListener<ItemManager.Item> {
-        private final WeakReference<StoryRecyclerViewAdapter> mAdapter;
-        private final ItemManager.Item mPartialItem;
 
-        public ItemResponseListener(StoryRecyclerViewAdapter adapter,
-                                    ItemManager.Item partialItem) {
-            mAdapter = new WeakReference<>(adapter);
-            mPartialItem = partialItem;
+    private static class ItemResponseListener implements ResponseListener<StoryModel> {
+        private final WeakReference<StoryRecyclerViewAdapter> adapter;
+        private final StoryModel partialItem;
+
+
+        public ItemResponseListener(StoryRecyclerViewAdapter adapter, StoryModel partialItem) {
+            this.adapter = new WeakReference<>(adapter);
+            this.partialItem = partialItem;
         }
+
 
         @Override
-        public void onResponse(ItemManager.Item response) {
-            if (mAdapter.get() != null && mAdapter.get().isAttached() && response != null) {
-                mPartialItem.populate(response);
-                mAdapter.get().onItemLoaded(mPartialItem);
+        public void onResponse(StoryModel response) {
+            if (adapter.get() != null && adapter.get().isAttached() && response != null) {
+                partialItem.populate(response);
+                adapter.get().onItemLoaded(partialItem);
             }
         }
+
 
         @Override
         public void onError(String errorMessage) {
@@ -410,32 +429,34 @@ public class StoryRecyclerViewAdapter extends
         }
     }
 
-    private static class VoteCallback extends UserServices.Callback {
-        private final WeakReference<StoryRecyclerViewAdapter> mAdapter;
-        private final int mPosition;
-        private final ItemManager.Item mItem;
+    private static class StoryReadCallback extends UserServices.Callback {
+        private final WeakReference<StoryRecyclerViewAdapter> adapter;
+        private final int position;
+        private final StoryModel storyModel;
 
-        public VoteCallback(StoryRecyclerViewAdapter adapter, int position,
-                            ItemManager.Item item) {
-            mAdapter = new WeakReference<>(adapter);
-            mPosition = position;
-            mItem = item;
+
+        public StoryReadCallback(StoryRecyclerViewAdapter adapter, int position,
+                                 StoryModel item) {
+            this.adapter = new WeakReference<>(adapter);
+            this.position = position;
+            storyModel = item;
         }
+
 
         @Override
         public void onDone(boolean successful) {
             // TODO update locally only, as API does not update instantly
-            mItem.incrementScore();
-            if (mAdapter.get() != null && mAdapter.get().isAttached()) {
-                mAdapter.get().onVoted(mPosition, successful);
-            }
+            storyModel.setClicks_count(storyModel.getClicks_count() + 1);
+
+            if (adapter.get() != null && adapter.get().isAttached())
+                adapter.get().onVoted(position, successful);
         }
+
 
         @Override
         public void onError() {
-            if (mAdapter.get() != null && mAdapter.get().isAttached()) {
-                mAdapter.get().onVoted(mPosition, null);
-            }
+            if (adapter.get() != null && adapter.get().isAttached())
+                adapter.get().onVoted(position, null);
         }
     }
 }

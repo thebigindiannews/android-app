@@ -44,32 +44,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.enamakel.thebigindiannews.ActivityModule;
-import com.enamakel.thebigindiannews.activities.parent.InjectableActivity;
-import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.BuildConfig;
-import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.util.Scrollable;
 import com.enamakel.thebigindiannews.accounts.UserServices;
+import com.enamakel.thebigindiannews.activities.base.InjectableActivity;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ItemManager;
-import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.SessionManager;
+import com.enamakel.thebigindiannews.data.models.StoryModel;
+import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
+import com.enamakel.thebigindiannews.util.Preferences;
+import com.enamakel.thebigindiannews.util.Scrollable;
 import com.enamakel.thebigindiannews.widget.ItemPagerAdapter;
-
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
 
 import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-@EActivity(R.layout.activity_item)
 public class ItemActivity extends InjectableActivity implements Scrollable {
     public static final String EXTRA_ITEM = ItemActivity.class.getName() + ".EXTRA_ITEM";
     public static final String EXTRA_OPEN_COMMENTS = ItemActivity.class.getName() + ".EXTRA_OPEN_COMMENTS";
@@ -77,25 +72,25 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
     private static final String STATE_ITEM = "state:item";
     private static final String STATE_ITEM_ID = "state:itemId";
 
-    private ItemManager.Item story;
-    private String mItemId = null;
-    private boolean mExternalBrowser;
-    private Preferences.StoryViewMode mStoryViewMode;
+    private StoryModel story;
+    private String itemId = null;
+    private boolean externalBrowser;
+    private Preferences.StoryViewMode storyViewMode;
 
     private boolean bookmarkedUndo;
 
     @Inject @Named(ActivityModule.HN) ItemManager mItemManager;
-    @Inject FavoriteManager mFavoriteManager;
+    @Inject FavoriteManager favoriteManager;
     @Inject AlertDialogBuilder mAlertDialogBuilder;
     @Inject UserServices mUserServices;
     @Inject SessionManager sessionManager;
 
-    @ViewById ImageView bookmarked;
-    @ViewById TabLayout tabLayout;
-    @ViewById AppBarLayout appbar;
-    @ViewById(R.id.content_frame) CoordinatorLayout coordinatorLayout;
-    @ViewById ImageButton voteButton;
-    @ViewById FloatingActionButton replyButton;
+    ImageView bookmarked;
+    TabLayout tabLayout;
+    AppBarLayout appbar;
+    CoordinatorLayout coordinatorLayout;
+    ImageButton voteButton;
+    FloatingActionButton replyButton;
 
     private final ContentObserver mObserver = new ContentObserver(new Handler()) {
         @Override
@@ -106,7 +101,7 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
             if (FavoriteManager.isCleared(uri)) {
                 story.setFavorite(false);
                 bindFavorite();
-            } else if (TextUtils.equals(mItemId, uri.getLastPathSegment())) {
+            } else if (TextUtils.equals(itemId, uri.getLastPathSegment())) {
                 story.setFavorite(FavoriteManager.isAdded(uri));
                 bindFavorite();
             }
@@ -114,7 +109,7 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
     };
 
 
-    @AfterViews
+    //    @AfterViews
     void initializeActionBar() {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME |
@@ -122,13 +117,13 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
     }
 
 
-    @AfterViews
+    //    @AfterViews
     void initializeFromPreferences() {
-        mExternalBrowser = Preferences.externalBrowserEnabled(this);
+        externalBrowser = Preferences.externalBrowserEnabled(this);
         if (getIntent().getBooleanExtra(EXTRA_OPEN_COMMENTS, false)) {
-            mStoryViewMode = Preferences.StoryViewMode.Comment;
+            storyViewMode = Preferences.StoryViewMode.Comment;
         } else {
-            mStoryViewMode = Preferences.getDefaultStoryView(this);
+            storyViewMode = Preferences.getDefaultStoryView(this);
         }
     }
 
@@ -136,35 +131,53 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        externalBrowser = Preferences.externalBrowserEnabled(this);
+        if (getIntent().getBooleanExtra(EXTRA_OPEN_COMMENTS, false)) {
+            storyViewMode = Preferences.StoryViewMode.Comment;
+        } else {
+            storyViewMode = Preferences.getDefaultStoryView(this);
+        }
+        setContentView(R.layout.activity_item);
+        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME |
+                ActionBar.DISPLAY_HOME_AS_UP);
+
+        replyButton = (FloatingActionButton) findViewById(R.id.reply_button);
+        voteButton = (ImageButton) findViewById(R.id.vote_button);
+        bookmarked = (ImageView) findViewById(R.id.bookmarked);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.content_frame);
+        appbar = (AppBarLayout) findViewById(R.id.appbar);
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
         final Intent intent = getIntent();
         getContentResolver().registerContentObserver(MaterialisticProvider.URI_FAVORITE,
                 true, mObserver);
-
         if (savedInstanceState != null) {
             story = savedInstanceState.getParcelable(STATE_ITEM);
-            mItemId = savedInstanceState.getString(STATE_ITEM_ID);
+            itemId = savedInstanceState.getString(STATE_ITEM_ID);
         } else {
             if (Intent.ACTION_VIEW.equalsIgnoreCase(intent.getAction())) {
                 if (intent.getData() != null) {
                     if (TextUtils.equals(intent.getData().getScheme(), BuildConfig.APPLICATION_ID)) {
-                        mItemId = intent.getData().getLastPathSegment();
+                        itemId = intent.getData().getLastPathSegment();
                     } else {
-                        mItemId = intent.getData().getQueryParameter(PARAM_ID);
+                        itemId = intent.getData().getQueryParameter(PARAM_ID);
                     }
                 }
             } else if (intent.hasExtra(EXTRA_ITEM)) {
-                ItemManager.WebItem item = intent.getParcelableExtra(EXTRA_ITEM);
-                mItemId = item.getId();
-                if (item instanceof ItemManager.Item) {
-                    story = (ItemManager.Item) item;
-                }
+                StoryModel item = intent.getParcelableExtra(EXTRA_ITEM);
+                itemId = item.getId();
+//
+//                if (item instanceof ItemManager.Item) {
+//                    story = (ItemManager.Item) item;
+//                }
             }
         }
 
-        if (story != null) bindData();
-        else if (!TextUtils.isEmpty(mItemId)) {
-            mItemManager.getItem(mItemId, new ItemResponseListener(this));
+        if (story != null) {
+            bindData();
+        } else if (!TextUtils.isEmpty(itemId)) {
+//            mItemManager.getItem(itemId, new ItemResponseListener(this));
         }
     }
 
@@ -191,12 +204,12 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
         }
 
         if (item.getItemId() == R.id.menu_external) {
-            AppUtils.openExternal(ItemActivity.this, mAlertDialogBuilder, story);
+//            AppUtils.openExternal(ItemActivity.this, mAlertDialogBuilder, story);
             return true;
         }
 
         if (item.getItemId() == R.id.menu_share) {
-            AppUtils.share(ItemActivity.this, mAlertDialogBuilder, story);
+//            AppUtils.share(ItemActivity.this, mAlertDialogBuilder, story);
             return true;
         }
 
@@ -208,7 +221,7 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(STATE_ITEM, story);
-        outState.putString(STATE_ITEM_ID, mItemId);
+        outState.putString(STATE_ITEM_ID, itemId);
     }
 
 
@@ -225,7 +238,7 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
     }
 
 
-    private void onItemLoaded(ItemManager.Item response) {
+    private void onItemLoaded(StoryModel response) {
         story = response;
         supportInvalidateOptionsMenu();
         bindData();
@@ -234,37 +247,38 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
 
     private void bindFavorite() {
         if (story == null) return;
-        if (!story.isStoryType()) return;
+//        if (!story.isStoryType()) return;
 
         bookmarked.setVisibility(View.VISIBLE);
+        bookmarked.setOnClickListener(new View.OnClickListener() {
+            private boolean mUndo;
+
+
+            @Override
+            public void onClick(View v) {
+                final int toastMessageResId;
+                if (!story.isFavorite()) {
+                    favoriteManager.add(ItemActivity.this, story);
+                    toastMessageResId = R.string.toast_saved;
+                } else {
+                    favoriteManager.remove(ItemActivity.this, story);
+                    toastMessageResId = R.string.toast_removed;
+                }
+                if (!mUndo) {
+                    Snackbar.make(coordinatorLayout, toastMessageResId, Snackbar.LENGTH_SHORT)
+                            .setAction(R.string.undo, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    mUndo = true;
+                                    bookmarked.performClick();
+                                }
+                            })
+                            .show();
+                }
+                mUndo = false;
+            }
+        });
         decorateFavorite(story.isFavorite());
-    }
-
-
-    @Click
-    void bookmarkedClicked() {
-        final int toastMessageResId;
-        if (!story.isFavorite()) {
-            mFavoriteManager.add(ItemActivity.this, story);
-            toastMessageResId = R.string.toast_saved;
-        } else {
-            mFavoriteManager.remove(ItemActivity.this, story.getId());
-            toastMessageResId = R.string.toast_removed;
-        }
-
-        if (!bookmarkedUndo) {
-            Snackbar.make(coordinatorLayout, toastMessageResId, Snackbar.LENGTH_SHORT)
-                    .setAction(R.string.undo, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            bookmarkedUndo = true;
-                            bookmarked.performClick();
-                        }
-                    })
-                    .show();
-        }
-
-        bookmarkedUndo = false;
     }
 
 
@@ -275,39 +289,48 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
         sessionManager.view(this, story.getId());
         voteButton.setVisibility(View.VISIBLE);
 
+//        replyButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(ItemActivity.this, ComposeActivity.class)
+//                        .putExtra(ComposeActivity.EXTRA_PARENT_ID, story.getId())
+//                        .putExtra(ComposeActivity.EXTRA_PARENT_TEXT, story.getText()));
+//            }
+//        });
+
         final TextView titleTextView = (TextView) findViewById(android.R.id.text2);
 
-        if (story.isStoryType()) {
-            titleTextView.setText(story.getDisplayedTitle());
-            if (!TextUtils.isEmpty(story.getSource())) {
-                TextView sourceTextView = (TextView) findViewById(R.id.source);
-                sourceTextView.setText(story.getSource());
-                sourceTextView.setVisibility(View.VISIBLE);
-            }
-
-        } else AppUtils.setHtmlText(titleTextView, story.getDisplayedTitle());
+//        if (story.isStoryType()) {
+//            titleTextView.setText(story.getDisplayedTitle());
+//            if (!TextUtils.isEmpty(story.getSource())) {
+//                TextView sourceTextView = (TextView) findViewById(R.id.source);
+//                sourceTextView.setText(story.getSource());
+//                sourceTextView.setVisibility(View.VISIBLE);
+//            }
+//
+//        } else AppUtils.setHtmlText(titleTextView, story.getDisplayedTitle());
 
         final TextView postedTextView = (TextView) findViewById(R.id.posted);
-        postedTextView.setText(story.getDisplayedTime(this, false, true));
+//        postedTextView.setText(story.getDisplayedTime(this, false, true));
         postedTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
-        switch (story.getType()) {
-            case ItemManager.Item.JOB_TYPE:
-                postedTextView.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.ic_work_white_18dp, 0, 0, 0);
-                break;
-            case ItemManager.Item.POLL_TYPE:
-                postedTextView.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.ic_poll_white_18dp, 0, 0, 0);
-                break;
-        }
+//        switch (story.getType()) {
+//            case ItemManager.Item.JOB_TYPE:
+//                postedTextView.setCompoundDrawablesWithIntrinsicBounds(
+//                        R.drawable.ic_work_white_18dp, 0, 0, 0);
+//                break;
+//            case ItemManager.Item.POLL_TYPE:
+//                postedTextView.setCompoundDrawablesWithIntrinsicBounds(
+//                        R.drawable.ic_poll_white_18dp, 0, 0, 0);
+//                break;
+//        }
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.divider));
         viewPager.setPageMarginDrawable(R.color.blackT12);
 
         final ItemPagerAdapter adapter = new ItemPagerAdapter(this, getSupportFragmentManager(),
-                story, !mExternalBrowser);
+                story, !externalBrowser);
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -322,7 +345,7 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
             }
         });
 
-        switch (mStoryViewMode) {
+        switch (storyViewMode) {
             case Article:
                 if (viewPager.getAdapter().getCount() == 3) {
                     viewPager.setCurrentItem(1);
@@ -332,18 +355,19 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
                 viewPager.setCurrentItem(viewPager.getAdapter().getCount() - 1);
                 break;
         }
-        if (story.isStoryType() && mExternalBrowser) {
-            findViewById(R.id.header_card_view).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AppUtils.openWebUrlExternal(ItemActivity.this,
-                            story.getDisplayedTitle(),
-                            story.getUrl());
-                }
-            });
-        } else {
-            findViewById(R.id.header_card_view).setClickable(false);
-        }
+
+//        if (story.isStoryType() && externalBrowser) {
+//            findViewById(R.id.header_card_view).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    AppUtils.openWebUrlExternal(ItemActivity.this,
+//                            story.getDisplayedTitle(),
+//                            story.getUrl());
+//                }
+//            });
+//        } else {
+//            findViewById(R.id.header_card_view).setClickable(false);
+//        }
     }
 
 
@@ -353,18 +377,18 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
     }
 
 
-    @Click
+    //    @Click
     void voteButtonClicked() {
-        ItemManager.Item story = this.story;
+        StoryModel story = this.story;
         mUserServices.voteUp(ItemActivity.this, story.getId(), new VoteCallback(this));
     }
 
 
-    @Click
+    //    @Click
     void replyButtonClicked() {
-        startActivity(new Intent(ItemActivity.this, ComposeActivity.class)
-                .putExtra(ComposeActivity.EXTRA_PARENT_ID, story.getId())
-                .putExtra(ComposeActivity.EXTRA_PARENT_TEXT, story.getText()));
+//        startActivity(new Intent(ItemActivity.this, ComposeActivity.class)
+//                .putExtra(ComposeActivity.EXTRA_PARENT_ID, story.getId())
+//                .putExtra(ComposeActivity.EXTRA_PARENT_TEXT, story.getText()));
     }
 
 
@@ -381,19 +405,19 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
     }
 
 
-    private static class ItemResponseListener implements ResponseListener<ItemManager.Item> {
-        private final WeakReference<ItemActivity> mItemActivity;
+    private static class ItemResponseListener implements ResponseListener<StoryModel> {
+        private final WeakReference<ItemActivity> itemActivity;
 
 
         public ItemResponseListener(ItemActivity itemActivity) {
-            mItemActivity = new WeakReference<>(itemActivity);
+            this.itemActivity = new WeakReference<>(itemActivity);
         }
 
 
         @Override
-        public void onResponse(ItemManager.Item response) {
-            if (mItemActivity.get() != null && !mItemActivity.get().isActivityDestroyed()) {
-                mItemActivity.get().onItemLoaded(response);
+        public void onResponse(StoryModel response) {
+            if (itemActivity.get() != null && !itemActivity.get().isActivityDestroyed()) {
+                itemActivity.get().onItemLoaded(response);
             }
         }
 
@@ -406,26 +430,26 @@ public class ItemActivity extends InjectableActivity implements Scrollable {
 
 
     private static class VoteCallback extends UserServices.Callback {
-        private final WeakReference<ItemActivity> mItemActivity;
+        private final WeakReference<ItemActivity> weakReference;
 
 
         public VoteCallback(ItemActivity itemActivity) {
-            mItemActivity = new WeakReference<>(itemActivity);
+            weakReference = new WeakReference<>(itemActivity);
         }
 
 
         @Override
         public void onDone(boolean successful) {
-            if (mItemActivity.get() != null && !mItemActivity.get().isActivityDestroyed()) {
-                mItemActivity.get().onVoted(successful);
+            if (weakReference.get() != null && !weakReference.get().isActivityDestroyed()) {
+                weakReference.get().onVoted(successful);
             }
         }
 
 
         @Override
         public void onError() {
-            if (mItemActivity.get() != null && !mItemActivity.get().isActivityDestroyed()) {
-                mItemActivity.get().onVoted(null);
+            if (weakReference.get() != null && !weakReference.get().isActivityDestroyed()) {
+                weakReference.get().onVoted(null);
             }
         }
     }

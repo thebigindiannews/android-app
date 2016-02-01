@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.activities.parent;
+package com.enamakel.thebigindiannews.activities.base;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -32,24 +32,25 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.clients.FeedbackClient;
+import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 
 import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 
 public abstract class DrawerActivity extends InjectableActivity {
-    @Inject FeedbackClient mFeedbackClient;
-    @Inject AlertDialogBuilder mAlertDialogBuilder;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private DrawerLayout mDrawerLayout;
-    private View mDrawer;
-    private Class<? extends Activity> mPendingNavigation;
-    private Bundle mPendingNavigationExtras;
-    private Dialog mFeedbackDialog;
+    @Inject FeedbackClient feedbackClient;
+    @Inject AlertDialogBuilder alertDialogBuilder;
+
+    private ActionBarDrawerToggle drawerToggle;
+    private DrawerLayout drawerLayout;
+    private View drawer;
+    private Class<? extends Activity> pendingNavigation;
+    private Bundle pendingNavigationExtras;
+    private Dialog feedbackDialog;
 
 
     @Override
@@ -62,51 +63,48 @@ public abstract class DrawerActivity extends InjectableActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mDrawer = findViewById(R.id.drawer);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open_drawer,
+        drawer = findViewById(R.id.drawer);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer,
                 R.string.close_drawer) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                if (drawerView.equals(mDrawer) && mPendingNavigation != null) {
-                    final Intent intent = new Intent(DrawerActivity.this, mPendingNavigation);
-                    if (mPendingNavigationExtras != null) {
-                        intent.putExtras(mPendingNavigationExtras);
-                        mPendingNavigationExtras = null;
+                if (drawerView.equals(drawer) && pendingNavigation != null) {
+                    final Intent intent = new Intent(DrawerActivity.this, pendingNavigation);
+                    if (pendingNavigationExtras != null) {
+                        intent.putExtras(pendingNavigationExtras);
+                        pendingNavigationExtras = null;
                     }
                     // TODO M bug https://code.google.com/p/android/issues/detail?id=193822
                     intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(intent);
-                    mPendingNavigation = null;
+                    pendingNavigation = null;
                 }
             }
         };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
+        drawerLayout.setDrawerListener(drawerToggle);
+        drawerToggle.syncState();
     }
 
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+        return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
 
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(mDrawer)) {
-            closeDrawers();
-        } else {
-            super.onBackPressed();
-        }
+        if (drawerLayout.isDrawerOpen(drawer)) closeDrawers();
+        else super.onBackPressed();
     }
 
 
@@ -119,20 +117,20 @@ public abstract class DrawerActivity extends InjectableActivity {
 
 
     public void navigate(Class<? extends Activity> activityClass, @Nullable Bundle extras) {
-        mPendingNavigation = !getClass().equals(activityClass) ? activityClass : null;
-        mPendingNavigationExtras = extras;
+        pendingNavigation = !getClass().equals(activityClass) ? activityClass : null;
+        pendingNavigationExtras = extras;
         closeDrawers();
     }
 
 
     public void showFeedback() {
-        showFeedbackDialog(getLayoutInflater().inflate(R.layout.dialog_feedback, mDrawerLayout, false));
+        showFeedbackDialog(getLayoutInflater().inflate(R.layout.dialog_feedback, drawerLayout, false));
         closeDrawers();
     }
 
 
     private void closeDrawers() {
-        mDrawerLayout.closeDrawers();
+        drawerLayout.closeDrawers();
     }
 
 
@@ -146,7 +144,7 @@ public abstract class DrawerActivity extends InjectableActivity {
         final EditText title = (EditText) dialogView.findViewById(R.id.edittext_title);
         final EditText body = (EditText) dialogView.findViewById(R.id.edittext_body);
         final View sendButton = dialogView.findViewById(R.id.feedback_button);
-        mFeedbackDialog = mAlertDialogBuilder
+        feedbackDialog = alertDialogBuilder
                 .init(this)
                 .setView(dialogView)
                 .create();
@@ -154,7 +152,7 @@ public abstract class DrawerActivity extends InjectableActivity {
             @Override
             public void onClick(View v) {
                 AppUtils.openPlayStore(DrawerActivity.this);
-                mFeedbackDialog.dismiss();
+                feedbackDialog.dismiss();
             }
         });
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -162,21 +160,16 @@ public abstract class DrawerActivity extends InjectableActivity {
             public void onClick(View v) {
                 titleLayout.setErrorEnabled(false);
                 bodyLayout.setErrorEnabled(false);
-                if (title.length() == 0) {
-                    titleLayout.setError(getString(R.string.title_required));
-                }
-                if (body.length() == 0) {
-                    bodyLayout.setError(getString(R.string.comment_required));
-                }
-                if (title.length() == 0 || body.length() == 0) {
-                    return;
-                }
+                if (title.length() == 0) titleLayout.setError(getString(R.string.title_required));
+                if (body.length() == 0) bodyLayout.setError(getString(R.string.comment_required));
+                if (title.length() == 0 || body.length() == 0) return;
+
                 sendButton.setEnabled(false);
-                mFeedbackClient.send(title.getText().toString(), body.getText().toString(),
+                feedbackClient.send(title.getText().toString(), body.getText().toString(),
                         new FeedbackCallback(DrawerActivity.this));
             }
         });
-        mFeedbackDialog.show();
+        feedbackDialog.show();
     }
 
 
@@ -185,30 +178,28 @@ public abstract class DrawerActivity extends InjectableActivity {
                 success ? R.string.feedback_sent : R.string.feedback_failed,
                 Toast.LENGTH_SHORT)
                 .show();
-        if (mFeedbackDialog == null || !mFeedbackDialog.isShowing()) {
-            return;
-        }
-        if (success) {
-            mFeedbackDialog.dismiss();
-        } else {
-            mFeedbackDialog.findViewById(R.id.feedback_button).setEnabled(true);
-        }
+
+        if (feedbackDialog == null || !feedbackDialog.isShowing()) return;
+
+        if (success) feedbackDialog.dismiss();
+        else feedbackDialog.findViewById(R.id.feedback_button).setEnabled(true);
+
     }
 
 
     private static class FeedbackCallback implements FeedbackClient.Callback {
-        private final WeakReference<DrawerActivity> mDrawerActivity;
+        private final WeakReference<DrawerActivity> weakReference;
 
 
         public FeedbackCallback(DrawerActivity drawerActivity) {
-            mDrawerActivity = new WeakReference<>(drawerActivity);
+            weakReference = new WeakReference<>(drawerActivity);
         }
 
 
         @Override
         public void onSent(boolean success) {
-            if (mDrawerActivity.get() != null && !mDrawerActivity.get().isActivityDestroyed()) {
-                mDrawerActivity.get().onFeedbackSent(success);
+            if (weakReference.get() != null && !weakReference.get().isActivityDestroyed()) {
+                weakReference.get().onFeedbackSent(success);
             }
         }
     }

@@ -253,7 +253,7 @@ public class ItemFragment extends LazyLoadFragment implements Scrollable {
     }
 
     private void loadKidData() {
-        mItemManager.getItem(mItemId, new ItemResponseListener(this));
+//        mItemManager.getItem(mItemId, new ItemResponseListener(this));
     }
 
     private void onItemLoaded(ItemManager.Item item) {

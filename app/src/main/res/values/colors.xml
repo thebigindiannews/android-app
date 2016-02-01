@@ -57,4 +57,8 @@
     <color name="solarizedBase1">#93a1a1</color>
     <color name="solarizedBase2">#eee8d5</color>
     <color name="solarizedBase3">#fdf6e3</color>
+
+    <color name="bigiRedMain">#C8211A</color>
+    <color name="bigiRedDark">#870806</color>
+    <color name="bigiRedLight">#D54740</color>
 </resources>

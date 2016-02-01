@@ -21,15 +21,47 @@ import android.content.Context;
 
 import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.accounts.UserServicesClient;
-import com.enamakel.thebigindiannews.activities.*;
-import com.enamakel.thebigindiannews.data.*;
+import com.enamakel.thebigindiannews.activities.AboutActivity;
+import com.enamakel.thebigindiannews.activities.AskActivity;
+import com.enamakel.thebigindiannews.activities.ComposeActivity;
+import com.enamakel.thebigindiannews.activities.FavoriteActivity;
+import com.enamakel.thebigindiannews.activities.ItemActivity;
+import com.enamakel.thebigindiannews.activities.JobsActivity;
+import com.enamakel.thebigindiannews.activities.ListActivity;
+import com.enamakel.thebigindiannews.activities.LoginActivity;
+import com.enamakel.thebigindiannews.activities.NewActivity;
+import com.enamakel.thebigindiannews.activities.PopularActivity;
+import com.enamakel.thebigindiannews.activities.SearchActivity;
+import com.enamakel.thebigindiannews.activities.SettingsActivity;
+import com.enamakel.thebigindiannews.activities.ShowActivity;
+import com.enamakel.thebigindiannews.activities.SubmitActivity;
+import com.enamakel.thebigindiannews.activities.ThreadPreviewActivity;
+import com.enamakel.thebigindiannews.activities.UserActivity;
+import com.enamakel.thebigindiannews.data.FavoriteManager;
+import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.ReadabilityClient;
+import com.enamakel.thebigindiannews.data.RestServiceFactory;
+import com.enamakel.thebigindiannews.data.SessionManager;
+import com.enamakel.thebigindiannews.data.UserManager;
 import com.enamakel.thebigindiannews.data.clients.AlgoliaClient;
 import com.enamakel.thebigindiannews.data.clients.AlgoliaPopularClient;
+import com.enamakel.thebigindiannews.data.clients.BigIndianClient;
 import com.enamakel.thebigindiannews.data.clients.FeedbackClient;
 import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
-import com.enamakel.thebigindiannews.fragments.*;
-import com.enamakel.thebigindiannews.util.*;
-import com.enamakel.thebigindiannews.widget.*;
+import com.enamakel.thebigindiannews.fragments.DrawerFragment;
+import com.enamakel.thebigindiannews.fragments.FavoriteFragment;
+import com.enamakel.thebigindiannews.fragments.ItemFragment;
+import com.enamakel.thebigindiannews.fragments.ListFragment;
+import com.enamakel.thebigindiannews.fragments.ReadabilityFragment;
+import com.enamakel.thebigindiannews.fragments.WebFragment;
+import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
+import com.enamakel.thebigindiannews.widget.FavoriteRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.widget.MultiPageItemRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.widget.PopupMenu;
+import com.enamakel.thebigindiannews.widget.SinglePageItemRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.widget.StoryRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.widget.SubmissionRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.widget.ThreadPreviewRecyclerViewAdapter;
 import com.squareup.okhttp.OkHttpClient;
 
 import javax.inject.Named;
@@ -74,6 +106,7 @@ import dagger.Provides;
 public class ActivityModule {
     public static final String ALGOLIA = "algolia";
     public static final String POPULAR = "popular";
+    public static final String BIGINDIAN = "bigindian";
     public static final String HN = "hn";
 
     private final Context mContext;
@@ -103,6 +136,14 @@ public class ActivityModule {
     @Singleton
     @Named(ALGOLIA)
     public ItemManager provideAlgoliaClient(AlgoliaClient client) {
+        return client;
+    }
+
+
+    @Provides
+    @Singleton
+    @Named(BIGINDIAN)
+    public ItemManager provideBigIndianClient(BigIndianClient client) {
         return client;
     }
 

@@ -29,7 +29,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 public class MaterialisticProvider extends ContentProvider {
-    private static final String PROVIDER_AUTHORITY = "com.enamakel.com.enamakel.com.enamakel.thebigindiannews.provider";
+    private static final String PROVIDER_AUTHORITY = "com.enamakel.thebigindiannews.provider";
     private static final Uri BASE_URI = Uri.parse("content://" + PROVIDER_AUTHORITY);
     public static final Uri URI_FAVORITE = BASE_URI.buildUpon()
             .appendPath(FavoriteEntry.TABLE_NAME)
@@ -41,19 +41,19 @@ public class MaterialisticProvider extends ContentProvider {
             .appendPath(ReadabilityEntry.TABLE_NAME)
             .build();
     private static final String READABILITY_MAX_ENTRIES = "50";
-    private DbHelper mDbHelper;
+    private DbHelper dbHelper;
 
 
     @Override
     public boolean onCreate() {
-        mDbHelper = new DbHelper(getContext());
+        dbHelper = new DbHelper(getContext());
         return true;
     }
 
 
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         if (URI_FAVORITE.equals(uri)) {
             return db.query(FavoriteEntry.TABLE_NAME, projection,
                     selection, selectionArgs,
@@ -89,7 +89,7 @@ public class MaterialisticProvider extends ContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         if (URI_FAVORITE.equals(uri)) {
             int updated = update(uri, values, FavoriteEntry.COLUMN_NAME_ITEM_ID + " = ?",
                     new String[]{values.getAsString(FavoriteEntry.COLUMN_NAME_ITEM_ID)});
@@ -125,7 +125,7 @@ public class MaterialisticProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         String table = null;
         if (URI_FAVORITE.equals(uri)) {
             table = FavoriteEntry.TABLE_NAME;
@@ -144,7 +144,7 @@ public class MaterialisticProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         String table = null;
         if (URI_FAVORITE.equals(uri)) {
             table = FavoriteEntry.TABLE_NAME;

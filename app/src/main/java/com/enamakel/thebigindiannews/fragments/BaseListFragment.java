@@ -36,7 +36,7 @@ import com.enamakel.thebigindiannews.widget.ListRecyclerViewAdapter;
 
 public abstract class BaseListFragment extends BaseFragment implements Scrollable {
     private static final String STATE_ADAPTER = "state:adapter";
-    protected RecyclerView mRecyclerView;
+    protected RecyclerView recyclerView;
     private final SharedPreferences.OnSharedPreferenceChangeListener mListener =
             new SharedPreferences.OnSharedPreferenceChangeListener() {
                 @Override
@@ -73,14 +73,14 @@ public abstract class BaseListFragment extends BaseFragment implements Scrollabl
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setHasFixedSize(true);
         final int verticalMargin = getResources()
                 .getDimensionPixelSize(R.dimen.cardview_vertical_margin);
         final int horizontalMargin = getResources()
                 .getDimensionPixelSize(R.dimen.cardview_horizontal_margin);
         final int divider = getResources().getDimensionPixelSize(R.dimen.divider);
-        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
                                        RecyclerView.State state) {
@@ -91,7 +91,7 @@ public abstract class BaseListFragment extends BaseFragment implements Scrollabl
                 }
             }
         });
-        mRecyclerView.setAdapter(getAdapter());
+        recyclerView.setAdapter(getAdapter());
     }
 
 
@@ -155,7 +155,7 @@ public abstract class BaseListFragment extends BaseFragment implements Scrollabl
 
     @Override
     public void scrollToTop() {
-        mRecyclerView.smoothScrollToPosition(0);
+        recyclerView.smoothScrollToPosition(0);
     }
 
 

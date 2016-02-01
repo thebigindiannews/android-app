@@ -24,10 +24,10 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import javax.inject.Inject;
-
 import com.enamakel.thebigindiannews.BuildConfig;
 import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+
+import javax.inject.Inject;
 
 import retrofit.Call;
 import retrofit.Response;
@@ -40,12 +40,15 @@ public interface ReadabilityClient {
         void onResponse(String content);
     }
 
+
     void parse(String itemId, String url, Callback callback);
 
+
     class Impl implements ReadabilityClient {
-        private static final CharSequence EMPTY_CONTENT = "<div></div>";
-        private final ReadabilityService mReadabilityService;
-        private final ContentResolver mContentResolver;
+        static final CharSequence EMPTY_CONTENT = "<div></div>";
+        final ReadabilityService mReadabilityService;
+        final ContentResolver mContentResolver;
+
 
         @Inject
         public Impl(Context context, RestServiceFactory factory) {
@@ -53,6 +56,7 @@ public interface ReadabilityClient {
                     ReadabilityService.class);
             mContentResolver = context.getContentResolver();
         }
+
 
         @Override
         public void parse(final String itemId, final String url, final Callback callback) {
@@ -75,6 +79,7 @@ public interface ReadabilityClient {
                             new String[]{itemId}, null);
         }
 
+
         private void readabilityParse(final String itemId, String url, final Callback callback) {
             mReadabilityService.parse(url)
                     .enqueue(new retrofit.Callback<Readable>() {
@@ -93,12 +98,14 @@ public interface ReadabilityClient {
                             }
                         }
 
+
                         @Override
                         public void onFailure(Throwable t) {
                             callback.onResponse(null);
                         }
                     });
         }
+
 
         private void cache(String itemId, String content) {
             final ContentValues contentValues = new ContentValues();
@@ -108,49 +115,55 @@ public interface ReadabilityClient {
                     MaterialisticProvider.URI_READABILITY, contentValues);
         }
 
+
         interface ReadabilityService {
             String READABILITY_API_URL = "https://readability.com/api/content/v1/";
+
 
             @GET("parser?token=" + BuildConfig.READABILITY_TOKEN)
             Call<Readable> parse(@Query("url") String url);
         }
 
+
         static class Readable {
             private String content;
         }
 
-        private static class ReadabilityHandler extends AsyncQueryHandler {
 
-            private final String mItemId;
-            private QueryCallback mCallback;
+        static class ReadabilityHandler extends AsyncQueryHandler {
+            final String mItemId;
+            QueryCallback callback;
+
 
             public ReadabilityHandler(ContentResolver cr, String itemId) {
                 super(cr);
                 mItemId = itemId;
             }
 
+
             private ReadabilityHandler setQueryCallback(@NonNull QueryCallback callback) {
-                mCallback = callback;
+                this.callback = callback;
                 return this;
             }
+
 
             @Override
             protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
                 super.onQueryComplete(token, cookie, cursor);
-                if (mCallback == null) {
+                if (callback == null) {
                     return;
                 }
                 if (cookie == null || !cookie.equals(mItemId)) {
-                    mCallback = null;
+                    callback = null;
                     return;
                 }
                 if (!cursor.moveToFirst()) {
-                    mCallback.onQueryComplete(null);
+                    callback.onQueryComplete(null);
                 } else {
-                    mCallback.onQueryComplete(cursor.getString(cursor.getColumnIndexOrThrow(
+                    callback.onQueryComplete(cursor.getString(cursor.getColumnIndexOrThrow(
                             MaterialisticProvider.ReadabilityEntry.COLUMN_NAME_CONTENT)));
                 }
-                mCallback = null;
+                callback = null;
             }
         }
 

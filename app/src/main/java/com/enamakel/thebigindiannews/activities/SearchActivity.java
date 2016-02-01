@@ -24,7 +24,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.enamakel.thebigindiannews.activities.parent.BaseListActivity;
+import com.enamakel.thebigindiannews.activities.base.BaseListActivity;
 import com.enamakel.thebigindiannews.fragments.ListFragment;
 import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;

@@ -46,18 +46,18 @@ public class ThreadPreviewRecyclerViewAdapter extends ItemRecyclerViewAdapter<Su
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        mLevelIndicatorWidth = AppUtils.getDimensionInDp(mContext, R.dimen.level_indicator_width);
+        mLevelIndicatorWidth = AppUtils.getDimensionInDp(context, R.dimen.level_indicator_width);
     }
 
     @Override
     public SubmissionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        SubmissionViewHolder holder = new SubmissionViewHolder(mLayoutInflater
+        SubmissionViewHolder holder = new SubmissionViewHolder(layoutInflater
                 .inflate(R.layout.item_submission, parent, false));
         final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams)
                 holder.itemView.getLayoutParams();
         params.leftMargin = mLevelIndicatorWidth * viewType;
         holder.itemView.setLayoutParams(params);
-        holder.mCommentButton.setVisibility(View.GONE);
+        holder.commentButton.setVisibility(View.GONE);
         return holder;
     }
 
@@ -74,17 +74,17 @@ public class ThreadPreviewRecyclerViewAdapter extends ItemRecyclerViewAdapter<Su
     @Override
     protected void bind(SubmissionViewHolder holder, final ItemManager.Item item) {
         super.bind(holder, item);
-        holder.mPostedTextView.setText(item.getDisplayedTime(mContext, false,
+        holder.postedTextView.setText(item.getDisplayedTime(context, false,
                 !TextUtils.equals(item.getBy(), mUsername)));
-        holder.mMoreButton.setVisibility(View.GONE);
+        holder.moreButton.setVisibility(View.GONE);
         if (TextUtils.equals(item.getType(), ItemManager.Item.COMMENT_TYPE)) {
             holder.mTitleTextView.setText(null);
             holder.itemView.setOnClickListener(null);
-            holder.mCommentButton.setVisibility(View.GONE);
+            holder.commentButton.setVisibility(View.GONE);
         } else {
             holder.mTitleTextView.setText(item.getDisplayedTitle());
-            holder.mCommentButton.setVisibility(View.VISIBLE);
-            holder.mCommentButton.setOnClickListener(new View.OnClickListener() {
+            holder.commentButton.setVisibility(View.VISIBLE);
+            holder.commentButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     openItem(item);
@@ -93,7 +93,7 @@ public class ThreadPreviewRecyclerViewAdapter extends ItemRecyclerViewAdapter<Su
         }
         holder.mTitleTextView.setVisibility(holder.mTitleTextView.length() > 0 ?
                 View.VISIBLE : View.GONE);
-        holder.mContentTextView.setVisibility(holder.mContentTextView.length() > 0 ?
+        holder.contentTextView.setVisibility(holder.contentTextView.length() > 0 ?
                 View.VISIBLE : View.GONE);
         if (!mExpanded.contains(item.getId()) && item.getParentItem() != null) {
             mExpanded.add(item.getId());
@@ -114,7 +114,7 @@ public class ThreadPreviewRecyclerViewAdapter extends ItemRecyclerViewAdapter<Su
     }
 
     private void openItem(ItemManager.Item item) {
-        mContext.startActivity(new Intent(mContext, ItemActivity.class)
+        context.startActivity(new Intent(context, ItemActivity.class)
                 .putExtra(ItemActivity.EXTRA_ITEM, item));
     }
 }

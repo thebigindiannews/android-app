@@ -70,7 +70,7 @@ public interface FeedbackClient {
         interface FeedbackService {
             String GITHUB_API_URL = "https://api.github.com/";
 
-            @POST("repos/hidroh/com.enamakel.com.enamakel.thebigindiannews/issues")
+            @POST("repos/thebigindiannews/android-app/issues")
             @Headers("Authorization: token " + BuildConfig.GITHUB_TOKEN)
             Call<Object> createGithubIssue(@Body Issue issue);
         }

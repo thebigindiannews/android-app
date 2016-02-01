@@ -21,30 +21,30 @@ import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.enamakel.thebigindiannews.activities.parent.BaseListActivity;
+import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.activities.base.BaseListActivity;
+import com.enamakel.thebigindiannews.data.clients.AlgoliaPopularClient;
 import com.enamakel.thebigindiannews.fragments.ListFragment;
 import com.enamakel.thebigindiannews.util.Preferences;
-import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.data.clients.AlgoliaPopularClient;
 
 public class PopularActivity extends BaseListActivity {
-    private static final String STATE_RANGE = "state:range";
+    static final String STATE_RANGE = "state:range";
+    String mRange;
 
-    private String mRange;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            setRange(savedInstanceState.getString(STATE_RANGE));
-        }
+        if (savedInstanceState != null) setRange(savedInstanceState.getString(STATE_RANGE));
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_popular, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -64,16 +64,19 @@ public class PopularActivity extends BaseListActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(STATE_RANGE, mRange);
     }
 
+
     @Override
     protected String getDefaultTitle() {
         return getString(R.string.title_activity_popular);
     }
+
 
     @Override
     protected Fragment instantiateListFragment() {
@@ -84,10 +87,12 @@ public class PopularActivity extends BaseListActivity {
         return Fragment.instantiate(this, ListFragment.class.getName(), args);
     }
 
+
     @Override
     protected boolean isSearchable() {
         return false;
     }
+
 
     private void filter(@AlgoliaPopularClient.Range String range) {
         setRange(range);
@@ -99,12 +104,13 @@ public class PopularActivity extends BaseListActivity {
         }
     }
 
+
     private void setRange(String range) {
         mRange = range;
         final int stringRes;
         switch (range) {
             case AlgoliaPopularClient.LAST_24H:
-                default:
+            default:
                 stringRes = R.string.popular_range_last_24h;
                 break;
             case AlgoliaPopularClient.PAST_WEEK:

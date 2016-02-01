@@ -38,6 +38,7 @@ public class AlgoliaPopularClient extends AlgoliaClient {
         super(context, factory);
     }
 
+
     @Retention(RetentionPolicy.SOURCE)
     @StringDef({
             LAST_24H,
@@ -69,7 +70,7 @@ public class AlgoliaPopularClient extends AlgoliaClient {
                 timestamp -= DateUtils.YEAR_IN_MILLIS;
                 break;
         }
-        mRestService.searchByMinTimestamp(MIN_CREATED_AT + timestamp / 1000)
+        restService.searchByMinTimestamp(MIN_CREATED_AT + timestamp / 1000)
                 .enqueue(callback);
     }
 }

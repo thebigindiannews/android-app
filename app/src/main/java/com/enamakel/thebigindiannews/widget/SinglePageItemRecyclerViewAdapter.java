@@ -52,8 +52,8 @@ public class SinglePageItemRecyclerViewAdapter
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        mLevelIndicatorWidth = AppUtils.getDimensionInDp(mContext, R.dimen.level_indicator_width);
-        mColors = mContext.getResources().obtainTypedArray(R.array.color_codes);
+        mLevelIndicatorWidth = AppUtils.getDimensionInDp(context, R.dimen.level_indicator_width);
+        mColors = context.getResources().obtainTypedArray(R.array.color_codes);
         mRecyclerView = recyclerView;
     }
 
@@ -66,7 +66,7 @@ public class SinglePageItemRecyclerViewAdapter
     @Override
     public ToggleItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final ToggleItemViewHolder holder =
-                new ToggleItemViewHolder(mLayoutInflater.inflate(R.layout.item_comment, parent, false));
+                new ToggleItemViewHolder(layoutInflater.inflate(R.layout.item_comment, parent, false));
         final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams)
                 holder.itemView.getLayoutParams();
         params.leftMargin = mLevelIndicatorWidth * viewType;
@@ -127,7 +127,7 @@ public class SinglePageItemRecyclerViewAdapter
         if (item == null) {
             return;
         }
-        holder.mPostedTextView.setText(item.getDisplayedTime(mContext, false, true));
+        holder.postedTextView.setText(item.getDisplayedTime(context, false, true));
         bindNavigation(holder, item);
         toggleKids(holder, item);
     }
@@ -176,12 +176,12 @@ public class SinglePageItemRecyclerViewAdapter
         if(expanded) {
             holder.mToggle.setCompoundDrawablesWithIntrinsicBounds(0, 0,
                     R.drawable.ic_expand_less_white_24dp, 0);
-            holder.mToggle.setText(mContext.getResources()
+            holder.mToggle.setText(context.getResources()
                     .getQuantityString(R.plurals.hide_comments, item.getKidCount(), item.getKidCount()));
         } else {
             holder.mToggle.setCompoundDrawablesWithIntrinsicBounds(0, 0,
                     R.drawable.ic_expand_more_white_24dp, 0);
-            holder.mToggle.setText(mContext.getResources()
+            holder.mToggle.setText(context.getResources()
                     .getQuantityString(R.plurals.show_comments, item.getKidCount(), item.getKidCount()));
         }
     }

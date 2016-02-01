@@ -23,24 +23,25 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
 
+import com.enamakel.thebigindiannews.data.models.StoryModel;
+import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
 import com.enamakel.thebigindiannews.fragments.ItemFragment;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.fragments.ReadabilityFragment;
 import com.enamakel.thebigindiannews.fragments.WebFragment;
-import com.enamakel.thebigindiannews.data.ItemManager;
 
 public class ItemPagerAdapter extends FragmentStatePagerAdapter {
     private final Fragment[] mFragments = new Fragment[3];
-    private final Context mContext;
-    private final ItemManager.WebItem mItem;
-    private final boolean mShowArticle;
+    private final Context context;
+    private final BaseCardModel item;
+    private final boolean showArticle;
 
     public ItemPagerAdapter(Context context, FragmentManager fm,
-                            ItemManager.WebItem item, boolean showArticle) {
+                            BaseCardModel item, boolean showArticle) {
         super(fm);
-        mContext = context;
-        mItem = item;
-        mShowArticle = showArticle;
+        this.context = context;
+        this.item = item;
+        this.showArticle = showArticle;
     }
 
     @Override
@@ -50,17 +51,17 @@ public class ItemPagerAdapter extends FragmentStatePagerAdapter {
         }
         if (position == 0) {
             Bundle args = new Bundle();
-            args.putParcelable(ItemFragment.EXTRA_ITEM, mItem);
-            return Fragment.instantiate(mContext,
+            args.putParcelable(ItemFragment.EXTRA_ITEM, item);
+            return Fragment.instantiate(context,
                     ItemFragment.class.getName(), args);
         }
         if (position == getCount() - 1) {
             Bundle readabilityArgs = new Bundle();
-            readabilityArgs.putParcelable(ReadabilityFragment.EXTRA_ITEM, mItem);
-            return Fragment.instantiate(mContext,
+            readabilityArgs.putParcelable(ReadabilityFragment.EXTRA_ITEM, item);
+            return Fragment.instantiate(context,
                     ReadabilityFragment.class.getName(), readabilityArgs);
         }
-        return WebFragment.instantiate(mContext, mItem);
+        return WebFragment.instantiate(context, item);
     }
 
     @Override
@@ -71,8 +72,8 @@ public class ItemPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        if (mItem.isStoryType()) {
-            return mShowArticle ? 3 : 2;
+        if (true/*item.isStoryType()*/) {
+            return showArticle ? 3 : 2;
         } else {
             return 1;
         }
@@ -81,16 +82,17 @@ public class ItemPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         if (position == 0) {
-            if (mItem instanceof ItemManager.Item) {
-                int count = ((ItemManager.Item) mItem).getKidCount();
-                return mContext.getResources()
+            if (item instanceof StoryModel) {
+//                int count = ((StoryModel) item).getKidCount();
+                int count = 0;
+                return context.getResources()
                         .getQuantityString(R.plurals.comments_count, count, count);
             }
-            return mContext.getString(R.string.title_activity_item);
+            return context.getString(R.string.title_activity_item);
         }
         if (position == getCount() - 1) {
-            return mContext.getString(R.string.readability);
+            return context.getString(R.string.readability);
         }
-        return mContext.getString(R.string.article);
+        return context.getString(R.string.article);
     }
 }

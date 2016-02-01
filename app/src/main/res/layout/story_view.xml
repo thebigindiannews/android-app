@@ -16,113 +16,159 @@
   -->
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="HardcodedText">
-    <View
-        android:layout_width="@dimen/cardview_min_height"
-        android:layout_height="match_parent"
-        android:layout_alignTop="@id/title"
-        android:layout_alignBottom="@+id/meta_container"
-        android:background="?attr/colorCardHighlight" />
+       xmlns:tools="http://schemas.android.com/tools"
+       android:layout_width="wrap_content"
+       android:layout_height="match_parent"
+       tools:ignore="HardcodedText">
+
     <ImageView
         android:id="@id/bookmarked"
-        android:contentDescription="@string/saved"
-        android:src="@drawable/ic_bookmark_white_24dp"
-        android:gravity="top|start"
-        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:tint="@color/orange500" />
+        android:contentDescription="@string/saved"
+        android:gravity="top|start"
+        android:src="@drawable/ic_bookmark_white_24dp"
+        android:tint="@color/orange500"
+        android:visibility="invisible"/>
 
     <LinearLayout
-        android:id="@+id/rank_container"
-        android:orientation="vertical"
-        android:gravity="center|center_vertical"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_width="@dimen/cardview_min_height"
-        android:layout_height="wrap_content">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <ViewSwitcher
-            android:id="@+id/vote_switcher"
-            android:inAnimation="@anim/slide_in_right"
-            android:outAnimation="@anim/slide_out_right"
-            android:layout_gravity="center"
+        <LinearLayout
+            android:id="@+id/rank_container"
+            android:layout_width="@dimen/cardview_min_height"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:gravity="center|center_vertical"
+            android:orientation="vertical"
+            android:background="?attr/colorCardHighlight">
+
+            <ViewSwitcher
+                android:id="@+id/vote_switcher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:inAnimation="@anim/slide_in_right"
+                android:outAnimation="@anim/slide_out_right"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@id/rank"
+                    style="@style/textRankStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="46"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:contentDescription="@string/voted"
+                    android:src="@drawable/ic_thumb_up_white_24dp"
+                    android:tint="@color/greenA700"/>
+
+            </ViewSwitcher>
+
+            <TextView
+                android:id="@id/score"
+                style="@style/textSubtitleStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:singleLine="false"
+                android:text="128 pts"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/thumbnail"
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:antialias="true"
+                android:dither="true"
+                android:scaleType="centerCrop"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@id/rank"
-                android:text="46"
-                style="@style/textRankStyle"
+            <com.enamakel.thebigindiannews.widget.TextView
+                android:id="@id/title"
+                style="@style/textTitleStyle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/rank_container"
+                android:paddingTop="@dimen/padding"
+                android:textStyle="bold"
+                android:text="@string/loading_text"
+                />
 
-            <ImageView
-                android:src="@drawable/ic_thumb_up_white_24dp"
-                android:contentDescription="@string/voted"
-                android:tint="@color/greenA700"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+            <com.enamakel.thebigindiannews.widget.TextView
+                android:id="@+id/description"
+                style="@style/textContentStyle"
+                android:maxLines = "4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/rank_container"
+                android:padding="@dimen/padding"
+                android:text="@string/loading_text"
+                android:textColor="#666"/>
 
-        </ViewSwitcher>
 
-        <TextView
-            android:id="@id/score"
-            android:text="128 pts"
-            style="@style/textSubtitleStyle"
-            android:singleLine="false"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:id="@id/meta_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_toLeftOf="@id/comment"
+                android:layout_toRightOf="@id/rank_container"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/padding">
 
+                <com.enamakel.thebigindiannews.widget.TintableTextView
+                    android:id="@id/source"
+                    style="@style/textSubtitleStyle.Italic"
+                    android:text="@string/loading_text"
+                    android:textColor="#000"
+                    android:paddingBottom="@dimen/padding"/>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@id/posted"
+                        style="@style/textSubtitleStyle"
+                        android:singleLine="false"
+                        android:text="@string/loading_text"
+                        android:textColor="#999"
+                        android:textStyle="italic"
+                        android:layout_width="fill_parent"/>
+
+                    <!--<include-->
+                        <!--android:id="@id/button_more"-->
+                        <!--layout="@layout/button_more"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"/>-->
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
-    <com.enamakel.thebigindiannews.widget.TextView
-        android:id="@id/title"
-        android:text="@string/loading_text"
-        style="@style/textTitleStyle"
-        android:layout_toRightOf="@id/rank_container"
-        android:paddingTop="@dimen/padding"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:id="@id/meta_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_below="@id/title"
-        android:layout_toRightOf="@id/rank_container"
-        android:layout_toLeftOf="@id/comment"
-        android:paddingBottom="@dimen/padding">
-        <com.enamakel.thebigindiannews.widget.TintableTextView
-            android:id="@id/source"
-            android:text="@string/loading_text"
-            style="@style/textSubtitleStyle.Italic" />
-        <TextView
-            android:id="@id/posted"
-            android:text="@string/loading_text"
-            style="@style/textSubtitleStyle"
-            android:singleLine="false" />
-    </LinearLayout>
-
-    <include layout="@layout/button_comment"
+    <include
         android:id="@id/comment"
-        android:layout_toLeftOf="@+id/button_more"
+        layout="@layout/button_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/meta_container"
+        android:layout_alignTop="@id/meta_container"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_alignTop="@id/meta_container"
-        android:layout_alignBottom="@id/meta_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <include layout="@layout/button_more"
-        android:id="@id/button_more"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/meta_container"
-        android:layout_alignBottom="@id/meta_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
+        android:layout_toLeftOf="@+id/button_more"/>
 </merge>

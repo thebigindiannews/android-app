@@ -25,7 +25,7 @@ import android.widget.TextView;
 
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.activities.parent.DrawerActivity;
+import com.enamakel.thebigindiannews.activities.base.DrawerActivity;
 
 public class AboutActivity extends DrawerActivity {
     @Override

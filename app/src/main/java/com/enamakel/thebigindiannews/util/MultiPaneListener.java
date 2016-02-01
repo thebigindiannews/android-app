@@ -18,7 +18,7 @@ package com.enamakel.thebigindiannews.util;
 
 import android.support.annotation.Nullable;
 
-import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
 
 /**
  * Interface for multi-pane view events
@@ -26,19 +26,23 @@ import com.enamakel.thebigindiannews.data.ItemManager;
 public interface MultiPaneListener {
     /**
      * Fired when an item has been selected in list view when multi-pane is active
-     * @param item          selected item or null if selection is clear
      *
+     * @param item selected item or null if selection is clear
      */
-    void onItemSelected(@Nullable ItemManager.WebItem item);
+    void onItemSelected(@Nullable BaseCardModel item);
+
 
     /**
-     * Gets item that has been opened via {@link #onItemSelected(ItemManager.WebItem)}
-     * @return  opened item or null
+     * Gets item that has been opened via {@link #onItemSelected(BaseCardModel)}
+     *
+     * @return opened item or null
      */
-    ItemManager.WebItem getSelectedItem();
+    BaseCardModel getSelectedItem();
+
 
     /**
      * Checks if multi pane configuration is active
+     *
      * @return true if multi pane, false if single pane
      */
     boolean isMultiPane();

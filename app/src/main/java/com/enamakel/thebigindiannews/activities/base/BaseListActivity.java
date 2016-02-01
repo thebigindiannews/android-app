@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.activities.parent;
+package com.enamakel.thebigindiannews.activities.base;
 
 import android.app.SearchManager;
 import android.content.ComponentName;
@@ -39,17 +39,18 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.enamakel.thebigindiannews.ActionViewResolver;
-import com.enamakel.thebigindiannews.activities.ComposeActivity;
+import com.enamakel.thebigindiannews.AppUtils;
+import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.ItemActivity;
 import com.enamakel.thebigindiannews.activities.SearchActivity;
-import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
-import com.enamakel.thebigindiannews.AppUtils;
-import com.enamakel.thebigindiannews.util.MultiPaneListener;
-import com.enamakel.thebigindiannews.util.Preferences;
-import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.util.Scrollable;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.SessionManager;
+import com.enamakel.thebigindiannews.data.models.StoryModel;
+import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
+import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
+import com.enamakel.thebigindiannews.util.MultiPaneListener;
+import com.enamakel.thebigindiannews.util.Preferences;
+import com.enamakel.thebigindiannews.util.Scrollable;
 import com.enamakel.thebigindiannews.widget.ItemPagerAdapter;
 
 import javax.inject.Inject;
@@ -61,32 +62,35 @@ import javax.inject.Inject;
 public abstract class BaseListActivity extends DrawerActivity implements MultiPaneListener {
     protected static final String LIST_FRAGMENT_TAG = BaseListActivity.class.getName() +
             ".LIST_FRAGMENT_TAG";
+    static final String STATE_SELECTED_ITEM = "state:selectedItem";
+    static final String STATE_STORY_VIEW_MODE = "state:storyViewMode";
+    static final String STATE_EXTERNAL_BROWSER = "state:useExternalBrowser";
 
-    private static final String STATE_SELECTED_ITEM = "state:selectedItem";
-    private static final String STATE_STORY_VIEW_MODE = "state:storyViewMode";
-    private static final String STATE_EXTERNAL_BROWSER = "state:useExternalBrowser";
+    @Inject ActionViewResolver actionViewResolver;
+    @Inject AlertDialogBuilder alertDialogBuilder;
+    @Inject SessionManager sessionManager;
 
-    private boolean mIsMultiPane;
-    protected ItemManager.WebItem mSelectedItem;
-    private Preferences.StoryViewMode mStoryViewMode;
-    private boolean useExternalBrowser;
-    private ViewPager mViewPager;
-    @Inject ActionViewResolver mActionViewResolver;
-    @Inject AlertDialogBuilder mAlertDialogBuilder;
-    @Inject SessionManager mSessionManager;
-    private TabLayout mTabLayout;
-    private FloatingActionButton mReplyButton;
-    private final SharedPreferences.OnSharedPreferenceChangeListener mPreferenceListener
+    boolean isMultiPane;
+    boolean useExternalBrowser;
+    Preferences.StoryViewMode storyViewMode;
+    ViewPager viewPager;
+    TabLayout tabLayout;
+    FloatingActionButton replyButton;
+
+    private final SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener
             = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (TextUtils.equals(key, getString(R.string.pref_external))) {
+            if (TextUtils.equals(key, getString(R.string.pref_external)))
                 useExternalBrowser = Preferences.externalBrowserEnabled(BaseListActivity.this);
-            } else if (TextUtils.equals(key, getString(R.string.pref_story_display))) {
-                mStoryViewMode = Preferences.getDefaultStoryView(BaseListActivity.this);
-            }
+
+            else if (TextUtils.equals(key, getString(R.string.pref_story_display)))
+                storyViewMode = Preferences.getDefaultStoryView(BaseListActivity.this);
         }
     };
+
+
+    protected StoryModel selectedItem;
 
 
     @Override
@@ -103,59 +107,55 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
             @Override
             public void onClick(View v) {
                 Fragment fragment = getSupportFragmentManager().findFragmentByTag(LIST_FRAGMENT_TAG);
-                if (fragment instanceof Scrollable) {
-                    ((Scrollable) fragment).scrollToTop();
-                }
+                if (fragment instanceof Scrollable) ((Scrollable) fragment).scrollToTop();
             }
         });
 
-        mIsMultiPane = getResources().getBoolean(R.bool.multi_pane);
-        if (mIsMultiPane) {
-            mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
-            mTabLayout.setVisibility(View.GONE);
-            mViewPager = (ViewPager) findViewById(R.id.content);
-            mViewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.divider));
-            mViewPager.setPageMarginDrawable(R.color.blackT12);
-            mViewPager.setVisibility(View.GONE);
-            mReplyButton = (FloatingActionButton) findViewById(R.id.reply_button);
-            AppUtils.toggleFab(mReplyButton, false);
+        isMultiPane = getResources().getBoolean(R.bool.multi_pane);
+        if (isMultiPane) {
+            tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+            viewPager = (ViewPager) findViewById(R.id.content);
+            tabLayout.setVisibility(View.GONE);
+            viewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.divider));
+            viewPager.setPageMarginDrawable(R.color.blackT12);
+            viewPager.setVisibility(View.GONE);
+            replyButton = (FloatingActionButton) findViewById(R.id.reply_button);
+            AppUtils.toggleFab(replyButton, false);
         }
 
         if (savedInstanceState == null) {
-            mStoryViewMode = Preferences.getDefaultStoryView(this);
+            storyViewMode = Preferences.getDefaultStoryView(this);
             useExternalBrowser = Preferences.externalBrowserEnabled(this);
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(android.R.id.list,
-                            instantiateListFragment(),
-                            LIST_FRAGMENT_TAG)
+                    .replace(android.R.id.list, instantiateListFragment(), LIST_FRAGMENT_TAG)
                     .commit();
         } else {
-            mStoryViewMode = Preferences.StoryViewMode.values()[
+            storyViewMode = Preferences.StoryViewMode.values()[
                     savedInstanceState.getInt(STATE_STORY_VIEW_MODE, 0)
                     ];
             useExternalBrowser = savedInstanceState.getBoolean(STATE_EXTERNAL_BROWSER);
-            mSelectedItem = savedInstanceState.getParcelable(STATE_SELECTED_ITEM);
+            selectedItem = savedInstanceState.getParcelable(STATE_SELECTED_ITEM);
 
-            if (mIsMultiPane) openMultiPaneItem(mSelectedItem);
+            if (isMultiPane) openMultiPaneItem(selectedItem);
             else unbindViewPager();
         }
 
         PreferenceManager
                 .getDefaultSharedPreferences(this)
-                .registerOnSharedPreferenceChangeListener(mPreferenceListener);
+                .registerOnSharedPreferenceChangeListener(preferenceChangeListener);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (mIsMultiPane) getMenuInflater().inflate(R.menu.menu_item, menu);
+        if (isMultiPane) getMenuInflater().inflate(R.menu.menu_item, menu);
 
         if (isSearchable()) {
             getMenuInflater().inflate(R.menu.menu_search, menu);
             MenuItem menuSearch = menu.findItem(R.id.menu_search);
             SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-            SearchView searchView = (SearchView) mActionViewResolver.getActionView(menuSearch);
+            SearchView searchView = (SearchView) actionViewResolver.getActionView(menuSearch);
             searchView.setSearchableInfo(searchManager.getSearchableInfo(
                     new ComponentName(this, SearchActivity.class)));
             searchView.setIconified(true);
@@ -168,9 +168,9 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (mIsMultiPane) {
-            menu.findItem(R.id.menu_share).setVisible(mSelectedItem != null);
-            menu.findItem(R.id.menu_external).setVisible(mSelectedItem != null);
+        if (isMultiPane) {
+            menu.findItem(R.id.menu_share).setVisible(selectedItem != null);
+            menu.findItem(R.id.menu_external).setVisible(selectedItem != null);
         }
 
         return isSearchable() || super.onPrepareOptionsMenu(menu);
@@ -180,12 +180,12 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_share) {
-            AppUtils.share(BaseListActivity.this, mAlertDialogBuilder, mSelectedItem);
+//            AppUtils.share(BaseListActivity.this, alertDialogBuilder, selectedItem);
             return true;
         }
 
         if (item.getItemId() == R.id.menu_external) {
-            AppUtils.openExternal(BaseListActivity.this, mAlertDialogBuilder, mSelectedItem);
+//            AppUtils.openExternal(BaseListActivity.this, alertDialogBuilder, selectedItem);
             return true;
         }
 
@@ -196,8 +196,8 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(STATE_SELECTED_ITEM, mSelectedItem);
-        outState.putInt(STATE_STORY_VIEW_MODE, mStoryViewMode.ordinal());
+        outState.putParcelable(STATE_SELECTED_ITEM, selectedItem);
+        outState.putInt(STATE_STORY_VIEW_MODE, storyViewMode.ordinal());
         outState.putBoolean(STATE_EXTERNAL_BROWSER, useExternalBrowser);
     }
 
@@ -206,45 +206,47 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
     protected void onDestroy() {
         super.onDestroy();
         PreferenceManager.getDefaultSharedPreferences(this)
-                .unregisterOnSharedPreferenceChangeListener(mPreferenceListener);
+                .unregisterOnSharedPreferenceChangeListener(preferenceChangeListener);
     }
 
 
     @NonNull
     @Override
     public ActionBar getSupportActionBar() {
-        //noinspection ConstantConditions
+        // noinspection ConstantConditions
         return super.getSupportActionBar();
     }
 
 
     @Override
-    public void onItemSelected(@Nullable ItemManager.WebItem item) {
-        if (mIsMultiPane) {
-            ItemManager.WebItem previousItem = mSelectedItem;
-
-            if (previousItem != null && item != null &&
-                    TextUtils.equals(item.getId(), previousItem.getId())) return;
-
-
-            if (previousItem == null && item != null ||
-                    previousItem != null && item == null) supportInvalidateOptionsMenu();
-
-            openMultiPaneItem(item);
-        } else if (item != null) openSinglePaneItem(item);
-        mSelectedItem = item;
+    public void onItemSelected(@Nullable BaseCardModel item) {
+        if (isMultiPane) return;
+//        return;
+//        if (isMultiPane) {
+//            StoryModel previousItem = selectedItem;
+//
+//            if (previousItem != null && item != null &&
+//                    TextUtils.equals(item.getId(), previousItem.getId())) return;
+//
+//
+//            if (previousItem == null && item != null ||
+//                    previousItem != null && item == null) supportInvalidateOptionsMenu();
+//
+//            openMultiPaneItem(item);
+//        } else if (item != null) openSinglePaneItem(item);
+//        selectedItem = item;
     }
 
 
     @Override
-    public ItemManager.WebItem getSelectedItem() {
-        return mSelectedItem;
+    public StoryModel getSelectedItem() {
+        return selectedItem;
     }
 
 
     @Override
     public boolean isMultiPane() {
-        return mIsMultiPane;
+        return isMultiPane;
     }
 
 
@@ -284,54 +286,54 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
     }
 
 
-    private void openMultiPaneItem(final ItemManager.WebItem item) {
+    private void openMultiPaneItem(final BaseCardModel item) {
         if (item == null) {
             setTitle(getDefaultTitle());
             findViewById(R.id.empty_selection).setVisibility(View.VISIBLE);
-            mTabLayout.setVisibility(View.GONE);
-            mViewPager.setVisibility(View.GONE);
-            mViewPager.setAdapter(null);
-            AppUtils.toggleFab(mReplyButton, false);
+            tabLayout.setVisibility(View.GONE);
+            viewPager.setVisibility(View.GONE);
+            viewPager.setAdapter(null);
+            AppUtils.toggleFab(replyButton, false);
         } else {
-            setTitle(item.getDisplayedTitle());
+//            setTitle(item.getDisplayedTitle());
             findViewById(R.id.empty_selection).setVisibility(View.GONE);
-            mTabLayout.setVisibility(View.VISIBLE);
-            mViewPager.setVisibility(View.VISIBLE);
-            AppUtils.toggleFab(mReplyButton, true);
-            mReplyButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(BaseListActivity.this, ComposeActivity.class)
-                            .putExtra(ComposeActivity.EXTRA_PARENT_ID, item.getId())
-                            .putExtra(ComposeActivity.EXTRA_PARENT_TEXT, item.getDisplayedTitle()));
-                }
-            });
+            tabLayout.setVisibility(View.VISIBLE);
+            viewPager.setVisibility(View.VISIBLE);
+            AppUtils.toggleFab(replyButton, true);
+//            replyButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    startActivity(new Intent(BaseListActivity.this, ComposeActivity.class)
+//                            .putExtra(ComposeActivity.EXTRA_PARENT_ID, item.getId())
+//                            .putExtra(ComposeActivity.EXTRA_PARENT_TEXT, item.getDisplayedTitle()));
+//                }
+//            });
             bindViewPager(item);
-            mSessionManager.view(this, item.getId());
+            sessionManager.view(this, item.getId());
         }
     }
 
 
-    private void bindViewPager(ItemManager.WebItem item) {
+    private void bindViewPager(BaseCardModel item) {
         final ItemPagerAdapter adapter = new ItemPagerAdapter(this,
                 getSupportFragmentManager(), item, true);
-        mViewPager.setAdapter(adapter);
-        mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager) {
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                Fragment fragment = adapter.getItem(mViewPager.getCurrentItem());
+                Fragment fragment = adapter.getItem(viewPager.getCurrentItem());
                 if (fragment != null) {
                     ((Scrollable) fragment).scrollToTop();
                 }
             }
         });
-        switch (mStoryViewMode) {
+        switch (storyViewMode) {
             case Article:
-                mViewPager.setCurrentItem(1);
+                viewPager.setCurrentItem(1);
                 break;
             case Readability:
-                mViewPager.setCurrentItem(2);
+                viewPager.setCurrentItem(2);
                 break;
         }
     }
@@ -349,5 +351,4 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
         }
         transaction.commit();
     }
-
 }

@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
 
-public class ToggleItemViewHolder extends ItemRecyclerViewAdapter.ItemViewHolder {
+public class ToggleItemViewHolder extends ItemViewHolder {
     public final TextView mToggle;
     public final View mLevel;
     public final TextView mParent;

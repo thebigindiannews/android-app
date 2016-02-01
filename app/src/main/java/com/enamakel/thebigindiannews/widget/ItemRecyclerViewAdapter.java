@@ -16,7 +16,6 @@
 
 package com.enamakel.thebigindiannews.widget;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -24,12 +23,10 @@ import android.os.Build;
 import android.support.annotation.CallSuper;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +36,7 @@ import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.activities.ComposeActivity;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
+import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.util.Injectable;
 
@@ -48,27 +46,29 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter.ItemViewHolder>
+public abstract class ItemRecyclerViewAdapter<VH extends ItemViewHolder>
         extends RecyclerView.Adapter<VH> {
-    private static final String PROPERTY_MAX_LINES = "maxLines";
-    private static final int DURATION_PER_LINE_MILLIS = 20;
-    protected LayoutInflater mLayoutInflater;
-    private ItemManager mItemManager;
-    @Inject UserServices mUserServices;
-    @Inject PopupMenu mPopupMenu;
-    @Inject AlertDialogBuilder mAlertDialogBuilder;
-    protected Context mContext;
-    private int mTertiaryTextColorResId;
-    private int mSecondaryTextColorResId;
-    private int mCardBackgroundColorResId;
-    private int mCardHighlightColorResId;
-    private int mContentMaxLines = Integer.MAX_VALUE;
-    private String mUsername;
-    private final Set<String> mLineCounted = new HashSet<>();
+    static final String PROPERTY_MAX_LINES = "maxLines";
+    static final int DURATION_PER_LINE_MILLIS = 20;
+    LayoutInflater layoutInflater;
+    ItemManager itemManager;
+    int tertiaryTextColorResId;
+    int secondaryTextColorResId;
+    int cardBackgroundColorResId;
+    int cardHighlightColorResId;
+    int contentMaxLines = Integer.MAX_VALUE;
+    String username;
+    final Set<String> lineCounted = new HashSet<>();
+
+    protected Context context;
+
+    @Inject UserServices userServices;
+    @Inject PopupMenu popupMenu;
+    @Inject AlertDialogBuilder alertDialogBuilder;
 
 
     public ItemRecyclerViewAdapter(ItemManager itemManager) {
-        mItemManager = itemManager;
+        this.itemManager = itemManager;
         setHasStableIds(true);
     }
 
@@ -76,21 +76,21 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        mContext = recyclerView.getContext();
-        if (mContext instanceof Injectable) {
-            ((Injectable) mContext).inject(this);
+        context = recyclerView.getContext();
+        if (context instanceof Injectable) {
+            ((Injectable) context).inject(this);
         }
-        mLayoutInflater = LayoutInflater.from(mContext);
-        TypedArray ta = mContext.obtainStyledAttributes(new int[]{
+        layoutInflater = LayoutInflater.from(context);
+        TypedArray ta = context.obtainStyledAttributes(new int[]{
                 android.R.attr.textColorTertiary,
                 android.R.attr.textColorSecondary,
                 R.attr.colorCardBackground,
                 R.attr.colorCardHighlight
         });
-        mTertiaryTextColorResId = ta.getInt(0, 0);
-        mSecondaryTextColorResId = ta.getInt(1, 0);
-        mCardBackgroundColorResId = ta.getInt(2, 0);
-        mCardHighlightColorResId = ta.getInt(3, 0);
+        tertiaryTextColorResId = ta.getInt(0, 0);
+        secondaryTextColorResId = ta.getInt(1, 0);
+        cardBackgroundColorResId = ta.getInt(2, 0);
+        cardHighlightColorResId = ta.getInt(3, 0);
         ta.recycle();
     }
 
@@ -98,19 +98,17 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
-        mContext = null;
+        context = null;
     }
 
 
     @Override
     public void onBindViewHolder(final VH holder, int position) {
-        final ItemManager.Item item = getItem(position);
-        if (item.getLocalRevision() < 0) {
+        final StoryModel item = getItem(position);
+        if (item.getLocal_revision() < 0) {
             clear(holder);
             load(holder.getAdapterPosition(), item);
-        } else {
-            bind(holder, item);
-        }
+        } else bind(holder, item);
     }
 
 
@@ -121,44 +119,42 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
 
 
     public void setMaxLines(int maxLines) {
-        mContentMaxLines = maxLines;
+        contentMaxLines = maxLines;
         notifyDataSetChanged();
     }
 
 
     public void setHighlightUsername(String username) {
-        mUsername = username;
+        this.username = username;
         notifyDataSetChanged();
     }
 
 
     public boolean isAttached() {
-        return mContext != null;
+        return context != null;
     }
 
 
-    protected abstract ItemManager.Item getItem(int position);
+    protected abstract StoryModel getItem(int position);
 
 
     @CallSuper
-    protected void bind(final VH holder, final ItemManager.Item item) {
-        if (item == null) {
-            return;
-        }
+    protected void bind(final VH holder, final StoryModel item) {
+        if (item == null) return;
+
         highlightUserItem(holder, item);
         decorateDead(holder, item);
-        AppUtils.setTextWithLinks(holder.mContentTextView, item.getText());
-        if (mLineCounted.contains(item.getId())) {
-            toggleCollapsibleContent(holder, item);
-        } else {
-            holder.mContentTextView.post(new Runnable() {
+//        AppUtils.setTextWithLinks(holder.contentTextView, item.getText());
+        if (lineCounted.contains(item.getId())) toggleCollapsibleContent(holder, item);
+        else {
+            holder.contentTextView.post(new Runnable() {
                 @Override
                 public void run() {
-                    if (mContext == null) {
+                    if (context == null) {
                         return;
                     }
                     toggleCollapsibleContent(holder, item);
-                    mLineCounted.add(item.getId());
+                    lineCounted.add(item.getId());
                 }
             });
         }
@@ -167,89 +163,88 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
 
 
     protected void clear(VH holder) {
-        holder.mCommentButton.setVisibility(View.GONE);
-        holder.mPostedTextView.setOnClickListener(null);
-        holder.mPostedTextView.setText(R.string.loading_text);
-        holder.mContentTextView.setText(R.string.loading_text);
-        holder.mReadMoreTextView.setVisibility(View.GONE);
+        holder.commentButton.setVisibility(View.GONE);
+        holder.postedTextView.setOnClickListener(null);
+        holder.postedTextView.setText(R.string.loading_text);
+        holder.contentTextView.setText(R.string.loading_text);
+        holder.readMoreTextView.setVisibility(View.GONE);
     }
 
 
-    private void load(int adapterPosition, ItemManager.Item item) {
-        mItemManager.getItem(item.getId(), new ItemResponseListener(this, adapterPosition, item));
+    private void load(int adapterPosition, StoryModel item) {
+        itemManager.getItem(item.getId(), new ItemResponseListener(this, adapterPosition, item));
     }
 
 
-    protected void onItemLoaded(int position, ItemManager.Item item) {
+    protected void onItemLoaded(int position, StoryModel item) {
         if (position < getItemCount()) {
             notifyItemChanged(position);
         }
     }
 
 
-    private void highlightUserItem(VH holder, ItemManager.Item item) {
-        boolean highlight = !TextUtils.isEmpty(mUsername) &&
-                TextUtils.equals(mUsername, item.getBy());
-        holder.mContentView.setBackgroundColor(highlight ?
-                mCardHighlightColorResId : mCardBackgroundColorResId);
+    private void highlightUserItem(VH holder, StoryModel item) {
+        boolean highlight = !TextUtils.isEmpty(username) &&
+                TextUtils.equals(username, item.getCreated_by());
+        holder.contentView.setBackgroundColor(highlight ?
+                cardHighlightColorResId : cardBackgroundColorResId);
     }
 
 
-    private void decorateDead(VH holder, ItemManager.Item item) {
-        holder.mContentTextView.setTextColor(item.isDead() ?
-                mSecondaryTextColorResId : mTertiaryTextColorResId);
+    private void decorateDead(VH holder, StoryModel item) {
+        holder.contentTextView.setTextColor(item.isDead() ?
+                secondaryTextColorResId : tertiaryTextColorResId);
     }
 
 
-    private void toggleCollapsibleContent(final VH holder, final ItemManager.Item item) {
-        final int lineCount = holder.mContentTextView.getLineCount();
-        if (item.isContentExpanded() || lineCount <= mContentMaxLines) {
-            holder.mContentTextView.setMaxLines(Integer.MAX_VALUE);
-            setTextIsSelectable(holder.mContentTextView, true);
-            holder.mReadMoreTextView.setVisibility(View.GONE);
-            return;
-        }
-        holder.mContentTextView.setMaxLines(mContentMaxLines);
-        setTextIsSelectable(holder.mContentTextView, false);
-        holder.mReadMoreTextView.setVisibility(View.VISIBLE);
-        holder.mReadMoreTextView.setText(mContext.getString(R.string.read_more, lineCount));
-        holder.mReadMoreTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                item.setContentExpanded(true);
-                v.setVisibility(View.GONE);
-                setTextIsSelectable(holder.mContentTextView, true);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                    ObjectAnimator.ofInt(holder.mContentTextView, PROPERTY_MAX_LINES, lineCount)
-                            .setDuration((lineCount - mContentMaxLines) * DURATION_PER_LINE_MILLIS)
-                            .start();
-                } else {
-                    holder.mContentTextView.setMaxLines(Integer.MAX_VALUE);
-                }
-            }
-        });
+    private void toggleCollapsibleContent(final VH holder, final StoryModel item) {
+        final int lineCount = holder.contentTextView.getLineCount();
+//        if (item.isContentExpanded() || lineCount <= contentMaxLines) {
+//            holder.contentTextView.setMaxLines(Integer.MAX_VALUE);
+//            setTextIsSelectable(holder.contentTextView, true);
+//            holder.readMoreTextView.setVisibility(View.GONE);
+//            return;
+//        }
+//
+//        holder.contentTextView.setMaxLines(contentMaxLines);
+//        setTextIsSelectable(holder.contentTextView, false);
+//        holder.readMoreTextView.setVisibility(View.VISIBLE);
+//        holder.readMoreTextView.setText(context.getString(R.string.read_more, lineCount));
+//        holder.readMoreTextView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(final View v) {
+//                item.setContentExpanded(true);
+//                v.setVisibility(View.GONE);
+//                setTextIsSelectable(holder.contentTextView, true);
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//                    ObjectAnimator.ofInt(holder.contentTextView, PROPERTY_MAX_LINES, lineCount)
+//                            .setDuration((lineCount - contentMaxLines) * DURATION_PER_LINE_MILLIS)
+//                            .start();
+//                } else holder.contentTextView.setMaxLines(Integer.MAX_VALUE);
+//            }
+//        });
     }
 
 
     private void setTextIsSelectable(TextView textView, boolean isSelectable) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
             textView.setTextIsSelectable(isSelectable);
-        }
     }
 
 
-    private void bindActions(final VH holder, final ItemManager.Item item) {
+    private void bindActions(final VH holder, final StoryModel item) {
         if (item.isDead() || item.isDeleted()) {
-            holder.mMoreButton.setVisibility(View.GONE);
+            holder.moreButton.setVisibility(View.GONE);
             return;
         }
-        holder.mMoreButton.setVisibility(View.VISIBLE);
-        holder.mMoreButton.setOnClickListener(new View.OnClickListener() {
+
+        holder.moreButton.setVisibility(View.VISIBLE);
+        holder.moreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPopupMenu.create(mContext, holder.mMoreButton, Gravity.NO_GRAVITY);
-                mPopupMenu.inflate(R.menu.menu_contextual_comment);
-                mPopupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                popupMenu.create(context, holder.moreButton, Gravity.NO_GRAVITY);
+                popupMenu.inflate(R.menu.menu_contextual_comment);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         if (menuItem.getItemId() == R.id.menu_contextual_vote) {
@@ -257,78 +252,54 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
                             return true;
                         }
                         if (menuItem.getItemId() == R.id.menu_contextual_comment) {
-                            mContext.startActivity(new Intent(mContext, ComposeActivity.class)
+                            context.startActivity(new Intent(context, ComposeActivity.class)
                                     .putExtra(ComposeActivity.EXTRA_PARENT_ID, item.getId())
-                                    .putExtra(ComposeActivity.EXTRA_PARENT_TEXT, item.getText()));
+                                    .putExtra(ComposeActivity.EXTRA_PARENT_TEXT, item.getTitle()));
                             return true;
                         }
                         return false;
                     }
                 });
-                mPopupMenu.show();
+                popupMenu.show();
             }
         });
     }
 
 
-    private void vote(final ItemManager.Item item) {
-        mUserServices.voteUp(mContext, item.getId(), new VoteCallback(this));
+    private void vote(final StoryModel item) {
+//        userServices.voteUp(context, item.getId(), new VoteCallback(this));
     }
 
 
     private void onVoted(Boolean successful) {
         if (successful == null) {
-            Toast.makeText(mContext, R.string.vote_failed, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.vote_failed, Toast.LENGTH_SHORT).show();
         } else if (successful) {
-            Toast.makeText(mContext, R.string.voted, Toast.LENGTH_SHORT).show();
-        } else {
-            AppUtils.showLogin(mContext, mAlertDialogBuilder);
-        }
+            Toast.makeText(context, R.string.voted, Toast.LENGTH_SHORT).show();
+        } else AppUtils.showLogin(context, alertDialogBuilder);
     }
 
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        final TextView mPostedTextView;
-        final TextView mContentTextView;
-        final TextView mReadMoreTextView;
-        final Button mCommentButton;
-        final View mMoreButton;
-        final View mContentView;
-
-
-        public ItemViewHolder(View itemView) {
-            super(itemView);
-            mPostedTextView = (TextView) itemView.findViewById(R.id.posted);
-            mPostedTextView.setMovementMethod(LinkMovementMethod.getInstance());
-            mContentTextView = (TextView) itemView.findViewById(R.id.text);
-            mReadMoreTextView = (TextView) itemView.findViewById(R.id.more);
-            mCommentButton = (Button) itemView.findViewById(R.id.comment);
-            mCommentButton.setVisibility(View.GONE);
-            mMoreButton = itemView.findViewById(R.id.button_more);
-            mContentView = itemView.findViewById(R.id.content);
-        }
-    }
-
-    private static class ItemResponseListener implements ResponseListener<ItemManager.Item> {
-        private final WeakReference<ItemRecyclerViewAdapter> mAdapter;
-        private final int mPosition;
-        private final ItemManager.Item mPartialItem;
+    private static class ItemResponseListener implements ResponseListener<StoryModel> {
+        private final WeakReference<ItemRecyclerViewAdapter> weakReference;
+        private final int position;
+        private final StoryModel partialItem;
 
 
         public ItemResponseListener(ItemRecyclerViewAdapter adapter, int position,
-                                    ItemManager.Item partialItem) {
-            mAdapter = new WeakReference<>(adapter);
-            mPosition = position;
-            mPartialItem = partialItem;
+                                    StoryModel partialItem) {
+            weakReference = new WeakReference<>(adapter);
+            this.position = position;
+            this.partialItem = partialItem;
         }
 
 
         @Override
-        public void onResponse(ItemManager.Item response) {
-            if (mAdapter.get() != null && mAdapter.get().isAttached() && response != null) {
-                mPartialItem.populate(response);
-                mPartialItem.setLocalRevision(0);
-                mAdapter.get().onItemLoaded(mPosition, mPartialItem);
+        public void onResponse(StoryModel response) {
+            if (weakReference.get() != null && weakReference.get().isAttached() && response != null) {
+                partialItem.populate(response);
+                partialItem.setLocal_revision(0);
+                weakReference.get().onItemLoaded(position, partialItem);
             }
         }
 
@@ -340,27 +311,25 @@ public abstract class ItemRecyclerViewAdapter<VH extends ItemRecyclerViewAdapter
     }
 
     private static class VoteCallback extends UserServices.Callback {
-        private final WeakReference<ItemRecyclerViewAdapter> mAdapter;
+        private final WeakReference<ItemRecyclerViewAdapter> weakReference;
 
 
         public VoteCallback(ItemRecyclerViewAdapter adapter) {
-            mAdapter = new WeakReference<>(adapter);
+            weakReference = new WeakReference<>(adapter);
         }
 
 
         @Override
         public void onDone(boolean successful) {
-            if (mAdapter.get() != null && mAdapter.get().isAttached()) {
-                mAdapter.get().onVoted(successful);
-            }
+            if (weakReference.get() != null && weakReference.get().isAttached())
+                weakReference.get().onVoted(successful);
         }
 
 
         @Override
         public void onError() {
-            if (mAdapter.get() != null && mAdapter.get().isAttached()) {
-                mAdapter.get().onVoted(null);
-            }
+            if (weakReference.get() != null && weakReference.get().isAttached())
+                weakReference.get().onVoted(null);
         }
     }
 }

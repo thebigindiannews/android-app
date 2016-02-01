@@ -34,7 +34,7 @@ import java.net.URL;
 
 import javax.inject.Inject;
 
-import com.enamakel.thebigindiannews.activities.parent.InjectableActivity;
+import com.enamakel.thebigindiannews.activities.base.InjectableActivity;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;

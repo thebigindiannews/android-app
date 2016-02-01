@@ -38,6 +38,8 @@ ext {
     leakCanaryVersion = '1.3.1'
     retrofitVersion = '2.0.0-beta2'
     AAVersion = "3.3.2"
+    lombokVersion = "1.16.6"
+    autoParcelVersion = "0.1"
 }
 
 apt {
@@ -74,6 +76,9 @@ dependencies {
     provided "com.squareup.dagger:dagger-compiler:$daggerVersion"
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
+    compile "org.projectlombok:lombok:$lombokVersion"
+    compile "me.tatarka:auto-parcel-gson:$autoParcelVersion"
+    apt "me.tatarka:auto-parcel-gson-processor:$autoParcelVersion"
 }
 
 apply from: "${rootProject.getRootDir()}/robolectric.gradle"

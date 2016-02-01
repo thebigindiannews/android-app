@@ -28,7 +28,8 @@ import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.activities.ItemActivity;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
-import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.models.StoryModel;
+import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.util.Injectable;
 import com.enamakel.thebigindiannews.util.MultiPaneListener;
@@ -42,23 +43,25 @@ import javax.inject.Inject;
  * @param <T>  item type, should provide title, posted, source
  */
 public abstract class ListRecyclerViewAdapter
-        <VH extends ListRecyclerViewAdapter.ItemViewHolder, T extends ItemManager.WebItem>
+        <VH extends ListRecyclerViewAdapter.ItemViewHolder, T extends BaseCardModel>
         extends RecyclerView.Adapter<VH> {
+    static final String STATE_LAST_SELECTION_POSITION = "state:lastSelectedPosition";
+    static final String STATE_CARD_VIEW_ENABLED = "state:cardViewEnabled";
 
-    private static final String STATE_LAST_SELECTION_POSITION = "state:lastSelectedPosition";
-    private static final String STATE_CARD_VIEW_ENABLED = "state:cardViewEnabled";
-    protected Context mContext;
-    private MultiPaneListener mMultiPaneListener;
-    protected RecyclerView mRecyclerView;
-    protected LayoutInflater mInflater;
-    @Inject PopupMenu mPopupMenu;
-    @Inject AlertDialogBuilder mAlertDialogBuilder;
-    @Inject UserServices mUserServices;
-    @Inject FavoriteManager mFavoriteManager;
-    private int mLastSelectedPosition = -1;
-    private int mCardElevation;
-    private int mCardRadius;
-    private boolean mCardViewEnabled = true;
+    MultiPaneListener multiPaneListener;
+    int lastSelectedPosition = -1;
+    int cardElevation;
+    int cardRadius;
+    boolean isCardViewEnabled = true;
+
+    protected Context context;
+    protected RecyclerView recyclerView;
+    protected LayoutInflater inflater;
+
+    @Inject PopupMenu popupMenu;
+    @Inject AlertDialogBuilder alertDialogBuilder;
+    @Inject UserServices userServices;
+    @Inject FavoriteManager favoriteManager;
 
 
     public ListRecyclerViewAdapter() {
@@ -69,14 +72,14 @@ public abstract class ListRecyclerViewAdapter
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        mRecyclerView = recyclerView;
-        mContext = recyclerView.getContext();
-        mInflater = LayoutInflater.from(mContext);
-        ((Injectable) mContext).inject(this);
-        mMultiPaneListener = (MultiPaneListener) mContext;
-        mCardElevation = mContext.getResources()
+        this.recyclerView = recyclerView;
+        context = recyclerView.getContext();
+        inflater = LayoutInflater.from(context);
+        ((Injectable) context).inject(this);
+        multiPaneListener = (MultiPaneListener) context;
+        cardElevation = context.getResources()
                 .getDimensionPixelSize(R.dimen.cardview_default_elevation);
-        mCardRadius = mContext.getResources()
+        cardRadius = context.getResources()
                 .getDimensionPixelSize(R.dimen.cardview_default_radius);
     }
 
@@ -84,43 +87,50 @@ public abstract class ListRecyclerViewAdapter
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
-        mContext = null;
-        mMultiPaneListener = null;
-        mRecyclerView = null;
+        context = null;
+        multiPaneListener = null;
+        this.recyclerView = null;
     }
 
 
     @Override
     public final void onBindViewHolder(final VH holder, int position) {
         final T item = getItem(position);
-        if (mCardViewEnabled) {
-            holder.mCardView.setCardElevation(mCardElevation);
-            holder.mCardView.setRadius(mCardRadius);
-            holder.mCardView.setUseCompatPadding(true);
+        if (isCardViewEnabled) {
+            holder.cardView.setCardElevation(cardElevation);
+            holder.cardView.setRadius(cardRadius);
+            holder.cardView.setUseCompatPadding(true);
         } else {
-            holder.mCardView.setCardElevation(0);
-            holder.mCardView.setRadius(0);
-            holder.mCardView.setUseCompatPadding(false);
+            holder.cardView.setCardElevation(0);
+            holder.cardView.setRadius(0);
+            holder.cardView.setUseCompatPadding(false);
         }
+
         if (!isItemAvailable(item)) {
             clearViewHolder(holder);
             loadItem(holder.getAdapterPosition());
             return;
         }
-        holder.mStoryView.setStory(item);
-        holder.mStoryView.setChecked(isSelected(item.getId()));
+
+        if (item instanceof StoryModel) {
+            StoryModel story = (StoryModel) item;
+            holder.storyView.setStory(story);
+            holder.storyView.setChecked(isSelected(item.get_id()));
+            holder.storyView.setOnCommentClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openItem(item);
+                }
+            });
+        }
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleItemClick(item, holder);
             }
         });
-        holder.mStoryView.setOnCommentClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openItem(item);
-            }
-        });
+
         bindItem(holder);
     }
 
@@ -132,19 +142,19 @@ public abstract class ListRecyclerViewAdapter
 
 
     public final boolean isCardViewEnabled() {
-        return mCardViewEnabled;
+        return isCardViewEnabled;
     }
 
 
     public final void setCardViewEnabled(boolean cardViewEnabled) {
-        this.mCardViewEnabled = cardViewEnabled;
+        this.isCardViewEnabled = cardViewEnabled;
     }
 
 
     public Bundle saveState() {
         Bundle savedState = new Bundle();
-        savedState.putInt(STATE_LAST_SELECTION_POSITION, mLastSelectedPosition);
-        savedState.putBoolean(STATE_CARD_VIEW_ENABLED, mCardViewEnabled);
+        savedState.putInt(STATE_LAST_SELECTION_POSITION, lastSelectedPosition);
+        savedState.putBoolean(STATE_CARD_VIEW_ENABLED, isCardViewEnabled);
         return savedState;
     }
 
@@ -152,13 +162,13 @@ public abstract class ListRecyclerViewAdapter
     public void restoreState(Bundle savedState) {
         if (savedState == null) return;
 
-        mCardViewEnabled = savedState.getBoolean(STATE_CARD_VIEW_ENABLED, true);
-        mLastSelectedPosition = savedState.getInt(STATE_LAST_SELECTION_POSITION);
+        isCardViewEnabled = savedState.getBoolean(STATE_CARD_VIEW_ENABLED, true);
+        lastSelectedPosition = savedState.getInt(STATE_LAST_SELECTION_POSITION);
     }
 
 
     public final boolean isAttached() {
-        return mContext != null;
+        return context != null;
     }
 
 
@@ -179,7 +189,7 @@ public abstract class ListRecyclerViewAdapter
      * @param holder view holder to clear
      */
     protected final void clearViewHolder(VH holder) {
-        holder.mStoryView.reset();
+        holder.storyView.reset();
         holder.itemView.setOnClickListener(null);
         holder.itemView.setOnLongClickListener(null);
     }
@@ -192,9 +202,9 @@ public abstract class ListRecyclerViewAdapter
      * @return true if selected, false otherwise or if selection is disabled
      */
     protected boolean isSelected(String itemId) {
-        return mMultiPaneListener.isMultiPane() &&
-                mMultiPaneListener.getSelectedItem() != null &&
-                itemId.equals(mMultiPaneListener.getSelectedItem().getId());
+        return multiPaneListener.isMultiPane() &&
+                multiPaneListener.getSelectedItem() != null &&
+                itemId.equals(multiPaneListener.getSelectedItem().getId());
     }
 
 
@@ -214,19 +224,18 @@ public abstract class ListRecyclerViewAdapter
      * @param holder clicked item view holder
      */
     protected void handleItemClick(T item, VH holder) {
-        mMultiPaneListener.onItemSelected(item);
-        if (isSelected(item.getId())) {
+        multiPaneListener.onItemSelected(item);
+
+        if (isSelected(item.get_id())) {
             notifyItemChanged(holder.getAdapterPosition());
-            if (mLastSelectedPosition >= 0) {
-                notifyItemChanged(mLastSelectedPosition);
-            }
-            mLastSelectedPosition = holder.getAdapterPosition();
+            if (lastSelectedPosition >= 0) notifyItemChanged(lastSelectedPosition);
+            lastSelectedPosition = holder.getAdapterPosition();
         }
     }
 
 
     private void openItem(T item) {
-        mContext.startActivity(new Intent(mContext, ItemActivity.class)
+        context.startActivity(new Intent(context, ItemActivity.class)
                 .putExtra(ItemActivity.EXTRA_ITEM, item)
                 .putExtra(ItemActivity.EXTRA_OPEN_COMMENTS, true));
     }
@@ -236,14 +245,14 @@ public abstract class ListRecyclerViewAdapter
      * Base {@link android.support.v7.widget.RecyclerView.ViewHolder} class for list item view
      */
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        public final StoryView mStoryView;
-        public final CardView mCardView;
+        public final StoryView_ storyView;
+        public final CardView cardView;
 
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            mCardView = (CardView) itemView;
-            mStoryView = (StoryView) itemView.findViewById(R.id.story_view);
+            cardView = (CardView) itemView;
+            storyView = (StoryView_) itemView.findViewById(R.id.story_view);
         }
     }
 }

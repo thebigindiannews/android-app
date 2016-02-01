@@ -46,6 +46,7 @@ import javax.inject.Named;
 import com.enamakel.thebigindiannews.ActivityModule;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
 import com.enamakel.thebigindiannews.util.Scrollable;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
@@ -53,7 +54,7 @@ import com.enamakel.thebigindiannews.data.ResponseListener;
 public class WebFragment extends LazyLoadFragment implements Scrollable {
 
     private static final String EXTRA_ITEM = WebFragment.class.getName() + ".EXTRA_ITEM";
-    private ItemManager.WebItem mItem;
+    private BaseCardModel mItem;
     private WebView mWebView;
     private TextView mText;
     private NestedScrollView mScrollView;
@@ -61,10 +62,10 @@ public class WebFragment extends LazyLoadFragment implements Scrollable {
     private boolean mExternalRequired = false;
     @Inject @Named(ActivityModule.HN) ItemManager mItemManager;
 
-    public static WebFragment instantiate(Context context, ItemManager.WebItem item) {
+    public static WebFragment instantiate(Context context, BaseCardModel item) {
         final WebFragment fragment = (WebFragment) instantiate(context, WebFragment.class.getName());
         fragment.mItem = item;
-        fragment.mIsHackerNewsUrl = AppUtils.isHackerNewsUrl(item);
+//        fragment.mIsHackerNewsUrl = AppUtils.isHackerNewsUrl(item);
         return fragment;
     }
 
@@ -156,7 +157,7 @@ public class WebFragment extends LazyLoadFragment implements Scrollable {
         if (mIsHackerNewsUrl) {
             bindContent();
         } else if (mItem != null) {
-            mWebView.loadUrl(mItem.getUrl());
+//            mWebView.loadUrl(mItem.getUrl());
         }
     }
 
@@ -188,7 +189,7 @@ public class WebFragment extends LazyLoadFragment implements Scrollable {
         if (mItem instanceof ItemManager.Item) {
             AppUtils.setTextWithLinks(mText, ((ItemManager.Item) mItem).getText());
         } else {
-            mItemManager.getItem(mItem.getId(), new ItemResponseListener(this));
+//            mItemManager.getItem(mItem.getId(), new ItemResponseListener(this));
         }
     }
 

@@ -39,13 +39,9 @@ public class SessionManager {
      * @param callbacks       listener to be informed upon checking completed
      */
     public void isViewed(ContentResolver contentResolver, final String itemId,
-                  final OperationCallbacks callbacks) {
-        if (TextUtils.isEmpty(itemId)) {
-            return;
-        }
-        if (callbacks == null) {
-            return;
-        }
+                         final OperationCallbacks callbacks) {
+        if (TextUtils.isEmpty(itemId) || callbacks == null) return;
+
         new SessionHandler(contentResolver, itemId, callbacks).startQuery(0, itemId,
                 MaterialisticProvider.URI_VIEWED, null,
                 MaterialisticProvider.ViewedEntry.COLUMN_NAME_ITEM_ID + " = ?",
@@ -60,14 +56,15 @@ public class SessionManager {
      * @param itemId  item ID that has been viewed
      */
     public void view(Context context, final String itemId) {
-        if (TextUtils.isEmpty(itemId)) {
-            return;
-        }
+        if (TextUtils.isEmpty(itemId)) return;
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(MaterialisticProvider.ViewedEntry.COLUMN_NAME_ITEM_ID, itemId);
         ContentResolver cr = context.getContentResolver();
+
         new SessionHandler(cr, itemId).startInsert(0, itemId,
                 MaterialisticProvider.URI_VIEWED, contentValues);
+
         // optimistically assume insert ok
         cr.notifyChange(MaterialisticProvider.URI_VIEWED
                         .buildUpon()
@@ -88,6 +85,7 @@ public class SessionManager {
          */
         void onCheckViewedComplete(boolean isViewed);
     }
+
 
     private static class SessionHandler extends AsyncQueryHandler {
         private final String mItemId;
@@ -110,10 +108,12 @@ public class SessionManager {
         @Override
         protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
             super.onQueryComplete(token, cookie, cursor);
+
             if (cookie == null) {
                 mCallback = null;
                 return;
             }
+
             if (cookie.equals(mItemId)) {
                 mCallback.onCheckViewedComplete(cursor != null && cursor.getCount() > 0);
                 mCallback = null;

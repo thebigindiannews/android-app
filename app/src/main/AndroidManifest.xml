@@ -45,7 +45,7 @@
         </activity>
 
         <activity
-            android:name=".ItemActivity_"
+            android:name=".activities.ItemActivity"
             android:label="@string/title_activity_item">
             <intent-filter android:label="@string/filter_title_item">
                 <action android:name="android.intent.action.VIEW"/>
@@ -204,11 +204,11 @@
 
         <provider
             android:name=".data.providers.MaterialisticProvider"
-            android:authorities=".provider"
+            android:authorities="com.enamakel.thebigindiannews.provider"
             android:exported="false"/>
         <provider
             android:name=".data.providers.SearchRecentSuggestionsProvider"
-            android:authorities=".recentprovider"
+            android:authorities="com.enamakel.thebigindiannews.recentprovider"
             android:exported="false"/>
 
         <receiver android:name=".AppUtils$ShareBroadcastReceiver"/>

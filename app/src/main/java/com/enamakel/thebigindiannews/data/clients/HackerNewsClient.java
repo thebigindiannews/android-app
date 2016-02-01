@@ -39,9 +39,14 @@ import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.RestServiceFactory;
 import com.enamakel.thebigindiannews.data.SessionManager;
 import com.enamakel.thebigindiannews.data.UserManager;
+import com.enamakel.thebigindiannews.data.models.StoryModel;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
+import lombok.Getter;
+import lombok.Setter;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
@@ -57,71 +62,80 @@ public class HackerNewsClient implements ItemManager, UserManager {
     public static final String BASE_WEB_URL = "https://news.ycombinator.com";
     public static final String WEB_ITEM_PATH = BASE_WEB_URL + "/item?id=%s";
     private static final String BASE_API_URL = "https://hacker-news.firebaseio.com/v0/";
-    private final RestService mRestService;
-    private final SessionManager mSessionManager;
-    private final FavoriteManager mFavoriteManager;
-    private final ContentResolver mContentResolver;
+
+    private final RestService restService;
+    private final SessionManager sessionManager;
+    private final FavoriteManager favoriteManager;
+    private final ContentResolver contentResolver;
 
 
     @Inject
     public HackerNewsClient(Context context, RestServiceFactory factory,
                             SessionManager sessionManager,
                             FavoriteManager favoriteManager) {
-        mRestService = factory.create(BASE_API_URL, RestService.class);
-        mSessionManager = sessionManager;
-        mFavoriteManager = favoriteManager;
-        mContentResolver = context.getApplicationContext().getContentResolver();
+        restService = factory.create(BASE_API_URL, RestService.class);
+        this.sessionManager = sessionManager;
+        this.favoriteManager = favoriteManager;
+        contentResolver = context.getApplicationContext().getContentResolver();
     }
 
 
     @Override
-    public void getStories(@FetchMode String filter, final ResponseListener<Item[]> listener) {
-        if (listener == null) {
-            return;
-        }
-        Call<int[]> call;
-        switch (filter) {
-            case NEW_FETCH_MODE:
-                call = mRestService.newStories();
-                break;
-            case SHOW_FETCH_MODE:
-                call = mRestService.showStories();
-                break;
-            case ASK_FETCH_MODE:
-                call = mRestService.askStories();
-                break;
-            case JOBS_FETCH_MODE:
-                call = mRestService.jobStories();
-                break;
-            default:
-                call = mRestService.topStories();
-                break;
-        }
-        call.enqueue(new Callback<int[]>() {
-            @Override
-            public void onResponse(Response<int[]> response, Retrofit retrofit) {
-                listener.onResponse(toItems(response.body()));
-            }
+    public void getStories(String filter, ResponseListener<List<StoryModel>> listener) {
 
-
-            @Override
-            public void onFailure(Throwable t) {
-                listener.onError(t != null ? t.getMessage() : "");
-
-            }
-        });
     }
 
+//    public void getStories(@FetchMode String filter, final ResponseListener<Item[]> listener) {
+//        if (listener == null) {
+//            return;
+//        }
+//        Call<int[]> call;
+//        switch (filter) {
+//            case NEW_FETCH_MODE:
+//                call = restService.newStories();
+//                break;
+//            case SHOW_FETCH_MODE:
+//                call = restService.showStories();
+//                break;
+//            case ASK_FETCH_MODE:
+//                call = restService.askStories();
+//                break;
+//            case JOBS_FETCH_MODE:
+//                call = restService.jobStories();
+//                break;
+//            default:
+//                call = restService.topStories();
+//                break;
+//        }
+//        call.enqueue(new Callback<int[]>() {
+//            @Override
+//            public void onResponse(Response<int[]> response, Retrofit retrofit) {
+//                listener.onResponse(toItems(response.body()));
+//            }
+//
+//
+//            @Override
+//            public void onFailure(Throwable t) {
+//                listener.onError(t != null ? t.getMessage() : "");
+//
+//            }
+//        });
+//    }
+
+
+//    @Override
+//    public void getItem(String itemId, final ResponseListener<Item> listener) {
+//        if (listener == null) return;
+//
+//        ItemCallbackWrapper wrapper = new ItemCallbackWrapper(listener);
+//        sessionManager.isViewed(contentResolver, itemId, wrapper);
+//        favoriteManager.check(contentResolver, itemId, wrapper);
+//        restService.item(itemId).enqueue(wrapper);
+//    }
 
     @Override
-    public void getItem(String itemId, final ResponseListener<Item> listener) {
-        if (listener == null) {
-            return;
-        }
-        ItemCallbackWrapper wrapper = new ItemCallbackWrapper(listener);
-        mSessionManager.isViewed(mContentResolver, itemId, wrapper);
-        mFavoriteManager.check(mContentResolver, itemId, wrapper);
-        mRestService.item(itemId).enqueue(wrapper);
+    public void getItem(String itemId, ResponseListener<StoryModel> listener) {
+//        hackerNewsClient.getItem(itemId, listener);
     }
 
 
@@ -130,7 +144,7 @@ public class HackerNewsClient implements ItemManager, UserManager {
         if (listener == null) {
             return;
         }
-        mRestService.user(username)
+        restService.user(username)
                 .enqueue(new Callback<UserItem>() {
                     @Override
                     public void onResponse(Response<UserItem> response, Retrofit retrofit) {
@@ -204,44 +218,45 @@ public class HackerNewsClient implements ItemManager, UserManager {
         private static final String FORMAT_LINK_USER = "<a href=\"%1$s://user/%2$s\">%2$s</a>";
 
         // The item's unique id. Required.
-        private long id;
+        @Getter private long id;
         // true if the item is deleted.
-        private boolean deleted;
+        @Getter private boolean deleted;
         // The type of item. One of "job", "story", "comment", "poll", or "pollopt".
-        private String type;
+        @Getter private String type;
         // The username of the item's author.
-        private String by;
+        @Getter private String by;
         // Creation date of the item, in Unix Time.
-        private long time;
+        @Getter private long time;
         // The comment, Ask HN, or poll text. HTML.
-        private String text;
+        @Getter private String text;
         // true if the item is dead.
-        private boolean dead;
-        // The item's parent. For comments, either another comment or the relevant story. For pollopts, the relevant poll.
-        private long parent;
+        @Getter private boolean dead;
+        // The item's parent. For comments, either another comment or the relevant story. For
+        // pollopts, the relevant poll.
+        @Getter private long parent;
         // The ids of the item's comments, in ranked display order.
-        private long[] kids;
+        @Getter @Setter private long[] kids;
         // The URL of the story.
-        private String url;
+        @Getter private String url;
         // The story's score, or the votes for a pollopt.
-        private int score;
+        @Getter private int score;
         // The title of the story or poll.
-        private String title;
+        @Getter private String title;
         // A list of related pollopts, in display order.
-        private long[] parts;
+        @Getter private long[] parts;
         // In the case of stories or polls, the total comment count.
-        private int descendants = -1;
+        @Getter private int descendants = -1;
 
         // view state
         private HackerNewsItem[] kidItems;
-        private boolean favorite;
-        private boolean viewed;
-        private int localRevision = -1;
+        @Getter @Setter private boolean favorite;
+        @Getter @Setter private boolean viewed;
+        @Getter @Setter private int localRevision = -1;
         private int level = 0;
         private boolean collapsed;
         private boolean contentExpanded;
         int rank;
-        private int lastKidCount = -1;
+        @Setter @Getter private int lastKidCount = -1;
         private boolean hasNewDescendants = false;
         private HackerNewsItem parentItem;
         private boolean voted;
@@ -335,24 +350,6 @@ public class HackerNewsClient implements ItemManager, UserManager {
 
 
         @Override
-        public long[] getKids() {
-            return kids;
-        }
-
-
-        @Override
-        public String getBy() {
-            return by;
-        }
-
-
-        @Override
-        public long getTime() {
-            return time;
-        }
-
-
-        @Override
         public int describeContents() {
             return 0;
         }
@@ -398,12 +395,6 @@ public class HackerNewsClient implements ItemManager, UserManager {
         @Override
         public long getLongId() {
             return id;
-        }
-
-
-        @Override
-        public String getTitle() {
-            return title;
         }
 
 
@@ -465,23 +456,8 @@ public class HackerNewsClient implements ItemManager, UserManager {
 
         @Override
         public int getKidCount() {
-            if (descendants > 0) {
-                return descendants;
-            }
-
+            if (descendants > 0) return descendants;
             return kids != null ? kids.length : 0;
-        }
-
-
-        @Override
-        public int getLastKidCount() {
-            return lastKidCount;
-        }
-
-
-        @Override
-        public void setLastKidCount(int lastKidCount) {
-            this.lastKidCount = lastKidCount;
         }
 
 
@@ -535,12 +511,6 @@ public class HackerNewsClient implements ItemManager, UserManager {
 
 
         @Override
-        public String getText() {
-            return text;
-        }
-
-
-        @Override
         public boolean isStoryType() {
             switch (getType()) {
                 case STORY_TYPE:
@@ -551,30 +521,6 @@ public class HackerNewsClient implements ItemManager, UserManager {
                 default:
                     return false;
             }
-        }
-
-
-        @Override
-        public boolean isFavorite() {
-            return favorite;
-        }
-
-
-        @Override
-        public void setFavorite(boolean favorite) {
-            this.favorite = favorite;
-        }
-
-
-        @Override
-        public int getLocalRevision() {
-            return localRevision;
-        }
-
-
-        @Override
-        public void setLocalRevision(int localRevision) {
-            this.localRevision = localRevision;
         }
 
 
@@ -610,12 +556,8 @@ public class HackerNewsClient implements ItemManager, UserManager {
 
         @Override
         public Item getParentItem() {
-            if (parent == 0) {
-                return null;
-            }
-            if (parentItem == null) {
-                parentItem = new HackerNewsItem(parent);
-            }
+            if (parent == 0) return null;
+            if (parentItem == null) parentItem = new HackerNewsItem(parent);
             return parentItem;
         }
 
@@ -824,24 +766,17 @@ public class HackerNewsClient implements ItemManager, UserManager {
 
 
         private void done() {
-            if (isViewed == null) {
-                return;
-            }
-            if (isFavorite == null) {
-                return;
-            }
-            if (!(hasResponse || hasError)) {
-                return;
-            }
+            if (isViewed == null) return;
+            if (isFavorite == null) return;
+            if (!(hasResponse || hasError)) return;
+
             if (hasResponse) {
                 if (item != null) {
                     item.setFavorite(isFavorite);
                     item.setIsViewed(isViewed);
                 }
                 responseListener.onResponse(item);
-            } else {
-                responseListener.onError(errorMessage);
-            }
+            } else responseListener.onError(errorMessage);
         }
     }
 }

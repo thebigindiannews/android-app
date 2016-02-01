@@ -22,7 +22,10 @@ import com.enamakel.thebigindiannews.ActivityModule;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.RestServiceFactory;
+import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.util.Preferences;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -38,57 +41,66 @@ import retrofit.http.Query;
 public class AlgoliaClient implements ItemManager {
     public static boolean sSortByTime = true;
     private static final String BASE_API_URL = "https://hn.algolia.com/api/v1/";
-    protected RestService mRestService;
+    protected RestService restService;
 
-    @Inject @Named(ActivityModule.HN) ItemManager mHackerNewsClient;
+    @Inject @Named(ActivityModule.HN) ItemManager hackerNewsClient;
 
 
     @Inject
     public AlgoliaClient(Context context, RestServiceFactory factory) {
-        mRestService = factory.create(BASE_API_URL, RestService.class);
+        restService = factory.create(BASE_API_URL, RestService.class);
         sSortByTime = Preferences.isSortByRecent(context);
     }
 
 
+//    @Override
+//    public void getStories(String filter, final ResponseListener<Item[]> listener) {
+//        if (listener == null) return;
+//
+//        search(filter, new Callback<AlgoliaHits>() {
+//            @Override
+//            public void onResponse(Response<AlgoliaHits> response, Retrofit retrofit) {
+//                AlgoliaHits algoliaHits = response.body();
+//                Hit[] hits = algoliaHits.hits;
+//                Item[] stories = new Item[hits == null ? 0 : hits.length];
+//
+//                for (int i = 0; i < stories.length; i++) {
+//                    HackerNewsClient.HackerNewsItem item = new HackerNewsClient.HackerNewsItem(
+//                            Long.parseLong(hits[i].objectID)
+//                    );
+//                    item.rank = i + 1;
+//                    stories[i] = item;
+//                }
+//
+//                listener.onResponse(stories);
+//            }
+//
+//
+//            @Override
+//            public void onFailure(Throwable t) {
+//                listener.onError(t != null ? t.getMessage() : "");
+//            }
+//        });
+//    }
+
+
     @Override
-    public void getStories(String filter, final ResponseListener<Item[]> listener) {
-        if (listener == null) return;
+    public void getStories(String filter, ResponseListener<List<StoryModel>> listener) {
 
-        search(filter, new Callback<AlgoliaHits>() {
-            @Override
-            public void onResponse(Response<AlgoliaHits> response, Retrofit retrofit) {
-                AlgoliaHits algoliaHits = response.body();
-                Hit[] hits = algoliaHits.hits;
-                Item[] stories = new Item[hits == null ? 0 : hits.length];
-                for (int i = 0; i < stories.length; i++) {
-                    HackerNewsClient.HackerNewsItem item = new HackerNewsClient.HackerNewsItem(
-                            Long.parseLong(hits[i].objectID));
-                    item.rank = i + 1;
-                    stories[i] = item;
-                }
-                listener.onResponse(stories);
-            }
-
-
-            @Override
-            public void onFailure(Throwable t) {
-                listener.onError(t != null ? t.getMessage() : "");
-            }
-        });
     }
 
 
     @Override
-    public void getItem(String itemId, ResponseListener<Item> listener) {
-        mHackerNewsClient.getItem(itemId, listener);
+    public void getItem(String itemId, ResponseListener<StoryModel> listener) {
+//        hackerNewsClient.getItem(itemId, listener);
     }
 
 
     protected void search(String filter, Callback<AlgoliaHits> callback) {
         Call<AlgoliaHits> call;
 
-        if (sSortByTime) call = mRestService.searchByDate(filter);
-        else call = mRestService.search(filter);
+        if (sSortByTime) call = restService.searchByDate(filter);
+        else call = restService.search(filter);
         call.enqueue(callback);
     }
 
@@ -109,9 +121,11 @@ public class AlgoliaClient implements ItemManager {
         Call<AlgoliaHits> searchByMinTimestamp(@Query("numericFilters") String timestampSeconds);
     }
 
+
     protected static class AlgoliaHits {
         Hit[] hits;
     }
+
 
     private static class Hit {
         String objectID;

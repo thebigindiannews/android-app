@@ -3,7 +3,7 @@ package com.enamakel.thebigindiannews.test;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import com.enamakel.thebigindiannews.activities.parent.InjectableActivity;
+import com.enamakel.thebigindiannews.activities.base.InjectableActivity;
 import com.enamakel.thebigindiannews.util.MultiPaneListener;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.ItemManager;

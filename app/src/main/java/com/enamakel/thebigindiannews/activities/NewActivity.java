@@ -19,7 +19,7 @@ package com.enamakel.thebigindiannews.activities;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.enamakel.thebigindiannews.activities.parent.BaseStoriesActivity;
+import com.enamakel.thebigindiannews.activities.base.BaseStoriesActivity;
 import com.enamakel.thebigindiannews.fragments.ListFragment;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.ItemManager;

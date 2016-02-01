@@ -61,6 +61,7 @@ import com.enamakel.thebigindiannews.activities.ComposeActivity;
 import com.enamakel.thebigindiannews.activities.FavoriteActivity;
 import com.enamakel.thebigindiannews.activities.ListActivity;
 import com.enamakel.thebigindiannews.activities.LoginActivity;
+import com.enamakel.thebigindiannews.data.Favorite;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
@@ -285,7 +286,7 @@ public class FavoriteActivityTest {
                 emailResolveInfo);
         ShadowLocalBroadcastManager manager = shadowOf(LocalBroadcastManager.getInstance(activity));
         Intent intent = new Intent(FavoriteManager.ACTION_GET);
-        intent.putExtra(FavoriteManager.ACTION_GET_EXTRA_DATA, new ArrayList<FavoriteManager.Favorite>());
+        intent.putExtra(FavoriteManager.ACTION_GET_EXTRA_DATA, new ArrayList<Favorite>());
         manager.getRegisteredBroadcastReceivers().get(0).broadcastReceiver
                 .onReceive(activity, intent);
         assertThat(progressDialog).isNotShowing();

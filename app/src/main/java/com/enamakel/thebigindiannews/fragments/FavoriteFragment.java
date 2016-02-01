@@ -44,6 +44,7 @@ import com.enamakel.thebigindiannews.ActionViewResolver;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.FavoriteActivity;
+import com.enamakel.thebigindiannews.data.Favorite;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
@@ -64,7 +65,7 @@ public class FavoriteFragment extends BaseListFragment
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ArrayList<FavoriteManager.Favorite> favorites =
+            ArrayList<Favorite> favorites =
                     intent.getParcelableArrayListExtra(FavoriteManager.ACTION_GET_EXTRA_DATA);
             export(favorites);
         }
@@ -106,7 +107,7 @@ public class FavoriteFragment extends BaseListFragment
                              @Nullable Bundle savedInstanceState) {
         View view = getLayoutInflater(savedInstanceState)
                 .inflate(R.layout.fragment_favorite, container, false);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mEmptySearchView = view.findViewById(R.id.empty_search);
         mEmptyView = view.findViewById(R.id.empty);
         mEmptyView.findViewById(R.id.header_card_view)
@@ -179,7 +180,7 @@ public class FavoriteFragment extends BaseListFragment
     public void onDetach() {
         super.onDetach();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
-        mRecyclerView.setAdapter(null); // detach adapter
+        recyclerView.setAdapter(null); // detach adapter
         if (mActionMode != null) {
             mActionMode.finish();
         }
@@ -333,7 +334,7 @@ public class FavoriteFragment extends BaseListFragment
     }
 
 
-    private void export(ArrayList<FavoriteManager.Favorite> favorites) {
+    private void export(ArrayList<Favorite> favorites) {
         if (mProgressDialog != null) {
             mProgressDialog.dismiss();
         }
@@ -346,7 +347,7 @@ public class FavoriteFragment extends BaseListFragment
     }
 
 
-    private String makeEmailContent(ArrayList<FavoriteManager.Favorite> favorites) {
+    private String makeEmailContent(ArrayList<Favorite> favorites) {
         return TextUtils.join("\n\n", favorites);
     }
 }

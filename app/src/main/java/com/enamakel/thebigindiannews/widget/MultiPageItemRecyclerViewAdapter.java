@@ -25,7 +25,7 @@ import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.ItemManager;
 
 public class MultiPageItemRecyclerViewAdapter
-        extends ItemRecyclerViewAdapter<ItemRecyclerViewAdapter.ItemViewHolder> {
+        extends ItemRecyclerViewAdapter<ItemViewHolder> {
     private final ItemManager.Item[] mItems;
 
     public MultiPageItemRecyclerViewAdapter(ItemManager itemManager,
@@ -36,7 +36,7 @@ public class MultiPageItemRecyclerViewAdapter
 
     @Override
     public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ItemViewHolder(mLayoutInflater.inflate(R.layout.item_comment, parent, false));
+        return new ItemViewHolder(layoutInflater.inflate(R.layout.item_comment, parent, false));
     }
 
     @Override
@@ -50,12 +50,12 @@ public class MultiPageItemRecyclerViewAdapter
         if (item == null) {
             return;
         }
-        holder.mPostedTextView.setText(item.getDisplayedTime(mContext, false, true));
+        holder.postedTextView.setText(item.getDisplayedTime(context, false, true));
         if (item.getKidCount() > 0) {
-            holder.mCommentButton.setText(mContext.getResources()
+            holder.commentButton.setText(context.getResources()
                     .getQuantityString(R.plurals.comments_count, item.getKidCount(), item.getKidCount()));
-            holder.mCommentButton.setVisibility(View.VISIBLE);
-            holder.mCommentButton.setOnClickListener(new View.OnClickListener() {
+            holder.commentButton.setVisibility(View.VISIBLE);
+            holder.commentButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     openItem(item);
@@ -70,7 +70,7 @@ public class MultiPageItemRecyclerViewAdapter
     }
 
     private void openItem(ItemManager.Item item) {
-        mContext.startActivity(new Intent(mContext, ItemActivity.class)
+        context.startActivity(new Intent(context, ItemActivity.class)
                 .putExtra(ItemActivity.EXTRA_ITEM, item)
                 .putExtra(ItemActivity.EXTRA_OPEN_COMMENTS, true));
     }

@@ -22,8 +22,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 import android.text.Spannable;
 
+import com.enamakel.thebigindiannews.data.models.StoryModel;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.List;
 
 /**
  * Data repository for {@link com.enamakel.thebigindiannews.data.ItemManager.Item}
@@ -53,7 +56,7 @@ public interface ItemManager {
      * @param filter   filter of stories to fetch
      * @param listener callback to be notified on response
      */
-    void getStories(String filter, final ResponseListener<Item[]> listener);
+    void getStories(String filter, final ResponseListener<List<StoryModel>> listener);
 
 
     /**
@@ -62,7 +65,7 @@ public interface ItemManager {
      * @param itemId   item ID
      * @param listener callback to be notified on response
      */
-    void getItem(String itemId, ResponseListener<Item> listener);
+    void getItem(String itemId, ResponseListener<StoryModel> listener);
 
 
     /**

@@ -26,7 +26,7 @@ import android.view.MenuItem;
 
 import javax.inject.Inject;
 
-import com.enamakel.thebigindiannews.activities.parent.DrawerActivity;
+import com.enamakel.thebigindiannews.activities.base.DrawerActivity;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.util.Preferences;

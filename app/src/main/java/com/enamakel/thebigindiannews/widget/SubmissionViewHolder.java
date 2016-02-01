@@ -21,12 +21,12 @@ import android.widget.TextView;
 
 import com.enamakel.thebigindiannews.R;
 
-public class SubmissionViewHolder extends ItemRecyclerViewAdapter.ItemViewHolder {
+public class SubmissionViewHolder extends ItemViewHolder {
     final TextView mTitleTextView;
 
     public SubmissionViewHolder(View itemView) {
         super(itemView);
         mTitleTextView = (android.widget.TextView) itemView.findViewById(R.id.title);
-        mCommentButton.setText(R.string.view_story);
+        commentButton.setText(R.string.view_story);
     }
 }

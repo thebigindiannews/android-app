@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.activities.parent;
+package com.enamakel.thebigindiannews.activities.base;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,65 +30,60 @@ import com.enamakel.thebigindiannews.fragments.ListFragment;
 
 public abstract class BaseStoriesActivity extends BaseListActivity
         implements ListFragment.RefreshCallback {
+    static final String STATE_LAST_UPDATED = "state:lastUpdated";
+    Long lastUpdated;
 
-    private static final String STATE_LAST_UPDATED = "state:lastUpdated";
-    private Long mLastUpdated;
-    private final Runnable mLastUpdateTask = new Runnable() {
+    final Runnable lastUpdateTask = new Runnable() {
         @Override
         public void run() {
-            if (mLastUpdated == null) {
-                return;
-            }
+            if (lastUpdated == null) return;
             getSupportActionBar().setSubtitle(getString(R.string.last_updated,
-                    DateUtils.getRelativeTimeSpanString(mLastUpdated,
+                    DateUtils.getRelativeTimeSpanString(lastUpdated,
                             System.currentTimeMillis(),
                             DateUtils.MINUTE_IN_MILLIS,
                             DateUtils.FORMAT_ABBREV_ALL)));
-            mHandler.postAtTime(this, SystemClock.uptimeMillis() + DateUtils.MINUTE_IN_MILLIS);
+            handler.postAtTime(this, SystemClock.uptimeMillis() + DateUtils.MINUTE_IN_MILLIS);
         }
     };
-    private final Handler mHandler = new Handler();
+
+    final Handler handler = new Handler();
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            mLastUpdated = savedInstanceState.getLong(STATE_LAST_UPDATED);
-        }
+    protected void onCreate(Bundle instanceState) {
+        super.onCreate(instanceState);
+        if (instanceState != null) lastUpdated = instanceState.getLong(STATE_LAST_UPDATED);
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        mHandler.removeCallbacks(mLastUpdateTask);
-        mHandler.post(mLastUpdateTask);
+        handler.removeCallbacks(lastUpdateTask);
+        handler.post(lastUpdateTask);
     }
 
 
     @Override
     protected void onPause() {
         super.onPause();
-        mHandler.removeCallbacks(mLastUpdateTask);
+        handler.removeCallbacks(lastUpdateTask);
     }
 
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mLastUpdated != null) {
-            outState.putLong(STATE_LAST_UPDATED, mLastUpdated);
-        }
+        if (lastUpdated != null) outState.putLong(STATE_LAST_UPDATED, lastUpdated);
     }
 
 
     @Override
     public void onRefreshed() {
         onItemSelected(null);
-        mLastUpdated = System.currentTimeMillis();
-        mHandler.removeCallbacks(mLastUpdateTask);
-        mHandler.post(mLastUpdateTask);
+        lastUpdated = System.currentTimeMillis();
+        handler.removeCallbacks(lastUpdateTask);
+        handler.post(lastUpdateTask);
     }
 
 
@@ -104,5 +99,4 @@ public abstract class BaseStoriesActivity extends BaseListActivity
         args.putString(ListFragment.EXTRA_FILTER, getFetchMode());
         return Fragment.instantiate(this, ListFragment.class.getName(), args);
     }
-
 }
