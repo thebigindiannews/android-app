@@ -24,7 +24,7 @@
 
     <include layout="@layout/empty_list" />
 
-    <com.enamakel.thebigindiannews.widget.AppBarSwipeRefreshLayout
+    <com.enamakel.thebigindiannews.widgets.AppBarSwipeRefreshLayout
         android:id="@id/swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -36,6 +36,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-    </com.enamakel.thebigindiannews.widget.AppBarSwipeRefreshLayout>
+    </com.enamakel.thebigindiannews.widgets.AppBarSwipeRefreshLayout>
 
 </FrameLayout>

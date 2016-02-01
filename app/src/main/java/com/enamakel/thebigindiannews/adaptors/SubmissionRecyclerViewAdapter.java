@@ -18,58 +18,62 @@ package com.enamakel.thebigindiannews.adaptors;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.enamakel.thebigindiannews.activities.ItemActivity;
 import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
 import com.enamakel.thebigindiannews.activities.ThreadPreviewActivity;
 import com.enamakel.thebigindiannews.data.ItemManager;
-import com.enamakel.thebigindiannews.widget.SubmissionViewHolder;
+import com.enamakel.thebigindiannews.data.models.StoryModel;
+import com.enamakel.thebigindiannews.widgets.SubmissionViewHolder;
 
 public class SubmissionRecyclerViewAdapter extends ItemRecyclerViewAdapter<SubmissionViewHolder> {
-    private final ItemManager.Item[] mItems;
+    private final StoryModel[] mItems;
 
-    public SubmissionRecyclerViewAdapter(ItemManager itemManager, @NonNull ItemManager.Item[] items) {
+
+    public SubmissionRecyclerViewAdapter(ItemManager itemManager, @NonNull StoryModel[] items) {
         super(itemManager);
         mItems = items;
     }
+
 
     @Override
     public SubmissionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new SubmissionViewHolder(layoutInflater.inflate(R.layout.item_submission, parent, false));
     }
 
+
     @Override
     public int getItemCount() {
         return mItems.length;
     }
 
+
     @Override
-    protected ItemManager.Item getItem(int position) {
+    protected StoryModel getItem(int position) {
         return mItems[position];
     }
 
+
     @Override
-    protected void bind(final SubmissionViewHolder holder, final ItemManager.Item item) {
+    protected void bind(final SubmissionViewHolder holder, final StoryModel item) {
         super.bind(holder, item);
-        if (item == null) {
-            return;
-        }
-        final boolean isComment = TextUtils.equals(item.getType(), ItemManager.Item.COMMENT_TYPE);
+        if (item == null) return;
+
+        final boolean isComment = false; //TextUtils.equals(item.getType(), ItemManager.Item.COMMENT_TYPE);
         holder.postedTextView.setText(item.getDisplayedTime(context, false, false));
         if (isComment) {
-            holder.mTitleTextView.setText(null);
+            holder.titleTextView.setText(null);
             holder.commentButton.setText(R.string.view_thread);
         } else {
-            holder.postedTextView.append(" - ");
-            holder.postedTextView.append(context.getResources()
-                    .getQuantityString(R.plurals.score, item.getScore(), item.getScore()));
-            holder.mTitleTextView.setText(item.getDisplayedTitle());
+//            holder.postedTextView.append(" - ");
+//            holder.postedTextView.append(context.getResources()
+//                    .getQuantityString(R.plurals.score, item.getScore(), item.getScore()));
+            holder.titleTextView.setText(item.getTitle());
             holder.commentButton.setText(R.string.view_story);
         }
-        holder.mTitleTextView.setVisibility(holder.mTitleTextView.length() > 0 ?
+        holder.titleTextView.setVisibility(holder.titleTextView.length() > 0 ?
                 View.VISIBLE : View.GONE);
         holder.contentTextView.setVisibility(holder.contentTextView.length() > 0 ?
                 View.VISIBLE : View.GONE);
@@ -77,21 +81,20 @@ public class SubmissionRecyclerViewAdapter extends ItemRecyclerViewAdapter<Submi
         holder.commentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isComment) {
-                    openPreview(item);
-                } else {
-                    openItem(item);
-                }
+                if (isComment) openPreview(item);
+                else openItem(item);
             }
         });
     }
 
-    private void openItem(ItemManager.Item item) {
-        context.startActivity(new Intent(context, ItemActivity.class)
-                .putExtra(ItemActivity.EXTRA_ITEM, item));
+
+    private void openItem(StoryModel item) {
+        context.startActivity(new Intent(context, SingleStoryActivity.class)
+                .putExtra(SingleStoryActivity.EXTRA_ITEM, item));
     }
 
-    private void openPreview(ItemManager.Item item) {
+
+    private void openPreview(StoryModel item) {
         context.startActivity(new Intent(context, ThreadPreviewActivity.class)
                 .putExtra(ThreadPreviewActivity.EXTRA_ITEM, item));
     }

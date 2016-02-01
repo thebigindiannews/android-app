@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             tools:ignore="UnusedAttribute">
 
-            <com.enamakel.thebigindiannews.widget.TintableTextView
+            <com.enamakel.thebigindiannews.views.TintableTextView
                 android:id="@+id/toggle"
                 android:drawableRight="@drawable/ic_expand_more_white_24dp"
                 style="@style/TextAppearance.AppCompat.Medium"

@@ -39,8 +39,7 @@ import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.util.Injectable;
-import com.enamakel.thebigindiannews.widget.ItemViewHolder;
-import com.enamakel.thebigindiannews.widget.PopupMenu;
+import com.enamakel.thebigindiannews.widgets.PopupMenu;
 
 import java.lang.ref.WeakReference;
 import java.util.HashSet;
@@ -48,7 +47,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-public abstract class ItemRecyclerViewAdapter<VH extends ItemViewHolder>
+public abstract class ItemRecyclerViewAdapter<VH extends MultiPageItemRecyclerViewAdapter.ItemViewHolder>
         extends RecyclerView.Adapter<VH> {
     static final String PROPERTY_MAX_LINES = "maxLines";
     static final int DURATION_PER_LINE_MILLIS = 20;

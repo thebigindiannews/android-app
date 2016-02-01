@@ -24,7 +24,7 @@
         android:paddingTop="@dimen/padding"
         style="@style/textSubtitleStyle.Italic" />
 
-    <com.enamakel.thebigindiannews.widget.TextView
+    <com.enamakel.thebigindiannews.views.TextView
         android:id="@id/title"
         android:text="@string/loading_text"
         style="@style/textTitleStyle"

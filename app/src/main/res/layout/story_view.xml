@@ -98,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.enamakel.thebigindiannews.widget.TextView
+            <com.enamakel.thebigindiannews.views.TextView
                 android:id="@id/title"
                 style="@style/textTitleStyle"
                 android:layout_width="match_parent"
@@ -109,7 +109,7 @@
                 android:text="@string/loading_text"
                 />
 
-            <com.enamakel.thebigindiannews.widget.TextView
+            <com.enamakel.thebigindiannews.views.TextView
                 android:id="@+id/description"
                 style="@style/textContentStyle"
                 android:maxLines = "4"
@@ -131,7 +131,7 @@
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/padding">
 
-                <com.enamakel.thebigindiannews.widget.TintableTextView
+                <com.enamakel.thebigindiannews.views.TintableTextView
                     android:id="@id/source"
                     style="@style/textSubtitleStyle.Italic"
                     android:text="@string/loading_text"

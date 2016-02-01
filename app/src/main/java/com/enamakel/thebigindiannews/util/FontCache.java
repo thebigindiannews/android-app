@@ -16,32 +16,34 @@
 
 package com.enamakel.thebigindiannews.util;
 
+
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v4.util.ArrayMap;
 import android.text.TextUtils;
 
-public class FontCache {
 
-    private static FontCache sInstance;
-    private final ArrayMap<String, Typeface> mTypefaceMap = new ArrayMap<>();
+public class FontCache {
+    static FontCache fontCache;
+    final ArrayMap<String, Typeface> typefaceMap = new ArrayMap<>();
+
 
     public static FontCache getInstance() {
-        if (sInstance == null) {
-            sInstance = new FontCache();
-        }
-        return sInstance;
+        if (fontCache == null) fontCache = new FontCache();
+        return fontCache;
     }
 
-    private FontCache() { }
+
+    FontCache() {
+
+    }
+
 
     public Typeface get(Context context, String typefaceName) {
-        if (TextUtils.isEmpty(typefaceName)) {
-            return null;
+        if (TextUtils.isEmpty(typefaceName)) return null;
+        if (!typefaceMap.containsKey(typefaceName)) {
+            typefaceMap.put(typefaceName, Typeface.createFromAsset(context.getAssets(), typefaceName));
         }
-        if (!mTypefaceMap.containsKey(typefaceName)) {
-            mTypefaceMap.put(typefaceName, Typeface.createFromAsset(context.getAssets(), typefaceName));
-        }
-        return mTypefaceMap.get(typefaceName);
+        return typefaceMap.get(typefaceName);
     }
 }

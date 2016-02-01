@@ -20,9 +20,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.adaptors.MultiPageItemRecyclerViewAdapter;
 
-public class SubmissionViewHolder extends ItemViewHolder {
-    final TextView titleTextView;
+public class SubmissionViewHolder extends MultiPageItemRecyclerViewAdapter.ItemViewHolder {
+    public final TextView titleTextView;
 
 
     public SubmissionViewHolder(View itemView) {

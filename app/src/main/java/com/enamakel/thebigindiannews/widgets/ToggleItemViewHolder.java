@@ -21,8 +21,9 @@ import android.widget.TextView;
 
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.adaptors.MultiPageItemRecyclerViewAdapter;
 
-public class ToggleItemViewHolder extends ItemViewHolder {
+public class ToggleItemViewHolder extends MultiPageItemRecyclerViewAdapter.ItemViewHolder {
     public final TextView toggle;
     public final View level;
     public final TextView parent;

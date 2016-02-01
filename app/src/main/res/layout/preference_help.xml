@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 
-<com.enamakel.thebigindiannews.widget.TintableTextView
+<com.enamakel.thebigindiannews.views.TintableTextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@android:id/title"

@@ -65,7 +65,7 @@ public class WebFragment extends LazyLoadFragment implements Scrollable {
     public static WebFragment instantiate(Context context, BaseCardModel item) {
         final WebFragment fragment = (WebFragment) instantiate(context, WebFragment.class.getName());
         fragment.mItem = item;
-//        fragment.mIsHackerNewsUrl = AppUtils.isHackerNewsUrl(item);
+//        fragment.mIsHackerNewsUrl = AppUtils.isHackerNewsUrl(story);
         return fragment;
     }
 
@@ -189,7 +189,7 @@ public class WebFragment extends LazyLoadFragment implements Scrollable {
         if (mItem instanceof ItemManager.Item) {
             AppUtils.setTextWithLinks(mText, ((ItemManager.Item) mItem).getText());
         } else {
-//            mItemManager.getItem(mItem.getId(), new ItemResponseListener(this));
+//            itemManager.getItem(mItem.getId(), new ItemResponseListener(this));
         }
     }
 

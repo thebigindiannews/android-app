@@ -32,7 +32,7 @@ import android.view.View;
 import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.util.Scrollable;
-import com.enamakel.thebigindiannews.widget.ListRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adaptors.ListRecyclerViewAdapter;
 
 public abstract class BaseListFragment extends BaseFragment implements Scrollable {
     private static final String STATE_ADAPTER = "state:adapter";

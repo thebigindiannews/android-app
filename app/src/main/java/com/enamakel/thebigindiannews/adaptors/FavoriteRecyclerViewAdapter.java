@@ -37,7 +37,7 @@ import com.enamakel.thebigindiannews.activities.ComposeActivity;
 import com.enamakel.thebigindiannews.data.Favorite;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.util.MenuTintDelegate;
-import com.enamakel.thebigindiannews.widget.PopupMenu;
+import com.enamakel.thebigindiannews.widgets.PopupMenu;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

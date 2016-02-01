@@ -29,91 +29,91 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.ref.WeakReference;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import com.enamakel.thebigindiannews.ActivityModule;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.BuildConfig;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.base.InjectableActivity;
-import com.enamakel.thebigindiannews.util.Scrollable;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.UserManager;
-import com.enamakel.thebigindiannews.widget.CommentItemDecoration;
-import com.enamakel.thebigindiannews.widget.SubmissionRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.util.Scrollable;
+import com.enamakel.thebigindiannews.widgets.CommentItemDecoration;
+
+import java.lang.ref.WeakReference;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 public class UserActivity extends InjectableActivity implements Scrollable {
     public static final String EXTRA_USERNAME = UserActivity.class.getName() + ".EXTRA_USERNAME";
-    private static final String STATE_USER = "state:user";
-    private static final String PARAM_ID = "id";
-    @Inject UserManager mUserManager;
-    @Inject @Named(ActivityModule.HN) ItemManager mItemManger;
-    private String mUsername;
-    private UserManager.User mUser;
-    private TextView mInfo;
-    private TextView mAbout;
-    private RecyclerView mRecyclerView;
-    private TabLayout mTabLayout;
-    private AppBarLayout mAppBar;
-    private View mEmpty;
+    static final String STATE_USER = "state:user";
+    static final String PARAM_ID = "id";
+    String username;
+    UserManager.User user;
+    TextView info;
+    TextView about;
+    RecyclerView recyclerView;
+    TabLayout tabLayout;
+    AppBarLayout appBarLayout;
+    View emptyView;
+
+    @Inject UserManager userManager;
+    @Inject @Named(ActivityModule.HN) ItemManager itemManger;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUsername = getIntent().getStringExtra(EXTRA_USERNAME);
-        if (TextUtils.isEmpty(mUsername) && getIntent().getData() != null) {
-            if (TextUtils.equals(getIntent().getData().getScheme(), BuildConfig.APPLICATION_ID)) {
-                mUsername = getIntent().getData().getLastPathSegment();
-            } else {
-                mUsername = getIntent().getData().getQueryParameter(PARAM_ID);
-            }
+        username = getIntent().getStringExtra(EXTRA_USERNAME);
+        if (TextUtils.isEmpty(username) && getIntent().getData() != null) {
+            if (TextUtils.equals(getIntent().getData().getScheme(), BuildConfig.APPLICATION_ID))
+                username = getIntent().getData().getLastPathSegment();
+            else username = getIntent().getData().getQueryParameter(PARAM_ID);
         }
-        if (TextUtils.isEmpty(mUsername)) {
+
+        if (TextUtils.isEmpty(username)) {
             finish();
             return;
         }
+
         setContentView(R.layout.activity_user);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME |
                 ActionBar.DISPLAY_HOME_AS_UP);
-        mAppBar = (AppBarLayout) findViewById(R.id.appbar);
-        ((TextView) findViewById(R.id.title)).setText(mUsername);
-        mInfo = (TextView) findViewById(R.id.user_info);
-        mAbout = (TextView) findViewById(R.id.about);
-        mEmpty = findViewById(R.id.empty);
-        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        ((TextView) findViewById(R.id.title)).setText(username);
+        info = (TextView) findViewById(R.id.user_info);
+        about = (TextView) findViewById(R.id.about);
+        emptyView = findViewById(R.id.empty);
+        tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 // no op
             }
+
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
                 // no op
             }
 
+
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 scrollToTop();
             }
         });
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        if (savedInstanceState != null) {
-            mUser = savedInstanceState.getParcelable(STATE_USER);
-        }
-        if (mUser == null) {
-            load();
-        } else {
-            bind();
-        }
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (savedInstanceState != null) user = savedInstanceState.getParcelable(STATE_USER);
+
+        if (user == null) load();
+        else bind();
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -121,75 +121,82 @@ public class UserActivity extends InjectableActivity implements Scrollable {
             finish();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(STATE_USER, mUser);
+        outState.putParcelable(STATE_USER, user);
     }
+
 
     @Override
     public void scrollToTop() {
-        mRecyclerView.smoothScrollToPosition(0);
-        mAppBar.setExpanded(true, true);
+        recyclerView.smoothScrollToPosition(0);
+        appBarLayout.setExpanded(true, true);
     }
 
+
     private void load() {
-        mUserManager.getUser(mUsername, new UserResponseListener(this));
+        userManager.getUser(username, new UserResponseListener(this));
     }
+
 
     private void onUserLoaded(UserManager.User response) {
         if (response != null) {
-            mUser = response;
+            user = response;
             bind();
         } else {
             showEmpty();
         }
     }
 
+
     private void showEmpty() {
-        mInfo.setVisibility(View.GONE);
-        mAbout.setVisibility(View.GONE);
-        mEmpty.setVisibility(View.VISIBLE);
-        mTabLayout.addTab(mTabLayout.newTab()
+        info.setVisibility(View.GONE);
+        about.setVisibility(View.GONE);
+        emptyView.setVisibility(View.VISIBLE);
+        tabLayout.addTab(tabLayout.newTab()
                 .setText(getResources().getQuantityString(R.plurals.submissions_count, 0, "").trim()));
     }
 
+
     private void bind() {
-        mInfo.setText(getString(R.string.user_info, mUser.getCreated(this), mUser.getKarma()));
-        if (TextUtils.isEmpty(mUser.getAbout())) {
-            mAbout.setVisibility(View.GONE);
-        } else {
-            AppUtils.setTextWithLinks(mAbout, mUser.getAbout());
-        }
-        int count = mUser.getItems().length;
-        mTabLayout.addTab(mTabLayout.newTab()
+        info.setText(getString(R.string.user_info, user.getCreated(this), user.getKarma()));
+        if (TextUtils.isEmpty(user.getAbout())) about.setVisibility(View.GONE);
+        else AppUtils.setTextWithLinks(about, user.getAbout());
+
+        int count = user.getItems().length;
+        tabLayout.addTab(tabLayout.newTab()
                 .setText(getResources().getQuantityString(R.plurals.submissions_count, count, count)));
-        mRecyclerView.setAdapter(new SubmissionRecyclerViewAdapter(mItemManger, mUser.getItems()));
-        mRecyclerView.addItemDecoration(new CommentItemDecoration(this));
+//        recyclerView.setAdapter(new SubmissionRecyclerViewAdapter(itemManger, user.getItems()));
+        recyclerView.addItemDecoration(new CommentItemDecoration(this));
     }
+
 
     private static class UserResponseListener implements ResponseListener<UserManager.User> {
         private final WeakReference<UserActivity> mUserActivity;
+
 
         public UserResponseListener(UserActivity userActivity) {
             mUserActivity = new WeakReference<>(userActivity);
         }
 
+
         @Override
         public void onResponse(UserManager.User response) {
-            if (mUserActivity.get() != null && !mUserActivity.get().isActivityDestroyed()) {
+            if (mUserActivity.get() != null && !mUserActivity.get().isActivityDestroyed())
                 mUserActivity.get().onUserLoaded(response);
-            }
         }
+
 
         @Override
         public void onError(String errorMessage) {
-            if (mUserActivity.get() != null && !mUserActivity.get().isActivityDestroyed()) {
+            if (mUserActivity.get() != null && !mUserActivity.get().isActivityDestroyed())
                 Toast.makeText(mUserActivity.get(), R.string.user_failed, Toast.LENGTH_SHORT).show();
-            }
         }
     }
 }

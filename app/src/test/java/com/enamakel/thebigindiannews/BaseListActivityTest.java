@@ -20,7 +20,7 @@ import org.robolectric.shadows.ShadowLooper;
 import org.robolectric.shadows.ShadowResolveInfo;
 import org.robolectric.util.ActivityController;
 
-import com.enamakel.thebigindiannews.activities.ItemActivity;
+import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
 import com.enamakel.thebigindiannews.test.ShadowRecyclerView;
 import com.enamakel.thebigindiannews.test.ShadowSupportPreferenceManager;
 import com.enamakel.thebigindiannews.test.TestListActivity;
@@ -69,7 +69,7 @@ public class BaseListActivityTest {
             }
         });
         Intent actual = shadowOf(activity).getNextStartedActivity();
-        assertEquals(ItemActivity.class.getName(), actual.getComponent().getClassName());
+        assertEquals(SingleStoryActivity.class.getName(), actual.getComponent().getClassName());
     }
 
     @Test
@@ -160,7 +160,7 @@ public class BaseListActivityTest {
                 return "1";
             }
         });
-        assertEquals(ItemActivity.class.getName(),
+        assertEquals(SingleStoryActivity.class.getName(),
                 shadowOf(activity).getNextStartedActivity().getComponent().getClassName());
     }
 

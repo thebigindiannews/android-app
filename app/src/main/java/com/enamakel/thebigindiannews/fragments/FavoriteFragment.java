@@ -48,8 +48,8 @@ import com.enamakel.thebigindiannews.data.Favorite;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
-import com.enamakel.thebigindiannews.widget.FavoriteRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.widget.ListRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adaptors.FavoriteRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adaptors.ListRecyclerViewAdapter;
 
 import java.util.ArrayList;
 

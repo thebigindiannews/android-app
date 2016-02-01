@@ -27,7 +27,7 @@ import org.robolectric.shadows.support.v4.SupportFragmentTestUtil;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.enamakel.thebigindiannews.activities.ItemActivity;
+import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.TestHnItem;
@@ -149,8 +149,8 @@ public class ItemFragmentMultiPageTest {
         assertThat(viewHolder.itemView.findViewById(R.id.comment)).isVisible();
         viewHolder.itemView.findViewById(R.id.comment).performClick();
         Intent actual = shadowOf(fragment.getActivity()).getNextStartedActivity();
-        assertEquals(ItemActivity.class.getName(), actual.getComponent().getClassName());
-        assertThat(actual).hasExtra(ItemActivity.EXTRA_OPEN_COMMENTS, true);
+        assertEquals(SingleStoryActivity.class.getName(), actual.getComponent().getClassName());
+        assertThat(actual).hasExtra(SingleStoryActivity.EXTRA_OPEN_COMMENTS, true);
     }
 
     @Test

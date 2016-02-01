@@ -23,7 +23,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +35,8 @@ import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.util.Preferences;
-import com.enamakel.thebigindiannews.widget.ListRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.widget.StoryRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adaptors.ListRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adaptors.StoryRecyclerViewAdapter;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

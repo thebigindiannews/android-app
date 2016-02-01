@@ -44,9 +44,9 @@ import com.enamakel.thebigindiannews.test.ShadowSupportPreferenceManager;
 import com.enamakel.thebigindiannews.test.ShadowTextView;
 import com.enamakel.thebigindiannews.test.TestItem;
 import com.enamakel.thebigindiannews.test.TestItemActivity;
-import com.enamakel.thebigindiannews.widget.MultiPageItemRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.widget.SinglePageItemRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.widget.ToggleItemViewHolder;
+import com.enamakel.thebigindiannews.adaptors.MultiPageItemRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adaptors.SinglePageItemRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.widgets.ToggleItemViewHolder;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;

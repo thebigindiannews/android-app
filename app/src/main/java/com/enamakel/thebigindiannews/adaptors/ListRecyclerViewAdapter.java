@@ -26,15 +26,15 @@ import android.view.View;
 
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.accounts.UserServices;
-import com.enamakel.thebigindiannews.activities.ItemActivity;
+import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.util.Injectable;
 import com.enamakel.thebigindiannews.util.MultiPaneListener;
-import com.enamakel.thebigindiannews.widget.PopupMenu;
-import com.enamakel.thebigindiannews.widget.StoryView_;
+import com.enamakel.thebigindiannews.widgets.PopupMenu;
+import com.enamakel.thebigindiannews.views.StoryView_;
 
 import javax.inject.Inject;
 
@@ -237,9 +237,9 @@ public abstract class ListRecyclerViewAdapter
 
 
     private void openItem(T item) {
-        context.startActivity(new Intent(context, ItemActivity.class)
-                .putExtra(ItemActivity.EXTRA_ITEM, item)
-                .putExtra(ItemActivity.EXTRA_OPEN_COMMENTS, true));
+        context.startActivity(new Intent(context, SingleStoryActivity.class)
+                .putExtra(SingleStoryActivity.EXTRA_ITEM, item)
+                .putExtra(SingleStoryActivity.EXTRA_OPEN_COMMENTS, true));
     }
 
 

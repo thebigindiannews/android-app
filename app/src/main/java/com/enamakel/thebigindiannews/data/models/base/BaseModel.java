@@ -34,7 +34,7 @@ public abstract class BaseModel<T> implements Parcelable {
     BaseModel() {
         longId = nextId();
     }
-9
+
 
     @Override
     public int describeContents() {

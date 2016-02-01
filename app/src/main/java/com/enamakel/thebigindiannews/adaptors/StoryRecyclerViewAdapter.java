@@ -42,7 +42,7 @@ import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
-import com.enamakel.thebigindiannews.widget.PopupMenu;
+import com.enamakel.thebigindiannews.widgets.PopupMenu;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -120,8 +120,8 @@ public class StoryRecyclerViewAdapter extends
 
 
     @Override
-    public com.enamakel.thebigindiannews.widget.ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new com.enamakel.thebigindiannews.widget.ItemViewHolder(inflater.inflate(R.layout.item_story, parent, false));
+    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ItemViewHolder(inflater.inflate(R.layout.item_story, parent, false));
     }
 
 
@@ -193,7 +193,7 @@ public class StoryRecyclerViewAdapter extends
 
 
     @Override
-    protected void bindItem(final com.enamakel.thebigindiannews.widget.ItemViewHolder holder) {
+    protected void bindItem(final ItemViewHolder holder) {
         final StoryModel story = getItem(holder.getAdapterPosition());
         bindItemUpdated(holder, story);
         highlightUserPost(holder, story);
@@ -307,7 +307,7 @@ public class StoryRecyclerViewAdapter extends
     }
 
 
-    private void bindItemUpdated(com.enamakel.thebigindiannews.widget.ItemViewHolder holder, StoryModel story) {
+    private void bindItemUpdated(ItemViewHolder holder, StoryModel story) {
         if (isHighlightUpdated) {
 //            boolean a = updatedPositions.indexOfKey(story.getLongId()) >= 0;
             boolean a = false;
@@ -318,7 +318,7 @@ public class StoryRecyclerViewAdapter extends
     }
 
 
-    private void showMoreOptions(View view, final StoryModel story, final com.enamakel.thebigindiannews.widget.ItemViewHolder holder) {
+    private void showMoreOptions(View view, final StoryModel story, final ItemViewHolder holder) {
         popupMenu.create(context, view, Gravity.NO_GRAVITY);
         popupMenu.inflate(R.menu.menu_contextual_story);
 
@@ -380,7 +380,7 @@ public class StoryRecyclerViewAdapter extends
     }
 
 
-    private void readStory(final StoryModel story, final com.enamakel.thebigindiannews.widget.ItemViewHolder holder) {
+    private void readStory(final StoryModel story, final ItemViewHolder holder) {
         userServices.voteUp(context, story.get_id(),
                 new StoryReadCallback(this, holder.getAdapterPosition(), story));
     }
@@ -392,13 +392,11 @@ public class StoryRecyclerViewAdapter extends
         } else if (successful) {
             Toast.makeText(context, R.string.voted, Toast.LENGTH_SHORT).show();
             if (position < getItemCount()) notifyItemChanged(position);
-        } else {
-            AppUtils.showLogin(context, alertDialogBuilder);
-        }
+        } else AppUtils.showLogin(context, alertDialogBuilder);
     }
 
 
-    private void highlightUserPost(com.enamakel.thebigindiannews.widget.ItemViewHolder holder, StoryModel story) {
+    private void highlightUserPost(ItemViewHolder holder, StoryModel story) {
         holder.storyView.setChecked(isSelected(story.get_id()) ||
                 !TextUtils.isEmpty(username) && TextUtils.equals(username, story.getCreated_by()));
     }
@@ -460,4 +458,5 @@ public class StoryRecyclerViewAdapter extends
                 adapter.get().onVoted(position, null);
         }
     }
+
 }

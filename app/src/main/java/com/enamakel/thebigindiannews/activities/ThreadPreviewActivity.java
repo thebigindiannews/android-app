@@ -31,8 +31,8 @@ import com.enamakel.thebigindiannews.ActivityModule;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.base.InjectableActivity;
 import com.enamakel.thebigindiannews.data.ItemManager;
-import com.enamakel.thebigindiannews.widget.CommentItemDecoration;
-import com.enamakel.thebigindiannews.widget.ThreadPreviewRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.widgets.CommentItemDecoration;
+import com.enamakel.thebigindiannews.adaptors.ThreadPreviewRecyclerViewAdapter;
 
 public class ThreadPreviewActivity extends InjectableActivity {
     public static final String EXTRA_ITEM = ThreadPreviewActivity.class.getName() + ".EXTRA_ITEM";
@@ -56,7 +56,7 @@ public class ThreadPreviewActivity extends InjectableActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new CommentItemDecoration(this));
-        recyclerView.setAdapter(new ThreadPreviewRecyclerViewAdapter(mItemManager, item));
+//        recyclerView.setAdapter(new ThreadPreviewRecyclerViewAdapter(mItemManager, item));
     }
 
     @Override

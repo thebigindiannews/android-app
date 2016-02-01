@@ -25,7 +25,7 @@ import com.enamakel.thebigindiannews.activities.AboutActivity;
 import com.enamakel.thebigindiannews.activities.AskActivity;
 import com.enamakel.thebigindiannews.activities.ComposeActivity;
 import com.enamakel.thebigindiannews.activities.FavoriteActivity;
-import com.enamakel.thebigindiannews.activities.ItemActivity;
+import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
 import com.enamakel.thebigindiannews.activities.JobsActivity;
 import com.enamakel.thebigindiannews.activities.ListActivity;
 import com.enamakel.thebigindiannews.activities.LoginActivity;
@@ -55,13 +55,13 @@ import com.enamakel.thebigindiannews.fragments.ListFragment;
 import com.enamakel.thebigindiannews.fragments.ReadabilityFragment;
 import com.enamakel.thebigindiannews.fragments.WebFragment;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
-import com.enamakel.thebigindiannews.widget.FavoriteRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.widget.MultiPageItemRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.widget.PopupMenu;
-import com.enamakel.thebigindiannews.widget.SinglePageItemRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.widget.StoryRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.widget.SubmissionRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.widget.ThreadPreviewRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adaptors.FavoriteRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adaptors.MultiPageItemRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.widgets.PopupMenu;
+import com.enamakel.thebigindiannews.adaptors.SinglePageItemRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adaptors.StoryRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adaptors.SubmissionRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adaptors.ThreadPreviewRecyclerViewAdapter;
 import com.squareup.okhttp.OkHttpClient;
 
 import javax.inject.Named;
@@ -76,7 +76,7 @@ import dagger.Provides;
                 AboutActivity.class,
                 AskActivity.class,
                 FavoriteActivity.class,
-                ItemActivity.class,
+                SingleStoryActivity.class,
                 JobsActivity.class,
                 ListActivity.class,
                 NewActivity.class,

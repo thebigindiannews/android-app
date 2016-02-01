@@ -16,12 +16,10 @@
 
 package com.enamakel.thebigindiannews.views;
 
+
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -31,6 +29,8 @@ import android.text.Spanned;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,25 +40,27 @@ import android.widget.ViewSwitcher;
 
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
-import com.enamakel.thebigindiannews.widget.AsteriskSpan;
+import com.enamakel.thebigindiannews.widgets.AsteriskSpan;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import org.androidannotations.annotations.EView;
 import org.androidannotations.annotations.ViewById;
 
-import java.io.InputStream;
-
 import lombok.Getter;
+
 
 @EView
 public class StoryView extends RelativeLayout implements Checkable {
-    private static final int VOTE_DELAY_MILLIS = 500;
-    private final int backgroundColor;
-    private final int highlightColor;
-    private final int tertiaryTextColorResId;
-    private final int secondaryTextColorResId;
-    private final int promotedColorResId;
-    private final boolean isLocal;
-    private @Getter boolean isChecked;
+    static final int VOTE_DELAY_MILLIS = 500;
+    final int backgroundColor;
+    final int highlightColor;
+    final int tertiaryTextColorResId;
+    final int secondaryTextColorResId;
+    final int promotedColorResId;
+    final boolean isLocal;
+    final Context context;
+    @Getter boolean isChecked;
 
     @ViewById View bookmarked;
     @ViewById TextView posted;
@@ -79,25 +81,26 @@ public class StoryView extends RelativeLayout implements Checkable {
 
     public StoryView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.StoryView);
-        isLocal = ta.getBoolean(R.styleable.StoryView_local, false);
-        TypedArray a = context.getTheme().obtainStyledAttributes(new int[]{
+        this.context = context;
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.StoryView);
+        isLocal = typedArray.getBoolean(R.styleable.StoryView_local, false);
+        TypedArray typedArray1 = context.getTheme().obtainStyledAttributes(new int[]{
                 android.R.attr.textColorTertiary,
                 android.R.attr.textColorSecondary,
                 R.attr.colorCardBackground,
                 R.attr.colorCardHighlight
         });
 
-        tertiaryTextColorResId = ContextCompat.getColor(context, a.getResourceId(0, 0));
-        secondaryTextColorResId = ContextCompat.getColor(context, a.getResourceId(1, 0));
-        backgroundColor = ContextCompat.getColor(context, a.getResourceId(2, 0));
-        highlightColor = ContextCompat.getColor(context, a.getResourceId(3, 0));
+        tertiaryTextColorResId = ContextCompat.getColor(context, typedArray1.getResourceId(0, 0));
+        secondaryTextColorResId = ContextCompat.getColor(context, typedArray1.getResourceId(1, 0));
+        backgroundColor = ContextCompat.getColor(context, typedArray1.getResourceId(2, 0));
+        highlightColor = ContextCompat.getColor(context, typedArray1.getResourceId(3, 0));
         promotedColorResId = ContextCompat.getColor(context, R.color.greenA700);
         inflate(context, isLocal ? R.layout.local_story_view : R.layout.story_view, this);
         setBackgroundColor(backgroundColor);
 
-        ta.recycle();
-        a.recycle();
+        typedArray.recycle();
+        typedArray1.recycle();
     }
 
 
@@ -117,6 +120,7 @@ public class StoryView extends RelativeLayout implements Checkable {
 
     public void setStory(@NonNull StoryModel story) {
         Log.d("hello", story.getId());
+        reset();
         if (!isLocal) {
 //            if (item.getKidCount() > 0) {
 //                ((Button) comment).setText(getContext().getResources()
@@ -130,11 +134,24 @@ public class StoryView extends RelativeLayout implements Checkable {
         // show The Image in a ImageView
         if (story.getThumbnail().getFilename() != null) {
             rankContainer.setBackgroundColor(Color.parseColor(story.getThumbnail().getColor()));
-            new DownloadImageTask(thumbnail).execute(story.getThumbnail().getImage_url());
+            Picasso.with(context)
+                    .load(story.getThumbnail().getUrl())
+                    .into(thumbnail, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            Animation animation = new AlphaAnimation(0.00f, 1.00f);
+                            animation.setDuration(500);
+                            thumbnail.startAnimation(animation);
+                        }
+
+
+                        @Override
+                        public void onError() {
+                            rankContainer.setVisibility(GONE);
+                        }
+                    });
         }
 
-
-        title.setText(getContext().getString(R.string.loading_text));
         title.setText(story.getTitle());
         description.setText(story.getExcerpt().replace('\n', ' '));
         source.setText(story.getSource());
@@ -150,6 +167,7 @@ public class StoryView extends RelativeLayout implements Checkable {
         title.setText(getContext().getString(R.string.loading_text));
         posted.setText(R.string.loading_text);
         source.setText(R.string.loading_text);
+        thumbnail.setImageResource(0);
         source.setCompoundDrawables(null, null, null, null);
         comment.setVisibility(View.GONE);
     }
@@ -189,43 +207,14 @@ public class StoryView extends RelativeLayout implements Checkable {
 
 
     private Spannable decorateUpdated(String text, boolean updated) {
-        SpannableStringBuilder sb = new SpannableStringBuilder(text);
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(text);
 
         if (updated) {
-            sb.append("*");
-            sb.setSpan(new AsteriskSpan(getContext()), sb.length() - 1, sb.length(),
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            stringBuilder.append("*");
+            stringBuilder.setSpan(new AsteriskSpan(getContext()), stringBuilder.length() - 1,
+                    stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
-        return sb;
-    }
-
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
+        return stringBuilder;
     }
 }

@@ -42,7 +42,7 @@ import javax.inject.Named;
 
 import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.activities.ComposeActivity;
-import com.enamakel.thebigindiannews.activities.ItemActivity;
+import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
 import com.enamakel.thebigindiannews.activities.ListActivity;
 import com.enamakel.thebigindiannews.activities.LoginActivity;
 import com.enamakel.thebigindiannews.activities.UserActivity;
@@ -257,8 +257,8 @@ public class ListFragmentViewHolderTest {
         verify(activity.multiPaneListener, never()).onItemSelected(any(ItemManager.WebItem.class)
         );
         Intent actual = shadowOf(activity).getNextStartedActivity();
-        assertEquals(ItemActivity.class.getName(), actual.getComponent().getClassName());
-        assertThat(actual).hasExtra(ItemActivity.EXTRA_OPEN_COMMENTS, true);
+        assertEquals(SingleStoryActivity.class.getName(), actual.getComponent().getClassName());
+        assertThat(actual).hasExtra(SingleStoryActivity.EXTRA_OPEN_COMMENTS, true);
         assertViewed();
     }
 

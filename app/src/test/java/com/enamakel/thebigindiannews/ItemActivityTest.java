@@ -37,7 +37,7 @@ import javax.inject.Named;
 
 import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.activities.ComposeActivity;
-import com.enamakel.thebigindiannews.activities.ItemActivity;
+import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
 import com.enamakel.thebigindiannews.activities.LoginActivity;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
@@ -65,8 +65,8 @@ import static org.robolectric.Shadows.shadowOf;
 @Config(shadows = {ShadowSupportPreferenceManager.class, ShadowRecyclerView.class, ShadowFloatingActionButton.class, ShadowContentResolverCompatJellybean.class})
 @RunWith(RobolectricGradleTestRunner.class)
 public class ItemActivityTest {
-    private ActivityController<ItemActivity> controller;
-    private ItemActivity activity;
+    private ActivityController<SingleStoryActivity> controller;
+    private SingleStoryActivity activity;
     @Inject @Named(ActivityModule.HN) ItemManager hackerNewsClient;
     @Inject FavoriteManager favoriteManager;
     @Inject UserServices userServices;
@@ -81,7 +81,7 @@ public class ItemActivityTest {
         reset(hackerNewsClient);
         reset(favoriteManager);
         reset(userServices);
-        controller = Robolectric.buildActivity(ItemActivity.class);
+        controller = Robolectric.buildActivity(SingleStoryActivity.class);
         activity = controller.get();
     }
 
@@ -90,7 +90,7 @@ public class ItemActivityTest {
         Intent intent = new Intent();
         ItemManager.WebItem webItem = mock(ItemManager.WebItem.class);
         when(webItem.getId()).thenReturn("1");
-        intent.putExtra(ItemActivity.EXTRA_ITEM, webItem);
+        intent.putExtra(SingleStoryActivity.EXTRA_ITEM, webItem);
         controller.withIntent(intent).create().start().resume().visible();
         verify(hackerNewsClient).getItem(eq("1"), any(ResponseListener.class));
     }
@@ -150,7 +150,7 @@ public class ItemActivityTest {
     @Test
     public void testPoll() {
         Intent intent = new Intent();
-        intent.putExtra(ItemActivity.EXTRA_ITEM, new TestItem() {
+        intent.putExtra(SingleStoryActivity.EXTRA_ITEM, new TestItem() {
             @NonNull
             @Override
             public String getType() {
@@ -182,7 +182,7 @@ public class ItemActivityTest {
                         Uri.parse(String.format(HackerNewsClient.WEB_ITEM_PATH, "1"))),
                 ShadowResolveInfo.newResolveInfo("label", "com.android.chrome", "DefaultActivity"));
         Intent intent = new Intent();
-        intent.putExtra(ItemActivity.EXTRA_ITEM, new TestItem() {
+        intent.putExtra(SingleStoryActivity.EXTRA_ITEM, new TestItem() {
             @NonNull
             @Override
             public String getType() {
@@ -229,7 +229,7 @@ public class ItemActivityTest {
     @Test
     public void testShare() {
         Intent intent = new Intent();
-        intent.putExtra(ItemActivity.EXTRA_ITEM, new TestItem() {
+        intent.putExtra(SingleStoryActivity.EXTRA_ITEM, new TestItem() {
             @NonNull
             @Override
             public String getType() {
@@ -294,7 +294,7 @@ public class ItemActivityTest {
                         Uri.parse("http://example.com")),
                 ShadowResolveInfo.newResolveInfo("label", "com.android.chrome", "DefaultActivity"));
         Intent intent = new Intent();
-        intent.putExtra(ItemActivity.EXTRA_ITEM, new TestItem() {
+        intent.putExtra(SingleStoryActivity.EXTRA_ITEM, new TestItem() {
             @NonNull
             @Override
             public String getType() {
@@ -336,7 +336,7 @@ public class ItemActivityTest {
             }
         };
         item.setFavorite(true);
-        intent.putExtra(ItemActivity.EXTRA_ITEM, item);
+        intent.putExtra(SingleStoryActivity.EXTRA_ITEM, item);
         controller.withIntent(intent).create().start().resume();
         assertEquals(R.drawable.ic_bookmark_white_24dp,
                 shadowOf(((ImageView) activity.findViewById(R.id.bookmarked)).getDrawable())
@@ -372,7 +372,7 @@ public class ItemActivityTest {
     @Test
     public void testNonFavoriteStory() {
         Intent intent = new Intent();
-        intent.putExtra(ItemActivity.EXTRA_ITEM, new TestHnItem(1L) {
+        intent.putExtra(SingleStoryActivity.EXTRA_ITEM, new TestHnItem(1L) {
             @NonNull
             @Override
             public String getType() {
@@ -402,7 +402,7 @@ public class ItemActivityTest {
     @Test
     public void testScrollToTop() {
         Intent intent = new Intent();
-        intent.putExtra(ItemActivity.EXTRA_ITEM, new TestItem() {
+        intent.putExtra(SingleStoryActivity.EXTRA_ITEM, new TestItem() {
             @NonNull
             @Override
             public String getType() {
@@ -450,7 +450,7 @@ public class ItemActivityTest {
                         activity.getString(R.string.pref_story_display_value_readability))
                 .commit();
         Intent intent = new Intent();
-        intent.putExtra(ItemActivity.EXTRA_ITEM, new TestItem() {
+        intent.putExtra(SingleStoryActivity.EXTRA_ITEM, new TestItem() {
             @NonNull
             @Override
             public String getType() {
@@ -481,7 +481,7 @@ public class ItemActivityTest {
     @Test
     public void testVotePromptToLogin() {
         Intent intent = new Intent();
-        intent.putExtra(ItemActivity.EXTRA_ITEM, new TestHnItem(1));
+        intent.putExtra(SingleStoryActivity.EXTRA_ITEM, new TestHnItem(1));
         controller.withIntent(intent).create().start().resume();
         activity.findViewById(R.id.vote_button).performClick();
         verify(userServices).voteUp(any(Context.class), eq("1"), userServicesCallback.capture());
@@ -493,7 +493,7 @@ public class ItemActivityTest {
     @Test
     public void testVote() {
         Intent intent = new Intent();
-        intent.putExtra(ItemActivity.EXTRA_ITEM, new TestHnItem(1));
+        intent.putExtra(SingleStoryActivity.EXTRA_ITEM, new TestHnItem(1));
         controller.withIntent(intent).create().start().resume();
         activity.findViewById(R.id.vote_button).performClick();
         verify(userServices).voteUp(any(Context.class), eq("1"), userServicesCallback.capture());
@@ -504,7 +504,7 @@ public class ItemActivityTest {
     @Test
     public void testVoteError() {
         Intent intent = new Intent();
-        intent.putExtra(ItemActivity.EXTRA_ITEM, new TestHnItem(1));
+        intent.putExtra(SingleStoryActivity.EXTRA_ITEM, new TestHnItem(1));
         controller.withIntent(intent).create().start().resume();
         activity.findViewById(R.id.vote_button).performClick();
         verify(userServices).voteUp(any(Context.class), eq("1"), userServicesCallback.capture());
@@ -515,7 +515,7 @@ public class ItemActivityTest {
     @Test
     public void testReply() {
         Intent intent = new Intent();
-        intent.putExtra(ItemActivity.EXTRA_ITEM, new TestHnItem(1L));
+        intent.putExtra(SingleStoryActivity.EXTRA_ITEM, new TestHnItem(1L));
         controller.withIntent(intent).create().start().resume();
         activity.findViewById(R.id.reply_button).performClick();
         assertThat(shadowOf(activity).getNextStartedActivity())

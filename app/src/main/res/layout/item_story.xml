@@ -20,7 +20,7 @@
     android:layout_height="wrap_content"
     style="@style/AppCardView">
 
-    <com.enamakel.thebigindiannews.widget.StoryView_
+    <com.enamakel.thebigindiannews.views.StoryView_
         android:id="@id/story_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

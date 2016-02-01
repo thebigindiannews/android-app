@@ -25,7 +25,7 @@ import org.robolectric.util.ActivityController;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.enamakel.thebigindiannews.activities.ItemActivity;
+import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
 import com.enamakel.thebigindiannews.activities.ThreadPreviewActivity;
 import com.enamakel.thebigindiannews.activities.UserActivity;
 import com.enamakel.thebigindiannews.data.ItemManager;
@@ -248,8 +248,8 @@ public class UserActivityTest {
                 .hasTextString("content");
         viewHolder.itemView.findViewById(R.id.comment).performClick();
         assertThat(shadowOf(activity).getNextStartedActivity())
-                .hasComponent(activity, ItemActivity.class)
-                .hasExtra(ItemActivity.EXTRA_ITEM);
+                .hasComponent(activity, SingleStoryActivity.class)
+                .hasExtra(SingleStoryActivity.EXTRA_ITEM);
     }
 
     @Test

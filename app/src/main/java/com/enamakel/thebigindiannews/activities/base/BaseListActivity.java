@@ -41,7 +41,7 @@ import android.view.View;
 import com.enamakel.thebigindiannews.ActionViewResolver;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.activities.ItemActivity;
+import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
 import com.enamakel.thebigindiannews.activities.SearchActivity;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.SessionManager;
@@ -51,7 +51,7 @@ import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.util.MultiPaneListener;
 import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.util.Scrollable;
-import com.enamakel.thebigindiannews.widget.ItemPagerAdapter;
+import com.enamakel.thebigindiannews.adaptors.ItemPagerAdapter;
 
 import javax.inject.Inject;
 
@@ -280,8 +280,8 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
         if (useExternalBrowser) {
             AppUtils.openWebUrlExternal(this, item.getDisplayedTitle(), item.getUrl());
         } else {
-            startActivity(new Intent(this, ItemActivity.class)
-                    .putExtra(ItemActivity.EXTRA_ITEM, item));
+            startActivity(new Intent(this, SingleStoryActivity.class)
+                    .putExtra(SingleStoryActivity.EXTRA_ITEM, item));
         }
     }
 
