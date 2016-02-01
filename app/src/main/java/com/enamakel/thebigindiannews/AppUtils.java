@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews;
 
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.OnAccountsUpdateListener;
@@ -59,14 +60,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.enamakel.thebigindiannews.activities.LoginActivity;
-import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
 import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.util.ScrollAwareFABBehavior;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class AppUtils {
     private static final String ABBR_YEAR = "y";
