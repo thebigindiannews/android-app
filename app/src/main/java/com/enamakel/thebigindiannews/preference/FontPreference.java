@@ -70,7 +70,7 @@ public class FontPreference extends SpinnerPreference {
 
 
     Typeface getFont(String name) {
-        String fontName = name + ".ttf";
+        String fontName = name.replaceAll(".ttf", "") + ".ttf";
         return FontCache.getInstance().get(getContext(), fontName);
     }
 }

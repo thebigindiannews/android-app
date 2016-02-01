@@ -33,11 +33,6 @@ public class FontCache {
     }
 
 
-    FontCache() {
-
-    }
-
-
     public static FontCache getInstance() {
         return instance;
     }
@@ -45,8 +40,10 @@ public class FontCache {
 
     public Typeface get(Context context, String typefaceName) {
         if (TextUtils.isEmpty(typefaceName)) return null;
-        if (!typefaceMap.containsKey(typefaceName))
-            typefaceMap.put(typefaceName, Typeface.createFromAsset(context.getAssets(), typefaceName));
-        return typefaceMap.get(typefaceName);
+
+        String fontName = typefaceName.replaceAll(".ttf", "") + ".ttf";
+        if (!typefaceMap.containsKey(fontName))
+            typefaceMap.put(fontName, Typeface.createFromAsset(context.getAssets(), fontName));
+        return typefaceMap.get(fontName);
     }
 }
