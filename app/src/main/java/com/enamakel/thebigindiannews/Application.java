@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews;
 
+
 import android.content.Context;
 import android.graphics.Typeface;
 
@@ -26,23 +27,25 @@ import com.squareup.leakcanary.RefWatcher;
 
 import dagger.ObjectGraph;
 
+
 public class Application extends android.app.Application {
     public static Typeface TYPE_FACE = null;
-    private RefWatcher mRefWatcher;
-    private ObjectGraph mApplicationGraph;
+    public static Typeface TYPE_FACE_BOLD = null;
+    RefWatcher refWatcher;
+    ObjectGraph applicationGraph;
 
 
     public static RefWatcher getRefWatcher(Context context) {
         Application application = (Application) context.getApplicationContext();
-        return application.mRefWatcher;
+        return application.refWatcher;
     }
 
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mRefWatcher = LeakCanary.install(this);
-        mApplicationGraph = ObjectGraph.create();
+        refWatcher = LeakCanary.install(this);
+        applicationGraph = ObjectGraph.create();
         Preferences.migrate(this);
         TYPE_FACE = FontCache.getInstance().get(this, Preferences.Theme.getTypeface(this));
         AppUtils.registerAccountsUpdatedListener(this);
@@ -50,6 +53,6 @@ public class Application extends android.app.Application {
 
 
     public ObjectGraph getApplicationGraph() {
-        return mApplicationGraph;
+        return applicationGraph;
     }
 }

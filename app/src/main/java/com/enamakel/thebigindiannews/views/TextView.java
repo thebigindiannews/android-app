@@ -16,21 +16,38 @@
 
 package com.enamakel.thebigindiannews.views;
 
+
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import com.enamakel.thebigindiannews.Application;
+
 
 public class TextView extends AppCompatTextView {
     public TextView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
+
     public TextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        if (!isInEditMode()) {
-            setTypeface(Application.TYPE_FACE);
+
+        if (!isInEditMode()) setTypeface(Application.TYPE_FACE);
+        try {
+            int style = attrs.getAttributeIntValue(
+                    "http://schemas.android.com/apk/res/android",
+                    "textStyle",
+                    Typeface.NORMAL);
+
+            Log.d("type", "" + Typeface.BOLD + " " + style);
+
+            if (style == Typeface.BOLD) setTypeface(Application.TYPE_FACE_BOLD, Typeface.BOLD);
+            Log.d("type-got", "" + getTypeface().toString() + getTypeface().isBold());
+        } catch (Exception e) {
+
         }
     }
 }
