@@ -44,8 +44,8 @@
         <item/>
         <item>DroidSans.ttf</item>
         <item>DroidSerif.ttf</item>
-        <item>LibreBaskerville-Regular.ttf</item>
-        <item>RobotoSlab-Regular.ttf</item>
+        <item>LibreBaskerville.ttf</item>
+        <item>RobotoSlab.ttf</item>
     </string-array>
 
     <!-- Comment display -->
