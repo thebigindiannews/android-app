@@ -24,7 +24,8 @@
     <FrameLayout
         android:background="?attr/colorPrimary"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <com.enamakel.thebigindiannews.views.TintableTextView
             android:id="@id/drawer_account"
@@ -117,7 +118,8 @@
         android:id="@id/drawer_favorite"
         android:text="@string/title_activity_favorite"
         android:drawableLeft="@drawable/ic_bookmark_white_24dp"
-        style="@style/DrawerTextStyle"/>
+        style="@style/DrawerTextStyle"
+        android:visibility="gone"/>
 
     <com.enamakel.thebigindiannews.views.TintableTextView
         android:id="@id/drawer_settings"

@@ -16,11 +16,16 @@
 
 package com.enamakel.thebigindiannews.activities;
 
+
+import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.base.BaseStoriesActivity;
 import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.clients.FetchMode;
+
 
 public class ListActivity extends BaseStoriesActivity {
     @Override
@@ -29,9 +34,23 @@ public class ListActivity extends BaseStoriesActivity {
     }
 
 
+    @Override
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+
+        // Fork off a process to check the version of the app
+    }
+
+
     @NonNull
     @Override
     protected String getFetchMode() {
         return ItemManager.TOP_FETCH_MODE;
+    }
+
+
+    @Override
+    protected FetchMode getMode() {
+        return FetchMode.TOP_STORIES;
     }
 }

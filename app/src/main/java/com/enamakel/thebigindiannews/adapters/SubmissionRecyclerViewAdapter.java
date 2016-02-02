@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.adaptors;
+package com.enamakel.thebigindiannews.adapters;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;

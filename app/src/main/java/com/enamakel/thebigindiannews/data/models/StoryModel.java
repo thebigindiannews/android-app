@@ -3,12 +3,19 @@ package com.enamakel.thebigindiannews.data.models;
 
 import android.content.Context;
 import android.os.Parcel;
+import android.text.Html;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.text.style.StrikethroughSpan;
 
 import com.enamakel.thebigindiannews.AppUtils;
+import com.enamakel.thebigindiannews.BuildConfig;
 import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.data.clients.BigIndianClient;
 import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
 import com.google.gson.annotations.Expose;
 
@@ -23,9 +30,9 @@ import lombok.ToString;
 @Data
 @ToString(includeFieldNames = true)
 public class StoryModel extends BaseCardModel<StoryModel> {
-    private static final String FORMAT_LINK_USER = "<a href=\"%1$s://user/%2$s\">%2$s</a>";
+    static final String FORMAT_LINK_USER = "<a href=\"%1$s://user/%2$s\">%2$s</a>";
 
-    @Expose String excerpt;
+    @Expose String excerpt = "";
     @Expose String image_url;
     @Expose String kind;
     @Expose String merged_story;
@@ -46,7 +53,6 @@ public class StoryModel extends BaseCardModel<StoryModel> {
     boolean dead;
     boolean viewed;
 
-
     @Data public class Thumbnail {
         @Expose String color;
         @Expose String filename;
@@ -55,7 +61,7 @@ public class StoryModel extends BaseCardModel<StoryModel> {
 
 
         public String getUrl() {
-            if (filename != null) return "https://thebigindian.news/uploads/" + filename;
+            if (filename != null) return BigIndianClient.BASE_WEB_URL + "/uploads/" + filename;
             return null;
         }
     }
@@ -73,12 +79,11 @@ public class StoryModel extends BaseCardModel<StoryModel> {
     }
 
 
-    @Override
-    protected String getDisplayedTitle() {
-        return title;
-    }
-
-
+    /**
+     * Gets the source of the story. Which is the domain of the link.
+     *
+     * @return The domain name of the story. eg: example.com
+     */
     public String getSource() {
         try {
             URI uri = new URI(url);
@@ -106,30 +111,35 @@ public class StoryModel extends BaseCardModel<StoryModel> {
             }
         }
 
-//        if (deleted) {
-//            Spannable spannable = new SpannableString(relativeTime);
-//            spannable.setSpan(new StrikethroughSpan(), 0, relativeTime.length(),
-//                    Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-//            return spannable;
-//        }
+        if (deleted) {
+            Spannable spannable = new SpannableString(relativeTime);
+            spannable.setSpan(new StrikethroughSpan(), 0, relativeTime.length(),
+                    Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+            return spannable;
+        }
 
         SpannableStringBuilder spannableBuilder = new SpannableStringBuilder();
 
-        if (isExpired()) {
+        if (isExpired())
             spannableBuilder.append(context.getString(R.string.dead_prefix)).append(" ");
-        }
 
         spannableBuilder.append(relativeTime);
 
-//        if (!TextUtils.isEmpty(created_by)) {
-//            spannableBuilder.append(" - ")
-//                    .append(authorLink ? Html.fromHtml(String.format(FORMAT_LINK_USER,
-//                            BuildConfig.APPLICATION_ID, created_by)) : created_by);
-//        }
+        if (!TextUtils.isEmpty(created_by)) {
+            spannableBuilder.append(" - ")
+                    .append(authorLink ? Html.fromHtml(String.format(FORMAT_LINK_USER,
+                            BuildConfig.APPLICATION_ID, created_by)) : created_by);
+        }
+
         return spannableBuilder;
     }
 
 
+    /**
+     * A helper function which returns true iff the story has an image set.
+     *
+     * @return True iff the story has an image set.
+     */
     public boolean hasImage() {
         return image_url != null && thumbnail.filename != null;
     }
@@ -160,7 +170,7 @@ public class StoryModel extends BaseCardModel<StoryModel> {
         // if minutes are greater than 0 then set reading time by the minute
         if (readingTimeMinutes > 0) return readingTimeMinutes + " " + minShortForm;
 
-            // set reading time as less than a minute
-        else return lessThanAMinute;
+        // otherwise set reading time as less than a minute
+        return lessThanAMinute;
     }
 }

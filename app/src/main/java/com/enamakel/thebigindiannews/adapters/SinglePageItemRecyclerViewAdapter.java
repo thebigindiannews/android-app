@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.adaptors;
+package com.enamakel.thebigindiannews.adapters;
 
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -119,7 +119,7 @@ public class SinglePageItemRecyclerViewAdapter
 
     @Override
     protected void onItemLoaded(int position, StoryModel item) {
-        // item position may already be shifted due to expansion, need to get new position
+        // item position may already be shifted due to expansion, need to build new position
         int index = savedState.list.indexOf(item);
         if (index >= 0 && index < getItemCount()) {
             notifyItemChanged(index);

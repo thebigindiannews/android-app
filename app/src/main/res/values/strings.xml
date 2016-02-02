@@ -218,9 +218,9 @@
     <string name="or">or</string>
     <string name="leave_feedback">Leave feedback</string>
     <string name="no_playstore">No Play Store app found</string>
-    <string name="submit_content_hint">URL or text</string>
+    <string name="submit_content_hint">URL</string>
     <string name="title_activity_submit">Submit an Article</string>
-    <string name="url_text_required">URL or text is required</string>
+    <string name="url_text_required">URL is required</string>
     <string name="submit_failed">Failed to submit. Please try again.</string>
     <string name="submit_successful">Successfully submitted</string>
     <string name="confirm_no_submit">Exit without submitting?</string>

@@ -48,8 +48,8 @@ import com.enamakel.thebigindiannews.data.Favorite;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
-import com.enamakel.thebigindiannews.adaptors.FavoriteRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.adaptors.ListRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adapters.FavoriteRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adapters.ListRecyclerViewAdapter;
 
 import java.util.ArrayList;
 
@@ -299,7 +299,7 @@ public class FavoriteFragment extends BaseListFragment
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                // trigger a dummy empty search intent, as empty query does not get submitted
+                // trigger a dummy empty search intent, as empty query does not build submitted
                 searchView.setQuery(FavoriteActivity.EMPTY_QUERY, true);
                 return false;
             }

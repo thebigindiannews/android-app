@@ -32,32 +32,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.enamakel.thebigindiannews.activities.SubmitActivity;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.BuildConfig;
 import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.AboutActivity;
-import com.enamakel.thebigindiannews.activities.AskActivity;
 import com.enamakel.thebigindiannews.activities.base.DrawerActivity;
-import com.enamakel.thebigindiannews.activities.FavoriteActivity;
-import com.enamakel.thebigindiannews.activities.JobsActivity;
 import com.enamakel.thebigindiannews.activities.ListActivity;
 import com.enamakel.thebigindiannews.activities.LoginActivity;
 import com.enamakel.thebigindiannews.activities.NewActivity;
-import com.enamakel.thebigindiannews.activities.PopularActivity;
 import com.enamakel.thebigindiannews.activities.SettingsActivity;
-import com.enamakel.thebigindiannews.activities.ShowActivity;
-import com.enamakel.thebigindiannews.activities.SubmitActivity;
-import com.enamakel.thebigindiannews.activities.UserActivity;
 
 import javax.inject.Inject;
 
 public class DrawerFragment extends BaseFragment {
     @Inject AlertDialogBuilder mAlertDialogBuilder;
-    private TextView mDrawerAccount;
-    private View mDrawerLogout;
-    private View mDrawerUser;
+    private TextView drawerAccount;
+    private View drawerLogout;
+    private View drawerUser;
     private final SharedPreferences.OnSharedPreferenceChangeListener mLoginListener
             = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
@@ -83,8 +77,8 @@ public class DrawerFragment extends BaseFragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_drawer, container, false);
-        mDrawerAccount = (TextView) view.findViewById(R.id.drawer_account);
-        mDrawerAccount.setOnClickListener(new View.OnClickListener() {
+        drawerAccount = (TextView) view.findViewById(R.id.drawer_account);
+        drawerAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Account[] accounts = AccountManager.get(getActivity())
@@ -97,8 +91,8 @@ public class DrawerFragment extends BaseFragment {
                 }
             }
         });
-        mDrawerLogout = view.findViewById(R.id.drawer_logout);
-        mDrawerLogout.setOnClickListener(new View.OnClickListener() {
+        drawerLogout = view.findViewById(R.id.drawer_logout);
+        drawerLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAlertDialogBuilder
@@ -114,19 +108,12 @@ public class DrawerFragment extends BaseFragment {
                         .show();
             }
         });
-        mDrawerUser = view.findViewById(R.id.drawer_user);
+        drawerUser = view.findViewById(R.id.drawer_user);
 
         view.findViewById(R.id.drawer_list).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 navigate(ListActivity.class);
-            }
-        });
-
-        view.findViewById(R.id.drawer_popular).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigate(PopularActivity.class);
             }
         });
 
@@ -137,26 +124,6 @@ public class DrawerFragment extends BaseFragment {
             }
         });
 
-        view.findViewById(R.id.drawer_show).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigate(ShowActivity.class);
-            }
-        });
-
-        view.findViewById(R.id.drawer_ask).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigate(AskActivity.class);
-            }
-        });
-
-        view.findViewById(R.id.drawer_job).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigate(JobsActivity.class);
-            }
-        });
 
         view.findViewById(R.id.drawer_settings).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,26 +137,26 @@ public class DrawerFragment extends BaseFragment {
                 navigate(AboutActivity.class);
             }
         });
-        view.findViewById(R.id.drawer_favorite).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigate(FavoriteActivity.class);
-            }
-        });
+//        view.findViewById(R.id.drawer_favorite).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                navigate(FavoriteActivity.class);
+//            }
+//        });
         view.findViewById(R.id.drawer_submit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 navigate(SubmitActivity.class);
             }
         });
-        view.findViewById(R.id.drawer_user).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle extras = new Bundle();
-                extras.putString(UserActivity.EXTRA_USERNAME, Preferences.getUsername(getActivity()));
-                navigate(UserActivity.class, extras);
-            }
-        });
+//        view.findViewById(R.id.drawer_user).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Bundle extras = new Bundle();
+//                extras.putString(UserActivity.EXTRA_USERNAME, Preferences.getUsername(getActivity()));
+//                navigate(UserActivity.class, extras);
+//            }
+//        });
         view.findViewById(R.id.drawer_feedback).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -231,13 +198,13 @@ public class DrawerFragment extends BaseFragment {
         }
         String username = Preferences.getUsername(getActivity());
         if (!TextUtils.isEmpty(username)) {
-            mDrawerAccount.setText(username);
-            mDrawerLogout.setVisibility(View.VISIBLE);
-            mDrawerUser.setVisibility(View.VISIBLE);
+            drawerAccount.setText(username);
+            drawerLogout.setVisibility(View.VISIBLE);
+            drawerUser.setVisibility(View.VISIBLE);
         } else {
-            mDrawerAccount.setText(R.string.login);
-            mDrawerLogout.setVisibility(View.GONE);
-            mDrawerUser.setVisibility(View.GONE);
+            drawerAccount.setText(R.string.login);
+            drawerLogout.setVisibility(View.GONE);
+            drawerUser.setVisibility(View.GONE);
         }
     }
 }

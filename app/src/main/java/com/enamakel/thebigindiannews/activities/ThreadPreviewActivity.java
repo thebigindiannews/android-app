@@ -32,7 +32,7 @@ import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.base.InjectableActivity;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.widgets.CommentItemDecoration;
-import com.enamakel.thebigindiannews.adaptors.ThreadPreviewRecyclerViewAdapter;
+
 
 public class ThreadPreviewActivity extends InjectableActivity {
     public static final String EXTRA_ITEM = ThreadPreviewActivity.class.getName() + ".EXTRA_ITEM";

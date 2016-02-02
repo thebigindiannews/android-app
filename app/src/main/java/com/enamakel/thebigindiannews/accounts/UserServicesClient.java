@@ -30,7 +30,7 @@ import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-import com.squareup.okhttp.logging.HttpLoggingInterceptor;
+//import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 
 import java.io.IOException;
 import java.net.CookieManager;
@@ -78,16 +78,16 @@ public class UserServicesClient implements UserServices {
 
     public UserServicesClient(OkHttpClient okHttpClient) {
         mClient = okHttpClient;
-        HttpLoggingInterceptor interceptor =
-                new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-                    @Override
-                    public void log(String message) {
-                        Log.d(TAG_OK_HTTP, message);
-                    }
-                });
-        interceptor.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY :
-                HttpLoggingInterceptor.Level.NONE);
-        mClient.networkInterceptors().add(interceptor);
+//        HttpLoggingInterceptor interceptor =
+//                new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+//                    @Override
+//                    public void log(String message) {
+//                        Log.d(TAG_OK_HTTP, message);
+//                    }
+//                });
+//        interceptor.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY :
+//                HttpLoggingInterceptor.Level.NONE);
+//        mClient.networkInterceptors().add(interceptor);
         mClient.setFollowRedirects(false);
         CookieManager cookieManager = new CookieManager();
         cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);

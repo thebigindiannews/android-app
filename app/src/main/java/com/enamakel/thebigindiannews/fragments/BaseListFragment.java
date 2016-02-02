@@ -32,7 +32,7 @@ import android.view.View;
 import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.util.Scrollable;
-import com.enamakel.thebigindiannews.adaptors.ListRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adapters.ListRecyclerViewAdapter;
 
 public abstract class BaseListFragment extends BaseFragment implements Scrollable {
     private static final String STATE_ADAPTER = "state:adapter";
@@ -42,12 +42,12 @@ public abstract class BaseListFragment extends BaseFragment implements Scrollabl
                 @Override
                 public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                                       String key) {
-                    mChanged = true;
+                    hasChanged = true;
                     getAdapter().setCardViewEnabled(Preferences.isListItemCardView(getActivity()));
                 }
             };
 
-    private boolean mChanged;
+    private boolean hasChanged;
 
 
     @Override
@@ -98,10 +98,9 @@ public abstract class BaseListFragment extends BaseFragment implements Scrollabl
     @Override
     public void onResume() {
         super.onResume();
-
-        if (mChanged) {
+        if (hasChanged) {
             getAdapter().notifyDataSetChanged();
-            mChanged = false;
+            hasChanged = false;
         }
     }
 
@@ -117,10 +116,10 @@ public abstract class BaseListFragment extends BaseFragment implements Scrollabl
         MenuItem item = menu.findItem(R.id.menu_list_toggle);
         if (getAdapter().isCardViewEnabled()) {
             item.setTitle(R.string.compact_view);
-            mMenuTintDelegate.setIcon(item, R.drawable.ic_view_stream_white_24dp);
+            menuTintDelegate.setIcon(item, R.drawable.ic_view_stream_white_24dp);
         } else {
             item.setTitle(R.string.card_view);
-            mMenuTintDelegate.setIcon(item, R.drawable.ic_view_agenda_white_24dp);
+            menuTintDelegate.setIcon(item, R.drawable.ic_view_agenda_white_24dp);
         }
     }
 

@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.activities;
 
+
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
@@ -35,6 +36,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,6 +51,7 @@ import com.enamakel.thebigindiannews.BuildConfig;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.activities.base.InjectableActivity;
+import com.enamakel.thebigindiannews.adapters.ItemPagerAdapter;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
@@ -58,12 +61,12 @@ import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.util.Scrollable;
-import com.enamakel.thebigindiannews.adaptors.ItemPagerAdapter;
 
 import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
 
 public class SingleStoryActivity extends InjectableActivity implements Scrollable {
     public static final String EXTRA_ITEM = SingleStoryActivity.class.getName() + ".EXTRA_ITEM";
@@ -131,6 +134,7 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(getLocalClassName(), "onCreate()");
         externalBrowser = Preferences.externalBrowserEnabled(this);
         if (getIntent().getBooleanExtra(EXTRA_OPEN_COMMENTS, false)) {
             storyViewMode = Preferences.StoryViewMode.Comment;
@@ -152,6 +156,7 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
         final Intent intent = getIntent();
         getContentResolver().registerContentObserver(MaterialisticProvider.URI_FAVORITE,
                 true, mObserver);
+
         if (savedInstanceState != null) {
             story = savedInstanceState.getParcelable(STATE_ITEM);
             itemId = savedInstanceState.getString(STATE_ITEM_ID);
@@ -174,9 +179,8 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
             }
         }
 
-        if (story != null) {
-            bindData();
-        } else if (!TextUtils.isEmpty(itemId)) {
+        if (story != null) bindData();
+        else if (!TextUtils.isEmpty(itemId)) {
 //            mItemManager.getItem(itemId, new ItemResponseListener(this));
         }
     }
@@ -204,12 +208,12 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
         }
 
         if (item.getItemId() == R.id.menu_external) {
-//            AppUtils.openExternal(SingleStoryActivity.this, mAlertDialogBuilder, story);
+//            AppUtils.openExternal(SingleStoryActivity.this, alertDialogBuilder, story);
             return true;
         }
 
         if (item.getItemId() == R.id.menu_share) {
-//            AppUtils.share(SingleStoryActivity.this, mAlertDialogBuilder, story);
+//            AppUtils.share(SingleStoryActivity.this, alertDialogBuilder, story);
             return true;
         }
 
@@ -347,9 +351,7 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
 
         switch (storyViewMode) {
             case Article:
-                if (viewPager.getAdapter().getCount() == 3) {
-                    viewPager.setCurrentItem(1);
-                }
+                if (viewPager.getAdapter().getCount() == 3) viewPager.setCurrentItem(1);
                 break;
             case Readability:
                 viewPager.setCurrentItem(viewPager.getAdapter().getCount() - 1);

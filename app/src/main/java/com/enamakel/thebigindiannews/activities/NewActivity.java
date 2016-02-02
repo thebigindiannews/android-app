@@ -16,16 +16,26 @@
 
 package com.enamakel.thebigindiannews.activities;
 
+
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.enamakel.thebigindiannews.activities.base.BaseStoriesActivity;
-import com.enamakel.thebigindiannews.fragments.ListFragment;
 import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.activities.base.BaseStoriesActivity;
 import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.clients.FetchMode;
+import com.enamakel.thebigindiannews.fragments.ListFragment;
+
 
 public class NewActivity extends BaseStoriesActivity {
     public static final String EXTRA_REFRESH = NewActivity.class.getName() + ".EXTRA_REFRESH";
+
+
+    @Override
+    protected FetchMode getMode() {
+        return FetchMode.LATEST_STORIES;
+    }
+
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -40,10 +50,12 @@ public class NewActivity extends BaseStoriesActivity {
         }
     }
 
+
     @Override
     protected String getDefaultTitle() {
         return getString(R.string.title_activity_new);
     }
+
 
     @NonNull
     @Override

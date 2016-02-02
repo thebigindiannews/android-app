@@ -29,3 +29,4 @@ proguard/
 *.iml
 
 .DS_Store
+secrets.properties

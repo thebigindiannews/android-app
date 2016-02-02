@@ -209,9 +209,9 @@ public class FavoriteManager {
 
 
     /**
-     * Creates an intent filter for get action broadcast
+     * Creates an intent filter for build action broadcast
      *
-     * @return get intent filter
+     * @return build intent filter
      * @see #get(android.content.Context, String)
      */
     public static IntentFilter makeGetIntentFilter() {

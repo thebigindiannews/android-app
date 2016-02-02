@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.adaptors;
+package com.enamakel.thebigindiannews.adapters;
+
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -54,13 +55,14 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 
+
 public class StoryRecyclerViewAdapter extends
         ListRecyclerViewAdapter<ListRecyclerViewAdapter.ItemViewHolder, StoryModel> {
     private static final String STATE_ITEMS = "state:items";
     private static final String STATE_UPDATED = "state:updated";
     private static final String STATE_PROMOTED = "state:promoted";
     private static final String STATE_SHOW_ALL = "state:showAll";
-    private static final String STATE_HIGHLIGHT_UPDATED = "state:isHighlightUpdated";
+    private static final String STATE_HIGHLIGHT_UPDATED = "state:highlightUpdated";
     private static final String STATE_FAVORITE_REVISION = "state:favoriteRevision";
     private static final String STATE_USERNAME = "state:username";
 
@@ -73,10 +75,10 @@ public class StoryRecyclerViewAdapter extends
                 return;
             }
 
-//            String position = itemPositions.get(Long.valueOf(uri.getLastPathSegment()));
+//            String position = itemPositions.build(Long.valueOf(uri.getLastPathSegment()));
 //            if (position == null) return;
 
-//            ItemManager.Item item = items.get(position);
+//            ItemManager.Item item = items.build(position);
 //            if (FavoriteManager.isAdded(uri)) {
 //                item.setFavorite(true);
 //                item.setLocalRevision(favoriteRevision);
@@ -90,17 +92,15 @@ public class StoryRecyclerViewAdapter extends
     };
 
     @Inject @Named(ActivityModule.HN) ItemManager itemManager;
-    private @Getter ArrayList<StoryModel> items;
-    private ArrayList<StoryModel> updatedItems = new ArrayList<>();
-    private ArrayList<String> promotedList = new ArrayList<>();
-    //    private final LongSparseArray<String> itemPositions = new LongSparseArray<>();
-    //    private final LongSparseArray<String> updatedPositions = new LongSparseArray<>();
-    private final HashMap<String, Integer> itemPositions = new HashMap<>();
-    private final HashMap<String, Integer> updatedPositions = new HashMap<>();
-    private int favoriteRevision = -1;
-    private @Setter String username;
-    private boolean isHighlightUpdated = true;
-    private boolean shouldShowAll = true;
+    @Getter ArrayList<StoryModel> items;
+    @Setter String username;
+    @Getter @Setter boolean highlightUpdated = true;
+    @Getter @Setter boolean showAll = true;
+    ArrayList<StoryModel> updatedItems = new ArrayList<>();
+    ArrayList<String> promotedList = new ArrayList<>();
+    final HashMap<String, Integer> itemPositions = new HashMap<>();
+    final HashMap<String, Integer> updatedPositions = new HashMap<>();
+    int favoriteRevision = -1;
 
 
     @Override
@@ -127,7 +127,7 @@ public class StoryRecyclerViewAdapter extends
 
     @Override
     public int getItemCount() {
-        if (shouldShowAll) return itemPositions.size();
+        if (showAll) return itemPositions.size();
         else return updatedPositions.size();
     }
 
@@ -138,8 +138,8 @@ public class StoryRecyclerViewAdapter extends
         savedState.putParcelableArrayList(STATE_ITEMS, items);
         savedState.putParcelableArrayList(STATE_UPDATED, updatedItems);
         savedState.putStringArrayList(STATE_PROMOTED, promotedList);
-        savedState.putBoolean(STATE_SHOW_ALL, shouldShowAll);
-        savedState.putBoolean(STATE_HIGHLIGHT_UPDATED, isHighlightUpdated);
+        savedState.putBoolean(STATE_SHOW_ALL, showAll);
+        savedState.putBoolean(STATE_HIGHLIGHT_UPDATED, highlightUpdated);
         savedState.putInt(STATE_FAVORITE_REVISION, favoriteRevision);
         savedState.putString(STATE_USERNAME, username);
         return savedState;
@@ -161,8 +161,8 @@ public class StoryRecyclerViewAdapter extends
 
 
         promotedList = savedState.getStringArrayList(STATE_PROMOTED);
-        shouldShowAll = savedState.getBoolean(STATE_SHOW_ALL, true);
-        isHighlightUpdated = savedState.getBoolean(STATE_HIGHLIGHT_UPDATED, true);
+        showAll = savedState.getBoolean(STATE_SHOW_ALL, true);
+        highlightUpdated = savedState.getBoolean(STATE_HIGHLIGHT_UPDATED, true);
         favoriteRevision = savedState.getInt(STATE_FAVORITE_REVISION);
         username = savedState.getString(STATE_USERNAME);
     }
@@ -172,16 +172,6 @@ public class StoryRecyclerViewAdapter extends
         setUpdated(items);
         setItemsInternal(items);
         notifyDataSetChanged();
-    }
-
-
-    public void setHighlightUpdated(boolean highlightUpdated) {
-        this.isHighlightUpdated = highlightUpdated;
-    }
-
-
-    public void setShowAll(boolean showAll) {
-        shouldShowAll = showAll;
     }
 
 
@@ -199,7 +189,7 @@ public class StoryRecyclerViewAdapter extends
         highlightUserPost(holder, story);
         holder.storyView.setViewed(false);
         holder.storyView.setViewed(story.isViewed());
-//        if (story.getLocalRevision() < favoriteRevision) story.setFavorite(false);
+        if (story.getLocal_revision() < favoriteRevision) story.setFavorite(false);
 
         holder.storyView.setFavorite(story.isFavorite());
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -226,7 +216,7 @@ public class StoryRecyclerViewAdapter extends
 
     @Override
     protected StoryModel getItem(int position) {
-        if (shouldShowAll) return items.get(position);
+        if (showAll) return items.get(position);
         else return updatedItems.get(position);
     }
 
@@ -241,7 +231,7 @@ public class StoryRecyclerViewAdapter extends
 
 
     private void setUpdated(ArrayList<StoryModel> stories) {
-        if (!isHighlightUpdated || getItems() == null) return;
+        if (!highlightUpdated || getItems() == null) return;
 
         updatedItems.clear();
         updatedPositions.clear();
@@ -264,7 +254,7 @@ public class StoryRecyclerViewAdapter extends
 
 
     private void notifyUpdated() {
-        if (shouldShowAll) {
+        if (showAll) {
             Snackbar.make(recyclerView,
                     context.getResources().getQuantityString(R.plurals.new_stories_count,
                             updatedItems.size(), updatedItems.size()),
@@ -297,7 +287,7 @@ public class StoryRecyclerViewAdapter extends
 
 
     private void onItemLoaded(StoryModel item) {
-        Integer position = shouldShowAll ? itemPositions.get(item.get_id()) :
+        Integer position = showAll ? itemPositions.get(item.get_id()) :
                 updatedPositions.get(item.get_id());
 
         // ignore changes if item was invalidated by refresh / filter
@@ -308,11 +298,9 @@ public class StoryRecyclerViewAdapter extends
 
 
     private void bindItemUpdated(ItemViewHolder holder, StoryModel story) {
-        if (isHighlightUpdated) {
-//            boolean a = updatedPositions.indexOfKey(story.getLongId()) >= 0;
-            boolean a = false;
+        if (highlightUpdated) {
             holder.storyView.setUpdated(story,
-                    a,
+                    updatedPositions.containsKey(story.get_id()),
                     promotedList.contains(story.get_id()));
         }
     }
@@ -321,10 +309,8 @@ public class StoryRecyclerViewAdapter extends
     private void showMoreOptions(View view, final StoryModel story, final ItemViewHolder holder) {
         popupMenu.create(context, view, Gravity.NO_GRAVITY);
         popupMenu.inflate(R.menu.menu_contextual_story);
-
         popupMenu.getMenu().findItem(R.id.menu_contextual_save)
                 .setTitle(story.isFavorite() ? R.string.unsave : R.string.save);
-
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -428,6 +414,7 @@ public class StoryRecyclerViewAdapter extends
         }
     }
 
+
     private static class StoryReadCallback extends UserServices.Callback {
         private final WeakReference<StoryRecyclerViewAdapter> adapter;
         private final int position;
@@ -458,5 +445,4 @@ public class StoryRecyclerViewAdapter extends
                 adapter.get().onVoted(position, null);
         }
     }
-
 }

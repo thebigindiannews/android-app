@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.fragments;
 
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,48 +27,53 @@ import com.enamakel.thebigindiannews.Application;
 import com.enamakel.thebigindiannews.util.Injectable;
 import com.enamakel.thebigindiannews.util.MenuTintDelegate;
 
+
 /**
  * Base fragment which performs injection using parent's activity object graphs if any
  */
 public abstract class BaseFragment extends Fragment {
-    protected final MenuTintDelegate mMenuTintDelegate = new MenuTintDelegate();
-    private boolean mAttached;
+    protected final MenuTintDelegate menuTintDelegate = new MenuTintDelegate();
+    boolean isAttached;
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mAttached = true;
+        isAttached = true;
     }
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (getActivity() instanceof Injectable) {
-            ((Injectable) getActivity()).inject(this);
-        }
-        mMenuTintDelegate.onActivityCreated(getActivity());
+
+        if (getActivity() instanceof Injectable) ((Injectable) getActivity()).inject(this);
+        menuTintDelegate.onActivityCreated(getActivity());
     }
+
 
     @Override
     public final void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (isAttached()) { // TODO http://b.android.com/80783
             createOptionsMenu(menu, inflater);
-            mMenuTintDelegate.onOptionsMenuCreated(menu);
+            menuTintDelegate.onOptionsMenuCreated(menu);
         }
     }
 
+
     @Override
     public final void onPrepareOptionsMenu(Menu menu) {
-        if (isAttached()) { // TODO http://b.android.com/80783
-            prepareOptionsMenu(menu);
-        }
+        // TODO http://b.android.com/80783
+        if (isAttached()) prepareOptionsMenu(menu);
     }
+
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mAttached = false;
+        isAttached = false;
     }
+
 
     @Override
     public void onDestroy() {
@@ -75,13 +81,16 @@ public abstract class BaseFragment extends Fragment {
         Application.getRefWatcher(getActivity()).watch(this);
     }
 
+
     public boolean isAttached() {
-        return mAttached;
+        return isAttached;
     }
+
 
     protected void createOptionsMenu(Menu menu, MenuInflater inflater) {
         // override to create options menu
     }
+
 
     protected void prepareOptionsMenu(Menu menu) {
         // override to prepare options menu

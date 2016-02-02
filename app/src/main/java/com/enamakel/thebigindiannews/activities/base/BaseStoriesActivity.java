@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.activities.base;
 
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -25,13 +26,19 @@ import android.text.format.DateUtils;
 
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.clients.FetchMode;
 import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
 import com.enamakel.thebigindiannews.fragments.ListFragment;
+
 
 public abstract class BaseStoriesActivity extends BaseListActivity
         implements ListFragment.RefreshCallback {
     static final String STATE_LAST_UPDATED = "state:lastUpdated";
     Long lastUpdated;
+
+
+    protected abstract FetchMode getMode();
+
 
     final Runnable lastUpdateTask = new Runnable() {
         @Override
@@ -97,6 +104,7 @@ public abstract class BaseStoriesActivity extends BaseListActivity
         Bundle args = new Bundle();
         args.putString(ListFragment.EXTRA_ITEM_MANAGER, HackerNewsClient.class.getName());
         args.putString(ListFragment.EXTRA_FILTER, getFetchMode());
+        if (getMode() != null) args.putString(ListFragment.EXTRA_FILTER2, getMode().name());
         return Fragment.instantiate(this, ListFragment.class.getName(), args);
     }
 }

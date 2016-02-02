@@ -14,15 +14,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.enamakel.thebigindiannews.activities.AboutActivity;
-import com.enamakel.thebigindiannews.activities.AskActivity;
 import com.enamakel.thebigindiannews.activities.FavoriteActivity;
-import com.enamakel.thebigindiannews.activities.JobsActivity;
 import com.enamakel.thebigindiannews.activities.ListActivity;
 import com.enamakel.thebigindiannews.activities.LoginActivity;
 import com.enamakel.thebigindiannews.activities.NewActivity;
-import com.enamakel.thebigindiannews.activities.PopularActivity;
 import com.enamakel.thebigindiannews.activities.SettingsActivity;
-import com.enamakel.thebigindiannews.activities.ShowActivity;
 import com.enamakel.thebigindiannews.activities.SubmitActivity;
 import com.enamakel.thebigindiannews.test.ParameterizedRobolectricGradleTestRunner;
 import com.enamakel.thebigindiannews.test.TestListActivity;
@@ -50,13 +46,9 @@ public class DrawerFragmentTest {
                 new Object[]{R.id.drawer_account, LoginActivity.class},
                 new Object[]{R.id.drawer_list, ListActivity.class},
                 new Object[]{R.id.drawer_new, NewActivity.class},
-                new Object[]{R.id.drawer_show, ShowActivity.class},
-                new Object[]{R.id.drawer_ask, AskActivity.class},
-                new Object[]{R.id.drawer_job, JobsActivity.class},
                 new Object[]{R.id.drawer_settings, SettingsActivity.class},
                 new Object[]{R.id.drawer_about, AboutActivity.class},
                 new Object[]{R.id.drawer_favorite, FavoriteActivity.class},
-                new Object[]{R.id.drawer_popular, PopularActivity.class},
                 new Object[]{R.id.drawer_submit, SubmitActivity.class}
         );
     }

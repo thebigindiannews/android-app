@@ -14,6 +14,4 @@ public abstract class BaseCardModel<T> extends BaseModel<T> {
     protected @Expose @Getter double activity_hotness;
     protected @Expose @Getter double hotness;
 //    protected @Expose @Getter Date created_at;
-
-    protected abstract String getDisplayedTitle();
 }

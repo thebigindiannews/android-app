@@ -71,12 +71,12 @@ import java.util.List;
 
 
 public class AppUtils {
-    private static final String ABBR_YEAR = "y";
-    private static final String ABBR_WEEK = "w";
-    private static final String ABBR_DAY = "d";
-    private static final String ABBR_HOUR = "h";
-    private static final String ABBR_MINUTE = "m";
-    private static final String PLAY_STORE_URL = "market://details?id=" + BuildConfig.APPLICATION_ID;
+    static final String ABBR_YEAR = "y";
+    static final String ABBR_WEEK = "w";
+    static final String ABBR_DAY = "d";
+    static final String ABBR_HOUR = "h";
+    static final String ABBR_MINUTE = "m";
+    static final String PLAY_STORE_URL = "market://details?id=" + BuildConfig.APPLICATION_ID;
 
 
     public static void openWebUrlExternal(Context context, String title, String url) {
@@ -236,17 +236,17 @@ public class AppUtils {
 
 
     public static int getThemedResId(Context context, @AttrRes int attr) {
-        TypedArray a = context.getTheme().obtainStyledAttributes(new int[]{attr});
-        final int resId = a.getResourceId(0, 0);
-        a.recycle();
+        TypedArray typedArray = context.getTheme().obtainStyledAttributes(new int[]{attr});
+        final int resId = typedArray.getResourceId(0, 0);
+        typedArray.recycle();
         return resId;
     }
 
 
     public static float getDimension(Context context, @StyleRes int styleResId, @AttrRes int attr) {
-        TypedArray a = context.getTheme().obtainStyledAttributes(styleResId, new int[]{attr});
-        float size = a.getDimension(0, 0);
-        a.recycle();
+        TypedArray typedArray = context.getTheme().obtainStyledAttributes(styleResId, new int[]{attr});
+        float size = typedArray.getDimension(0, 0);
+        typedArray.recycle();
         return size;
     }
 
@@ -458,7 +458,7 @@ public class AppUtils {
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, title);
             shareIntent.putExtra(Intent.EXTRA_TEXT, url);
             CustomTabsIntent customTabsIntent = new CustomTabsIntent.Builder()
-                    .setToolbarColor(ContextCompat.getColor(context, R.color.orange500))
+                    .setToolbarColor(ContextCompat.getColor(context, R.color.red300))
                     .setActionButton(BitmapFactory.decodeResource(context.getResources(),
                                     R.drawable.ic_share_grey600_24dp),
                             context.getString(R.string.share),

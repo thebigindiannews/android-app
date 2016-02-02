@@ -42,10 +42,7 @@ public class TextView extends AppCompatTextView {
                     "textStyle",
                     Typeface.NORMAL);
 
-            Log.d("type", "" + Typeface.BOLD + " " + style);
-
             if (style == Typeface.BOLD) setTypeface(Application.TYPE_FACE_BOLD, Typeface.BOLD);
-            Log.d("type-got", "" + getTypeface().toString() + getTypeface().isBold());
         } catch (Exception e) {
 
         }

@@ -21,10 +21,10 @@ import android.util.Log;
 
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.logging.HttpLoggingInterceptor;
+//import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 
 import com.enamakel.thebigindiannews.BuildConfig;
-import retrofit.GsonConverterFactory;
+//import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 
 public interface RestServiceFactory {
@@ -37,16 +37,16 @@ public interface RestServiceFactory {
 
         public Impl(Context context) {
             okHttpClient = new OkHttpClient();
-            HttpLoggingInterceptor interceptor =
-                    new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-                        @Override
-                        public void log(String message) {
-                            Log.d(TAG_OK_HTTP, message);
-                        }
-                    });
-            interceptor.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY :
-                    HttpLoggingInterceptor.Level.NONE);
-            okHttpClient.networkInterceptors().add(interceptor);
+//            HttpLoggingInterceptor interceptor =
+//                    new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+//                        @Override
+//                        public void log(String message) {
+//                            Log.d(TAG_OK_HTTP, message);
+//                        }
+//                    });
+//            interceptor.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY :
+//                    HttpLoggingInterceptor.Level.NONE);
+//            okHttpClient.networkInterceptors().add(interceptor);
             okHttpClient.setCache(new Cache(context.getApplicationContext().getCacheDir(),
                     CACHE_SIZE));
         }
@@ -56,7 +56,7 @@ public interface RestServiceFactory {
             return new Retrofit.Builder()
                     .client(okHttpClient)
                     .baseUrl(baseUrl)
-                    .addConverterFactory(GsonConverterFactory.create())
+//                    .addConverterFactory(GsonConverterFactory.create())
                     .build()
                     .create(clazz);
         }

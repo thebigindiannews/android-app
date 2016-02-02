@@ -43,7 +43,6 @@ import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
 import com.enamakel.thebigindiannews.activities.SearchActivity;
-import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.SessionManager;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
@@ -51,7 +50,7 @@ import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.util.MultiPaneListener;
 import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.util.Scrollable;
-import com.enamakel.thebigindiannews.adaptors.ItemPagerAdapter;
+import com.enamakel.thebigindiannews.adapters.ItemPagerAdapter;
 
 import javax.inject.Inject;
 

@@ -115,7 +115,7 @@
     <!-- Alert dialog themes -->
     <!-- =================== -->
     <style name="AppAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorPrimary">@color/orange500</item>
+        <item name="colorPrimary">@color/red400</item>
         <item name="colorAccent">@color/redA200</item>
         <item name="android:textColorPrimary">@color/blackT87</item>
         <item name="android:textColorSecondary">@color/grey500</item>

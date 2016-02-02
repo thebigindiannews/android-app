@@ -22,18 +22,15 @@ import dagger.Module;
 import dagger.Provides;
 import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.activities.AboutActivity;
-import com.enamakel.thebigindiannews.activities.AskActivity;
 import com.enamakel.thebigindiannews.activities.ComposeActivity;
 import com.enamakel.thebigindiannews.activities.FavoriteActivity;
 import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
-import com.enamakel.thebigindiannews.activities.JobsActivity;
 import com.enamakel.thebigindiannews.activities.ListActivity;
 import com.enamakel.thebigindiannews.activities.LoginActivity;
 import com.enamakel.thebigindiannews.activities.NewActivity;
 import com.enamakel.thebigindiannews.activities.PopularActivity;
 import com.enamakel.thebigindiannews.activities.SearchActivity;
 import com.enamakel.thebigindiannews.activities.SettingsActivity;
-import com.enamakel.thebigindiannews.activities.ShowActivity;
 import com.enamakel.thebigindiannews.activities.SubmitActivity;
 import com.enamakel.thebigindiannews.activities.ThreadPreviewActivity;
 import com.enamakel.thebigindiannews.activities.UserActivity;
@@ -55,13 +52,13 @@ import com.enamakel.thebigindiannews.test.TestListActivity;
 import com.enamakel.thebigindiannews.test.TestReadabilityActivity;
 import com.enamakel.thebigindiannews.test.WebActivity;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
-import com.enamakel.thebigindiannews.adaptors.FavoriteRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.adaptors.MultiPageItemRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adapters.FavoriteRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adapters.MultiPageItemRecyclerViewAdapter;
 import com.enamakel.thebigindiannews.widgets.PopupMenu;
-import com.enamakel.thebigindiannews.adaptors.SinglePageItemRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.adaptors.StoryRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.adaptors.SubmissionRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.adaptors.ThreadPreviewRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adapters.SinglePageItemRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adapters.StoryRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adapters.SubmissionRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adapters.ThreadPreviewRecyclerViewAdapter;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -72,15 +69,12 @@ import static org.mockito.Mockito.when;
                 // source classes
                 LoginActivity.class,
                 SettingsActivity.class,
-                AskActivity.class,
                 AboutActivity.class,
                 FavoriteActivity.class,
                 SingleStoryActivity.class,
-                JobsActivity.class,
                 ListActivity.class,
                 NewActivity.class,
                 SearchActivity.class,
-                ShowActivity.class,
                 WebActivity.class,
                 PopularActivity.class,
                 ComposeActivity.class,

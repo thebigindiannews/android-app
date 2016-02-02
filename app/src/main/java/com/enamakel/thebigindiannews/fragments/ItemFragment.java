@@ -35,8 +35,8 @@ import android.view.ViewGroup;
 
 import com.enamakel.thebigindiannews.ActivityModule;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.adaptors.ItemRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.adaptors.SinglePageItemRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adapters.ItemRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adapters.SinglePageItemRecyclerViewAdapter;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
@@ -312,7 +312,6 @@ public class ItemFragment extends LazyLoadFragment implements Scrollable {
 
     private void setMaxLines() {
         if (adapter == null) return;
-
         invalidateOptionsMenu();
         adapter.setMaxLines(maxLines);
     }
@@ -320,14 +319,12 @@ public class ItemFragment extends LazyLoadFragment implements Scrollable {
 
     private void setHighlightUsername() {
         if (adapter == null) return;
-
         adapter.setHighlightUsername(username);
     }
 
 
     private void invalidateOptionsMenu() {
         if (!isAttached()) return;
-
         getActivity().supportInvalidateOptionsMenu();
     }
 
