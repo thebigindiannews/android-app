@@ -49,7 +49,6 @@ import com.enamakel.thebigindiannews.data.SessionManager;
 import com.enamakel.thebigindiannews.data.UserManager;
 import com.enamakel.thebigindiannews.data.clients.AlgoliaClient;
 import com.enamakel.thebigindiannews.data.clients.AlgoliaPopularClient;
-import com.enamakel.thebigindiannews.data.clients.FeedbackClient;
 import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
 import com.enamakel.thebigindiannews.fragments.DrawerFragment;
 import com.enamakel.thebigindiannews.fragments.FavoriteFragment;
@@ -145,13 +144,6 @@ public class ActivityModule {
     @Provides
     @Singleton
     public UserManager provideUserManager(HackerNewsClient client) {
-        return client;
-    }
-
-
-    @Provides
-    @Singleton
-    public FeedbackClient provideFeedbackClient(FeedbackClient.Impl client) {
         return client;
     }
 

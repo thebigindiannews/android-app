@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.activities.base;
 
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -41,8 +42,8 @@ import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 
+
 public abstract class DrawerActivity extends InjectableActivity {
-    @Inject FeedbackClient feedbackClient;
     @Inject AlertDialogBuilder alertDialogBuilder;
 
     private ActionBarDrawerToggle drawerToggle;
@@ -165,7 +166,8 @@ public abstract class DrawerActivity extends InjectableActivity {
                 if (title.length() == 0 || body.length() == 0) return;
 
                 sendButton.setEnabled(false);
-                feedbackClient.send(title.getText().toString(), body.getText().toString(),
+
+                FeedbackClient.send(title.getText().toString(), body.getText().toString(),
                         new FeedbackCallback(DrawerActivity.this));
             }
         });
@@ -187,7 +189,7 @@ public abstract class DrawerActivity extends InjectableActivity {
     }
 
 
-    private static class FeedbackCallback implements FeedbackClient.Callback {
+    class FeedbackCallback implements FeedbackClient.Callback {
         private final WeakReference<DrawerActivity> weakReference;
 
 
@@ -197,10 +199,9 @@ public abstract class DrawerActivity extends InjectableActivity {
 
 
         @Override
-        public void onSent(boolean success) {
-            if (weakReference.get() != null && !weakReference.get().isActivityDestroyed()) {
+        public void onResponse(Boolean success) {
+            if (weakReference.get() != null && !weakReference.get().isActivityDestroyed())
                 weakReference.get().onFeedbackSent(success);
-            }
         }
     }
 }

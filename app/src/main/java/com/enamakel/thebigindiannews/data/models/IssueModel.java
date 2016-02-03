@@ -1,15 +1,22 @@
 package com.enamakel.thebigindiannews.data.models;
 
 
+import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
+import com.google.gson.annotations.Expose;
+
+import lombok.Data;
+
+
 /**
  * Created by robert on 2/3/16.
  */
-public class IssueModel {
-    private static final String LABEL_FEEDBACK = "feedback";
+@Data
+public class IssueModel extends BaseCardModel<IssueModel> {
+    static final String LABEL_FEEDBACK = "feedback";
 
-    private final String title;
-    private final String body;
-    private final String[] labels;
+    @Expose final String title;
+    @Expose final String body;
+    @Expose final String[] labels;
 
 
     public IssueModel(String title, String body) {

@@ -16,7 +16,7 @@ import retrofit2.http.POST;
 
 
 /**
- * Created by robert on 2/3/16.
+ * This client is used to communicate with the Github API to submit issues
  */
 public class FeedbackClient {
     static FeedbackService feedbackService;
@@ -40,10 +40,10 @@ public class FeedbackClient {
                 Build.VERSION.SDK_INT,
                 BuildConfig.VERSION_CODE);
 
+        // Create the issue
         IssueModel issueModel = new IssueModel(title, body);
 
-        Log.d("fuck", issueModel.toJSON());
-
+        // Submit to Github!
         feedbackService.createGithubIssue(issueModel)
                 .enqueue(new retrofit2.Callback<Object>() {
                     @Override
