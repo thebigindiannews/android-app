@@ -35,14 +35,15 @@ public class ThemePreference extends Preference {
 
     public static final @StyleRes int THEME_DEFAULT = R.style.AppTheme;
     public static final @StyleRes int DIALOG_THEME_DEFAULT = R.style.AppAlertDialog;
-    private static final String VALUE_LIGHT = "light";
-    private static final String VALUE_DARK = "dark";
-    private static final String VALUE_SEPIA = "sepia";
-    private static final String VALUE_GREEN = "green";
-    private static final String VALUE_SOLARIZED = "solarized";
-    private static final String VALUE_SOLARIZED_DARK = "solarized_dark";
-    private static final ArrayMap<Integer, String> BUTTON_VALUE = new ArrayMap<>();
-    private static final ArrayMap<String, ThemeSpec> VALUE_THEME = new ArrayMap<>();
+
+    static final String VALUE_LIGHT = "light";
+    static final String VALUE_DARK = "dark";
+    static final String VALUE_SEPIA = "sepia";
+    static final String VALUE_GREEN = "green";
+    static final String VALUE_SOLARIZED = "solarized";
+    static final String VALUE_SOLARIZED_DARK = "solarized_dark";
+    static final ArrayMap<Integer, String> BUTTON_VALUE = new ArrayMap<>();
+    static final ArrayMap<String, ThemeSpec> VALUE_THEME = new ArrayMap<>();
 
 
     static {
@@ -71,9 +72,7 @@ public class ThemePreference extends Preference {
     public static
     @StyleRes
     int getTheme(String value) {
-        if (!VALUE_THEME.containsKey(value)) {
-            return THEME_DEFAULT;
-        }
+        if (!VALUE_THEME.containsKey(value)) return THEME_DEFAULT;
         return VALUE_THEME.get(value).theme;
     }
 
@@ -81,9 +80,7 @@ public class ThemePreference extends Preference {
     public static
     @StyleRes
     int getDialogTheme(String value) {
-        if (!VALUE_THEME.containsKey(value)) {
-            return DIALOG_THEME_DEFAULT;
-        }
+        if (!VALUE_THEME.containsKey(value)) return DIALOG_THEME_DEFAULT;
         return VALUE_THEME.get(value).dialogTheme;
     }
 
@@ -109,9 +106,8 @@ public class ThemePreference extends Preference {
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
         super.onSetInitialValue(restorePersistedValue, defaultValue);
         String value = restorePersistedValue ? getPersistedString(null) : (String) defaultValue;
-        if (TextUtils.isEmpty(value)) {
-            value = VALUE_LIGHT;
-        }
+
+        if (TextUtils.isEmpty(value)) value = VALUE_LIGHT;
         setSummary(VALUE_THEME.get(value).summary);
     }
 
@@ -120,6 +116,7 @@ public class ThemePreference extends Preference {
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
         holder.itemView.setClickable(false);
+
         for (int i = 0; i < BUTTON_VALUE.size(); i++) {
             final int buttonId = BUTTON_VALUE.keyAt(i);
             final String value = BUTTON_VALUE.valueAt(i);
@@ -136,7 +133,7 @@ public class ThemePreference extends Preference {
     }
 
 
-    private static class ThemeSpec {
+    static class ThemeSpec {
         public final @StringRes int summary;
         public final @StyleRes int theme;
         public final @StyleRes int dialogTheme;

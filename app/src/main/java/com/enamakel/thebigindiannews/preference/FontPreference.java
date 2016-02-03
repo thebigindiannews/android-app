@@ -62,7 +62,6 @@ public class FontPreference extends SpinnerPreference {
 
     @Override
     protected boolean persistString(String value) {
-        Log.d("font", value);
         NewsApplication.TYPE_FACE = getFont(value);
         NewsApplication.TYPE_FACE_BOLD = getFont(value + "-bold");
         return super.persistString(value);
@@ -71,6 +70,6 @@ public class FontPreference extends SpinnerPreference {
 
     Typeface getFont(String name) {
         String fontName = name.replaceAll(".ttf", "") + ".ttf";
-        return FontCache.getInstance().get(getContext(), fontName);
+        return FontCache.get(getContext(), fontName);
     }
 }

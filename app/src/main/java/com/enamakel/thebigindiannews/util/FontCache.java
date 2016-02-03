@@ -24,26 +24,56 @@ import android.text.TextUtils;
 
 
 public class FontCache {
-    static FontCache instance;
-    final ArrayMap<String, Typeface> typefaceMap = new ArrayMap<>();
+    static final ArrayMap<String, Typeface> typefaceMap;
 
 
     static {
-        instance = new FontCache();
+        typefaceMap = new ArrayMap<>();
     }
 
 
-    public static FontCache getInstance() {
-        return instance;
-    }
-
-
-    public Typeface get(Context context, String typefaceName) {
+    /**
+     * Returns the typeface instance of the given font. The function caches each font as it is being
+     * called, to avoid loading it multiple times.
+     *
+     * @param context      The context of the application
+     * @param typefaceName The font name to load.
+     * @return A {@link Typeface} instance of the font. null if the font isin't in the assets
+     * folder.
+     */
+    public static Typeface get(Context context, String typefaceName) {
         if (TextUtils.isEmpty(typefaceName)) return null;
 
+        // sometimes the typeface name contains the '.ttf' part twice. This fixes that.
         String fontName = typefaceName.replaceAll(".ttf", "") + ".ttf";
-        if (!typefaceMap.containsKey(fontName))
-            typefaceMap.put(fontName, Typeface.createFromAsset(context.getAssets(), fontName));
+
+        // Check if the typeface is in our cache.
+        if (!typefaceMap.containsKey(fontName)) {
+            Typeface typeface = Typeface.createFromAsset(context.getAssets(), fontName);
+            typefaceMap.put(fontName, typeface);
+        }
+
         return typefaceMap.get(fontName);
+    }
+
+
+    /**
+     * Returns the 'bold' version of the given font.
+     *
+     * @param context      The context of the application
+     * @param typefaceName The font name to load.
+     * @return A {@link Typeface} instance of the font. null if the font isin't in the assets
+     * folder.
+     */
+    public static Typeface getBold(Context context, String typefaceName) {
+        if (TextUtils.isEmpty(typefaceName)) return null;
+
+        // Remove the -bold component if it exists.
+        typefaceName = typefaceName.replace("-bold", "");
+
+        // Append '-bold' to the font name.
+        typefaceName = typefaceName.replace(".ttf", "") + "-bold.ttf";
+
+        return get(context, typefaceName);
     }
 }

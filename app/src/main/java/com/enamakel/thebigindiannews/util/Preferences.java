@@ -71,8 +71,10 @@ public class Preferences {
     /**
      * Migrate from boolean preferences to string preferences. Should be called only once
      * when application is relaunched.
+     * <p/>
      * If boolean preference has been set before, and value is not default, migrate to the new
-     * corresponding string value
+     * corresponding string value.
+     * <p/>
      * If boolean preference has been set before, but value is default, simply remove it
      *
      * @param context application context
@@ -81,14 +83,11 @@ public class Preferences {
     public static void migrate(Context context) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sp.edit();
-        for (BoolToStringPref pref : PREF_MIGRATION) {
-            if (pref.isChanged(context, sp)) {
-                editor.putString(context.getString(pref.newKey), context.getString(pref.newValue));
-            }
 
-            if (pref.hasOldValue(context, sp)) {
-                editor.remove(context.getString(pref.oldKey));
-            }
+        for (BoolToStringPref pref : PREF_MIGRATION) {
+            if (pref.isChanged(context, sp))
+                editor.putString(context.getString(pref.newKey), context.getString(pref.newValue));
+            if (pref.hasOldValue(context, sp)) editor.remove(context.getString(pref.oldKey));
         }
 
         editor.apply();
@@ -132,12 +131,12 @@ public class Preferences {
         String pref = PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(context.getString(R.string.pref_story_display),
                         context.getString(R.string.pref_story_display_value_article));
-        if (TextUtils.equals(context.getString(R.string.pref_story_display_value_comments), pref)) {
+
+        if (TextUtils.equals(context.getString(R.string.pref_story_display_value_comments), pref))
             return StoryViewMode.Comment;
-        }
-        if (TextUtils.equals(context.getString(R.string.pref_story_display_value_readability), pref)) {
+        if (TextUtils.equals(context.getString(R.string.pref_story_display_value_readability), pref))
             return StoryViewMode.Readability;
-        }
+
         return StoryViewMode.Article;
     }
 
@@ -396,11 +395,9 @@ public class Preferences {
         int getTheme(Context context, boolean dialogTheme) {
             String choice = PreferenceManager.getDefaultSharedPreferences(context)
                     .getString(context.getString(R.string.pref_theme), null);
-            if (dialogTheme) {
-                return ThemePreference.getDialogTheme(choice);
-            } else {
-                return ThemePreference.getTheme(choice);
-            }
+
+            if (dialogTheme) return ThemePreference.getDialogTheme(choice);
+            else return ThemePreference.getTheme(choice);
         }
     }
 }
