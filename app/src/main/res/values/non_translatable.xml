@@ -19,10 +19,17 @@
     <string name="loading_text" translatable="false" tools:ignore="TypographyEllipsis">...</string>
     <string name="developer_info_text" translatable="false">
         <![CDATA[
-            <p>Ha Duy Trung</p>
-            <p><a href="https://twitter.com/hadt">@hadt</a></p>
-            <p><a href="https://github.com/hidroh">Github</a></p>
-            <p><a href="https://hidroh.github.io">Blog</a></p>
+            <p>
+                <b>Ha Duy Trung</b>
+                <a href="https://twitter.com/hadt">@hadt</a>
+                <a href="https://github.com/hidroh">Github</a>
+                <a href="https://hidroh.github.io">Blog</a>
+            </p>
+            <p>
+                <b>Steven Enamakel</b>
+                <a href="https://github.com/enamakel">Github</a>
+                <a href="https://steven.pw">Blog</a>
+            </p>
         ]]>
     </string>
     <string name="readability_html" translatable="false">

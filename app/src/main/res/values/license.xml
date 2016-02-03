@@ -38,20 +38,20 @@
     </string>
     <string translatable="false" name="libraries_text">
         <![CDATA[
-            <p><a href="https://github.com/square/retrofit">Square Retrofit</a> - Apache License v2.0</p>
-            <p><a href="https://github.com/square/okhttp">Square OkHttp</a> - Apache License v2.0</p>
-            <p><a href="https://github.com/square/dagger">Square Dagger</a> - Apache License v2.0</p>
-            <p><a href="https://github.com/square/leakcanary">Square LeakCanary</a> - Apache License v2.0</p>
-            <p><a href="http://developer.android.com/tools/support-library/index.html">Android support library</a> - Apache License v2.0</p>
-            <p><a href="https://github.com/algolia/hn-search">algolia/hn-search</a> - MIT License</p>
-            <p><a href="https://www.readability.com/developers/api/parser">Readability Parser API</a></p>
-            <p><a href="https://github.com/google/material-design-icons">Material design icons</a> - Creative Common Attribution 4.0 International License</p>
-            <p><a href="https://github.com/google/fonts">Google Fonts</a></p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;Droid Sans - Apache License v2.0</p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;Droid Serif - Apache License v2.0</p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;Libre Baskerville - OFL License v1.1</p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;Roboto Slab - Apache License v2.0</p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;Roboto - Apache License v2.0</p>
+            <a href="https://github.com/square/retrofit">Square Retrofit</a> - Apache License v2.0<br/>
+            <a href="https://github.com/square/okhttp">Square OkHttp</a> - Apache License v2.0<br/>
+            <a href="https://github.com/square/dagger">Square Dagger</a> - Apache License v2.0<br/>
+            <a href="https://github.com/square/leakcanary">Square LeakCanary</a> - Apache License v2.0<br/>
+            <a href="http://developer.android.com/tools/support-library/index.html">Android support library</a> - Apache License v2.0<br/>
+            <a href="https://github.com/algolia/hn-search">algolia/hn-search</a> - MIT License<br/>
+            <a href="https://www.readability.com/developers/api/parser">Readability Parser API</a><br/>
+            <a href="https://github.com/google/material-design-icons">Material design icons</a> - Creative Common Attribution 4.0 International License<br/>
+            <a href="https://github.com/google/fonts">Google Fonts</a><br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;Droid Sans - Apache License v2.0<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;Droid Serif - Apache License v2.0<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;Libre Baskerville - OFL License v1.1<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;Roboto Slab - Apache License v2.0<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;Roboto - Apache License v2.0<br/>
         ]]>
     </string>
     <string translatable="false" name="third_party_licenses_text" tools:ignore="TypographyOther">
