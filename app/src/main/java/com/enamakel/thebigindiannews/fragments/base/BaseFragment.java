@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.fragments;
+package com.enamakel.thebigindiannews.fragments.base;
 
 
 import android.content.Context;

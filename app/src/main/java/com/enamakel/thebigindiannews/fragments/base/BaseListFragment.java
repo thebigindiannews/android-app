@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.fragments;
+package com.enamakel.thebigindiannews.fragments.base;
+
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -29,15 +30,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.util.Scrollable;
 import com.enamakel.thebigindiannews.adapters.ListRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.util.Preferences;
+import com.enamakel.thebigindiannews.util.Scrollable;
+
 
 public abstract class BaseListFragment extends BaseFragment implements Scrollable {
-    private static final String STATE_ADAPTER = "state:adapter";
     protected RecyclerView recyclerView;
-    private final SharedPreferences.OnSharedPreferenceChangeListener mListener =
+    static final String STATE_ADAPTER = "state:adapter";
+
+    final SharedPreferences.OnSharedPreferenceChangeListener listener =
             new SharedPreferences.OnSharedPreferenceChangeListener() {
                 @Override
                 public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
@@ -47,14 +50,19 @@ public abstract class BaseListFragment extends BaseFragment implements Scrollabl
                 }
             };
 
-    private boolean hasChanged;
+    boolean hasChanged;
+
+    LinearLayoutManager layoutManager;
+    int pastVisiblesItems, visibleItemCount, totalItemCount;
+
+    protected int currentPage;
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         PreferenceManager.getDefaultSharedPreferences(getActivity())
-                .registerOnSharedPreferenceChangeListener(mListener);
+                .registerOnSharedPreferenceChangeListener(listener);
     }
 
 
@@ -62,42 +70,63 @@ public abstract class BaseListFragment extends BaseFragment implements Scrollabl
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        if (savedInstanceState == null) {
-            getAdapter().setCardViewEnabled(Preferences.isListItemCardView(getActivity()));
-        } else {
-            getAdapter().restoreState(savedInstanceState.getBundle(STATE_ADAPTER));
-        }
+
+//        if (savedInstanceState == null) {
+        getAdapter().setCardViewEnabled(Preferences.isListItemCardView(getActivity()));
+//        } else {
+//            getAdapter().restoreState(savedInstanceState.getBundle(STATE_ADAPTER));
+//        }
     }
 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
         final int verticalMargin = getResources()
                 .getDimensionPixelSize(R.dimen.cardview_vertical_margin);
         final int horizontalMargin = getResources()
                 .getDimensionPixelSize(R.dimen.cardview_horizontal_margin);
         final int divider = getResources().getDimensionPixelSize(R.dimen.divider);
+
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
                                        RecyclerView.State state) {
-                if (getAdapter().isCardViewEnabled()) {
+                if (getAdapter().isCardViewEnabled())
                     outRect.set(horizontalMargin, verticalMargin, horizontalMargin, 0);
-                } else {
-                    outRect.set(0, 0, 0, divider);
-                }
+                else outRect.set(0, 0, 0, divider);
+
             }
         });
         recyclerView.setAdapter(getAdapter());
+
+        // use a linear layout manager
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    visibleItemCount = layoutManager.getChildCount();
+                    totalItemCount = layoutManager.getItemCount();
+                    pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+
+                    if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) loadNextPage();
+                }
+            }
+        });
     }
+
+
+    protected abstract void loadNextPage();
 
 
     @Override
     public void onResume() {
         super.onResume();
+
         if (hasChanged) {
             getAdapter().notifyDataSetChanged();
             hasChanged = false;
@@ -114,6 +143,7 @@ public abstract class BaseListFragment extends BaseFragment implements Scrollabl
     @Override
     protected void prepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.menu_list_toggle);
+
         if (getAdapter().isCardViewEnabled()) {
             item.setTitle(R.string.compact_view);
             menuTintDelegate.setIcon(item, R.drawable.ic_view_stream_white_24dp);
@@ -126,9 +156,8 @@ public abstract class BaseListFragment extends BaseFragment implements Scrollabl
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() != R.id.menu_list_toggle) {
-            return super.onOptionsItemSelected(item);
-        }
+        if (item.getItemId() != R.id.menu_list_toggle) return super.onOptionsItemSelected(item);
+
         getAdapter().setCardViewEnabled(!getAdapter().isCardViewEnabled());
         Preferences.setListItemCardView(getActivity(), getAdapter().isCardViewEnabled());
         getActivity().supportInvalidateOptionsMenu();
@@ -148,7 +177,7 @@ public abstract class BaseListFragment extends BaseFragment implements Scrollabl
     public void onDetach() {
         super.onDetach();
         PreferenceManager.getDefaultSharedPreferences(getActivity())
-                .unregisterOnSharedPreferenceChangeListener(mListener);
+                .unregisterOnSharedPreferenceChangeListener(listener);
     }
 
 
