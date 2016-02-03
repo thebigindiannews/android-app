@@ -35,7 +35,6 @@ import com.enamakel.thebigindiannews.activities.SubmitActivity;
 import com.enamakel.thebigindiannews.activities.ThreadPreviewActivity;
 import com.enamakel.thebigindiannews.activities.UserActivity;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
-import com.enamakel.thebigindiannews.data.clients.FeedbackClient;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ReadabilityClient;
 import com.enamakel.thebigindiannews.data.SessionManager;
@@ -67,61 +66,61 @@ import static org.mockito.Mockito.when;
 @Module(
         injects = {
                 // source classes
-                LoginActivity.class,
-                SettingsActivity.class,
                 AboutActivity.class,
-                FavoriteActivity.class,
-                SingleStoryActivity.class,
-                ListActivity.class,
-                NewActivity.class,
-                SearchActivity.class,
-                WebActivity.class,
-                PopularActivity.class,
                 ComposeActivity.class,
-                SubmitActivity.class,
-                UserActivity.class,
-                ThreadPreviewActivity.class,
-                FavoriteFragment.class,
-                ItemFragment.class,
-                ListFragment.class,
-                WebFragment.class,
                 DrawerFragment.class,
-                ReadabilityFragment.class,
-                StoryRecyclerViewAdapter.class,
+                FavoriteActivity.class,
+                FavoriteFragment.class,
                 FavoriteRecyclerViewAdapter.class,
-                SinglePageItemRecyclerViewAdapter.class,
+                ItemFragment.class,
+                ListActivity.class,
+                ListFragment.class,
+                LoginActivity.class,
                 MultiPageItemRecyclerViewAdapter.class,
+                NewActivity.class,
+                PopularActivity.class,
+                ReadabilityFragment.class,
+                SearchActivity.class,
+                SettingsActivity.class,
+                SinglePageItemRecyclerViewAdapter.class,
+                SingleStoryActivity.class,
+                StoryRecyclerViewAdapter.class,
                 SubmissionRecyclerViewAdapter.class,
+                SubmitActivity.class,
+                ThreadPreviewActivity.class,
                 ThreadPreviewRecyclerViewAdapter.class,
+                UserActivity.class,
+                WebActivity.class,
+                WebFragment.class,
                 // test classes
                 AppUtilsTest.class,
-                SettingsActivityTest.class,
-                SearchActivityTest.class,
+                ComposeActivityTest.class,
+                DrawerFragmentLoginTest.class,
+                FavoriteActivityEmptyTest.class,
+                FavoriteActivityTest.class,
+                FeedbackTest.class,
                 ItemActivityTest.class,
                 ItemFragmentMultiPageTest.class,
                 ItemFragmentSinglePageTest.class,
-                TestItemActivity.class,
-                TestReadabilityActivity.class,
-                TestListActivity.class,
-                com.enamakel.thebigindiannews.test.ListActivity.class,
-                ListFragmentViewHolderTest.class,
+                ListFragmentTest.class,
                 ListFragmentViewHolderEdgeTest.class,
-                FavoriteActivityTest.class,
-                FavoriteActivityEmptyTest.class,
+                ListFragmentViewHolderTest.class,
+                LoginActivityTest.class,
+                PopularActivityTest.class,
+                ReadabilityFragmentLazyLoadTest.class,
+                ReadabilityFragmentTest.class,
+                SearchActivityTest.class,
+                SettingsActivityTest.class,
+                SubmitActivityTest.class,
                 TestFavoriteActivity.class,
+                TestItemActivity.class,
+                TestListActivity.class,
+                TestReadabilityActivity.class,
+                ThreadPreviewActivityTest.class,
+                UserActivityTest.class,
                 WebFragmentLocalTest.class,
                 WebFragmentTest.class,
-                FeedbackTest.class,
-                ListFragmentTest.class,
-                PopularActivityTest.class,
-                ReadabilityFragmentTest.class,
-                ReadabilityFragmentLazyLoadTest.class,
-                LoginActivityTest.class,
-                DrawerFragmentLoginTest.class,
-                ComposeActivityTest.class,
-                SubmitActivityTest.class,
-                UserActivityTest.class,
-                ThreadPreviewActivityTest.class
+                com.enamakel.thebigindiannews.test.ListActivity.class
         },
         library = true,
         overrides = true
@@ -134,7 +133,6 @@ public class TestActivityModule {
     private final FavoriteManager favoriteManager = mock(FavoriteManager.class);
     private final SessionManager sessionManager = mock(SessionManager.class);
     private final SearchView searchView = mock(SearchView.class);
-    private final FeedbackClient feedbackClient = mock(FeedbackClient.class);
     private final ReadabilityClient readabilityClient = mock(ReadabilityClient.class);
     private final UserServices userServices = mock(UserServices.class);
 
@@ -161,11 +159,6 @@ public class TestActivityModule {
     @Provides @Singleton
     public SessionManager provideSessionManager() {
         return sessionManager;
-    }
-
-    @Provides @Singleton
-    public FeedbackClient provideFeedbackClient() {
-        return feedbackClient;
     }
 
     @Provides @Singleton
