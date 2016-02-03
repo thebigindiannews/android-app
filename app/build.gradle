@@ -1,11 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
+apply plugin: 'com.google.gms.google-services'
 
-def getApiKey(){
+
+// Helper function to get the secret keys from the 'secrets.properties' file
+def getSecret(keyname) {
     def Properties props = new Properties()
     props.load(new FileInputStream(new File('secrets.properties')))
-    return props['API_KEY']
+    return props[keyname]
 }
+
 
 android {
     compileSdkVersion 23
@@ -19,12 +23,16 @@ android {
         versionName "2.5"
         buildConfigField "String", "GITHUB_TOKEN", "\"\""
         buildConfigField "String", "READABILITY_TOKEN", "\"\""
+        buildConfigField "String", "API_KEY", "\"" + getSecret("API_KEY") + "\""
     }
 
     buildTypes {
         leak.initWith(buildTypes.debug)
-        applicationVariants.all { variant ->
-            variant.buildConfigField "String", "API_KEY", "\""+getApiKey()+"\""
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            zipAlignEnabled true
+            // proguardFile "proguard-rules.pro"
         }
     }
 
@@ -41,16 +49,17 @@ android {
 }
 
 ext {
-    supportVersion = '23.1.1'
-    okHttpVersion = '3.0.0-RC1'
+    AAVersion = "3.3.2"
+    autoParcelVersion = "0.1"
     daggerVersion = '1.2.2'
     leakCanaryVersion = '1.3.1'
+    lombokVersion = "1.16.6"
+    okHttpVersion = '3.0.0-RC1'
+    picassoVersion = "2.5.2"
     retrofit2Version = '2.0.0-beta3'
     retrofitVersion = '2.0.0-beta2'
-    AAVersion = "3.3.2"
-    lombokVersion = "1.16.6"
-    autoParcelVersion = "0.1"
-    picassoVersion = "2.5.2"
+    supportVersion = '23.1.1'
+    googleAnalyticsVersion = '8.3.0'
 }
 
 apt {
@@ -70,32 +79,52 @@ apt {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "com.android.support:appcompat-v7:$supportVersion"
-    compile "com.android.support:recyclerview-v7:$supportVersion"
     compile "com.android.support:cardview-v7:$supportVersion"
+    compile "com.android.support:customtabs:$supportVersion"
     compile "com.android.support:design:$supportVersion"
     compile "com.android.support:preference-v7:$supportVersion"
-    compile "com.android.support:customtabs:$supportVersion"
-    compile "com.squareup.dagger:dagger:$daggerVersion"
-    leakCompile "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
+    compile "com.android.support:recyclerview-v7:$supportVersion"
+
+    // Leakcanary. A memory leak detection library for Android and Java.
     debugCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
+    leakCompile "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
     testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$leakCanaryVersion"
-    compile "com.squareup.retrofit:retrofit:$retrofitVersion"
-    compile ("com.squareup.retrofit2:retrofit:$retrofit2Version") {
+
+    // Retrofit 2 & OkHttp
+    compile "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+    compile "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    compile("com.squareup.retrofit2:retrofit:$retrofit2Version") {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
         exclude module: 'okhttp'
     }
     compile "com.squareup.retrofit2:converter-gson:$retrofit2Version"
-    compile "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    compile "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+
+    // Retrofit 1 for fallback methods.
+    compile "com.squareup.retrofit:retrofit:$retrofitVersion"
+
+    // Dagger, A fast dependency injector for Android and Java
+    compile "com.squareup.dagger:dagger:$daggerVersion"
     provided "com.squareup.dagger:dagger-compiler:$daggerVersion"
+
+    // Picasso, A powerful image downloading and caching library
+    compile "com.squareup.picasso:picasso:$picassoVersion"
+
+    // Android Annotations
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
+
+    // Project Lombok
     compile "org.projectlombok:lombok:$lombokVersion"
+
+    // Google Analytics
+    compile "com.google.android.gms:play-services-analytics:$googleAnalyticsVersion"
+
+    // Autoparcel-Gson. Gson for parcel
     compile "me.tatarka:auto-parcel-gson:$autoParcelVersion"
     apt "me.tatarka:auto-parcel-gson-processor:$autoParcelVersion"
-    compile "com.squareup.picasso:picasso:$picassoVersion"
 }
+
 
 apply from: "${rootProject.getRootDir()}/robolectric.gradle"
 apply from: "${rootProject.getRootDir()}/jacoco.gradle"

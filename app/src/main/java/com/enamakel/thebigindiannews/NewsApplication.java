@@ -17,22 +17,42 @@
 package com.enamakel.thebigindiannews;
 
 
+import android.app.Application;
 import android.content.Context;
 import android.graphics.Typeface;
 
 import com.enamakel.thebigindiannews.util.FontCache;
 import com.enamakel.thebigindiannews.util.Preferences;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
 import dagger.ObjectGraph;
 
 
-public class NewsApplication extends android.app.Application {
+public class NewsApplication extends Application {
     public static Typeface TYPE_FACE = null;
     public static Typeface TYPE_FACE_BOLD = null;
     RefWatcher refWatcher;
+    Tracker tracker;
     ObjectGraph applicationGraph;
+
+
+    /**
+     * Gets the default {@link Tracker} for this {@link Application}.
+     *
+     * @return tracker
+     */
+    synchronized public Tracker getDefaultTracker() {
+        if (tracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+
+            // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
+            tracker = analytics.newTracker(R.xml.global_tracker);
+        }
+        return tracker;
+    }
 
 
     public static RefWatcher getRefWatcher(Context context) {

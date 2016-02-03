@@ -1,4 +1,4 @@
-# Built application files
+# Built newsApplication files
 *.apk
 *.ap_
 
@@ -30,3 +30,4 @@ proguard/
 
 .DS_Store
 secrets.properties
+google-services.json
