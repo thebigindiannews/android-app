@@ -64,11 +64,11 @@
         <!--android:summary="@string/pref_external_summary"-->
         <!--android:defaultValue="false" />-->
 
-    <android.support.v7.preference.SwitchPreferenceCompat
-        android:key="@string/pref_custom_tab"
-        android:title="@string/pref_custom_tab_title"
-        android:summary="@string/pref_custom_tab_summary"
-        android:defaultValue="true" />
+    <!--<android.support.v7.preference.SwitchPreferenceCompat-->
+        <!--android:key="@string/pref_custom_tab"-->
+        <!--android:title="@string/pref_custom_tab_title"-->
+        <!--android:summary="@string/pref_custom_tab_summary"-->
+        <!--android:defaultValue="true" />-->
 
     <!--<android.support.v7.preference.SwitchPreferenceCompat-->
         <!--android:key="@string/pref_lazy_load"-->
