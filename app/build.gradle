@@ -20,9 +20,9 @@ android {
         minSdkVersion 9
         targetSdkVersion 23
         versionCode 44
-        versionName "2.5"
-        buildConfigField "String", "GITHUB_TOKEN", "\"\""
-        buildConfigField "String", "READABILITY_TOKEN", "\"\""
+        versionName "1.0.0"
+        buildConfigField "String", "GITHUB_TOKEN", "\"" + getSecret("GITHUB_KEY") + "\""
+        buildConfigField "String", "READABILITY_TOKEN", "\"" + getSecret("READABILITY_KEY") + "\""
         buildConfigField "String", "API_KEY", "\"" + getSecret("API_KEY") + "\""
     }
 
@@ -32,7 +32,6 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             zipAlignEnabled true
-            // proguardFile "proguard-rules.pro"
         }
     }
 
