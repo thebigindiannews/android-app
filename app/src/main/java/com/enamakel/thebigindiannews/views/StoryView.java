@@ -117,7 +117,7 @@ public class StoryView extends RelativeLayout implements Checkable {
 
 
     public void setStory(@NonNull StoryModel story) {
-        reset();
+//        reset();
         setChecked(false);
 //        story.getThumbnail().setFilename(null);
         if (!isLocal) {

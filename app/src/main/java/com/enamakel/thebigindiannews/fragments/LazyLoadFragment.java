@@ -19,6 +19,7 @@ package com.enamakel.thebigindiannews.fragments;
 import android.os.Bundle;
 
 import com.enamakel.thebigindiannews.AppUtils;
+import com.enamakel.thebigindiannews.fragments.base.BaseFragment;
 import com.enamakel.thebigindiannews.util.Preferences;
 
 /**

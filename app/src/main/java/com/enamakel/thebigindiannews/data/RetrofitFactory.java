@@ -25,13 +25,6 @@ public class RetrofitFactory {
     static OkHttpClient createClient() {
         OkHttpClient.Builder client = new OkHttpClient.Builder();
 
-        client.addInterceptor(new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(String message) {
-                Log.d(TAG, message);
-            }
-        }));
-
         client.addInterceptor(new Interceptor() {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
@@ -40,7 +33,7 @@ public class RetrofitFactory {
                 // Customize the request
                 Request request = original.newBuilder()
                         .header("Accept", "application/json")
-                        .header("x-ApiKey", BuildConfig.API_KEY)
+                        .header("x-apikey", BuildConfig.API_KEY)
                         .method(original.method(), original.body())
                         .build();
 
@@ -50,6 +43,10 @@ public class RetrofitFactory {
                 return response;
             }
         });
+
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        client.addInterceptor(interceptor);
 
         return client.build();
     }
