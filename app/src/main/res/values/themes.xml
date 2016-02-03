@@ -80,8 +80,8 @@
     </style>
 
     <style name="AppTheme.Green">
-        <item name="colorPrimary">@color/orange300</item>
-        <item name="colorPrimaryDark">@color/orange500</item>
+        <item name="colorPrimary">@color/red500</item>
+        <item name="colorPrimaryDark">@color/red700</item>
         <item name="colorCardBackground">@color/teal50</item>
         <item name="colorCardHighlight">@color/teal100</item>
         <item name="android:textColorPrimary">@color/teal900</item>
