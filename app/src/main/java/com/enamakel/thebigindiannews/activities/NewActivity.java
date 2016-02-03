@@ -63,4 +63,9 @@ public class NewActivity extends BaseStoriesActivity {
         return ItemManager.NEW_FETCH_MODE;
     }
 
+
+    @Override
+    protected String getTrackingName() {
+        return "New Story Page";
+    }
 }

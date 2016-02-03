@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 
 import dagger.ObjectGraph;
 
-public class TestApplication extends Application implements TestLifecycleApplication {
+public class TestApplication extends NewsApplication implements TestLifecycleApplication {
     public static ObjectGraph applicationGraph = ObjectGraph.create(new TestActivityModule());
 
     @Override

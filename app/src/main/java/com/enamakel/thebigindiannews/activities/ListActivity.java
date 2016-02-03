@@ -53,4 +53,10 @@ public class ListActivity extends BaseStoriesActivity {
     protected FetchMode getMode() {
         return FetchMode.TOP_STORIES;
     }
+
+
+    @Override
+    protected String getTrackingName() {
+        return "Top Stories List";
+    }
 }

@@ -22,8 +22,8 @@ import retrofit2.http.Query;
 
 public class BigIndianClient {
     static RestService restService;
-    //    public static final String BASE_WEB_URL = "https://thebigindian.news";
-    public static final String BASE_WEB_URL = "http://192.168.1.106:3000";
+        public static final String BASE_WEB_URL = "https://thebigindian.news";
+//    public static final String BASE_WEB_URL = "http://192.168.1.106:3000";
     public static final String BASE_API_URL = BASE_WEB_URL + "/api/";
     public static final String WEB_STORY_PATH = BASE_WEB_URL + "/story/%s";
     private static String TAG = "BigIndianClient";

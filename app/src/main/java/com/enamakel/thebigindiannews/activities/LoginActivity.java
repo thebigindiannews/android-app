@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.activities;
 
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.os.Bundle;
@@ -25,15 +26,16 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.enamakel.thebigindiannews.BuildConfig;
+import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.accounts.UserServices;
+import com.enamakel.thebigindiannews.activities.base.AccountAuthenticatorActivity;
+import com.enamakel.thebigindiannews.util.Preferences;
+
 import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 
-import com.enamakel.thebigindiannews.BuildConfig;
-import com.enamakel.thebigindiannews.activities.base.AccountAuthenticatorActivity;
-import com.enamakel.thebigindiannews.util.Preferences;
-import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.accounts.UserServices;
 
 public class LoginActivity extends AccountAuthenticatorActivity {
     public static final String EXTRA_ADD_ACCOUNT = LoginActivity.class.getName() + ".EXTRA_ADD_ACCOUNT";
@@ -47,6 +49,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     private EditText mPasswordEditText;
     private String mUsername;
     private String mPassword;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,10 +96,12 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         });
     }
 
+
     @Override
     protected boolean isDialogTheme() {
         return true;
     }
+
 
     private boolean validate() {
         mUsernameLayout.setErrorEnabled(false);
@@ -110,11 +115,13 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         return mUsernameEditText.length() > 0 && mPasswordEditText.length() > 0;
     }
 
+
     private void login(String username, String password, boolean createAccount) {
         mUsername = username;
         mPassword = password;
         mUserServices.login(username, password, createAccount, new LoginCallback(this));
     }
+
 
     private void onLoggedIn(Boolean successful) {
         if (successful == null) {
@@ -133,6 +140,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         }
     }
 
+
     private void addAccount(String username, String password) {
         Account account = new Account(username, BuildConfig.APPLICATION_ID);
         mAccountManager.addAccountExplicitly(account, password, null);
@@ -145,12 +153,15 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         finish();
     }
 
+
     private static class LoginCallback extends UserServices.Callback {
         private final WeakReference<LoginActivity> mLoginActivity;
+
 
         public LoginCallback(LoginActivity loginActivity) {
             mLoginActivity = new WeakReference<>(loginActivity);
         }
+
 
         @Override
         public void onDone(boolean successful) {
@@ -159,11 +170,17 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             }
         }
 
+
         @Override
         public void onError() {
             if (mLoginActivity.get() != null && !mLoginActivity.get().isActivityDestroyed()) {
                 mLoginActivity.get().onLoggedIn(null);
             }
         }
+    }
+
+    @Override
+    protected String getTrackingName() {
+        return "Login";
     }
 }

@@ -21,9 +21,8 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
-import android.util.Log;
 
-import com.enamakel.thebigindiannews.Application;
+import com.enamakel.thebigindiannews.NewsApplication;
 
 
 public class TextView extends AppCompatTextView {
@@ -35,14 +34,14 @@ public class TextView extends AppCompatTextView {
     public TextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        if (!isInEditMode()) setTypeface(Application.TYPE_FACE);
+        if (!isInEditMode()) setTypeface(NewsApplication.TYPE_FACE);
         try {
             int style = attrs.getAttributeIntValue(
                     "http://schemas.android.com/apk/res/android",
                     "textStyle",
                     Typeface.NORMAL);
 
-            if (style == Typeface.BOLD) setTypeface(Application.TYPE_FACE_BOLD, Typeface.BOLD);
+            if (style == Typeface.BOLD) setTypeface(NewsApplication.TYPE_FACE_BOLD, Typeface.BOLD);
         } catch (Exception e) {
 
         }

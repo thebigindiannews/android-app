@@ -26,7 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.enamakel.thebigindiannews.Application;
+import com.enamakel.thebigindiannews.NewsApplication;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.util.FontCache;
 
@@ -63,8 +63,8 @@ public class FontPreference extends SpinnerPreference {
     @Override
     protected boolean persistString(String value) {
         Log.d("font", value);
-        Application.TYPE_FACE = getFont(value);
-        Application.TYPE_FACE_BOLD = getFont(value + "-bold");
+        NewsApplication.TYPE_FACE = getFont(value);
+        NewsApplication.TYPE_FACE_BOLD = getFont(value + "-bold");
         return super.persistString(value);
     }
 

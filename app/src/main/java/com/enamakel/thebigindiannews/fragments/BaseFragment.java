@@ -23,7 +23,7 @@ import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 
-import com.enamakel.thebigindiannews.Application;
+import com.enamakel.thebigindiannews.NewsApplication;
 import com.enamakel.thebigindiannews.util.Injectable;
 import com.enamakel.thebigindiannews.util.MenuTintDelegate;
 
@@ -78,7 +78,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Application.getRefWatcher(getActivity()).watch(this);
+        NewsApplication.getRefWatcher(getActivity()).watch(this);
     }
 
 

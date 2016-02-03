@@ -16,30 +16,41 @@
 
 package com.enamakel.thebigindiannews.activities.base;
 
+
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 
+import com.enamakel.thebigindiannews.NewsApplication;
 import com.enamakel.thebigindiannews.util.MenuTintDelegate;
 import com.enamakel.thebigindiannews.util.Preferences;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
-public abstract class ThemedActivity extends AppCompatActivity {
-    private final MenuTintDelegate mMenuTintDelegate = new MenuTintDelegate();
+
+public abstract class ThemedActivity extends BaseActivity {
+    final MenuTintDelegate menuTintDelegate = new MenuTintDelegate();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Preferences.Theme.apply(this, isDialogTheme());
         super.onCreate(savedInstanceState);
-        mMenuTintDelegate.onActivityCreated(this);
+        menuTintDelegate.onActivityCreated(this);
     }
+
+
+
 
     @CallSuper
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        mMenuTintDelegate.onOptionsMenuCreated(menu);
+        menuTintDelegate.onOptionsMenuCreated(menu);
         return super.onCreateOptionsMenu(menu);
     }
+
 
     protected boolean isDialogTheme() {
         return false;

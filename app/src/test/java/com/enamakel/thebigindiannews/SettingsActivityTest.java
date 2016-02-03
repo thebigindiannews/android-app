@@ -80,7 +80,7 @@ public class SettingsActivityTest {
                 .edit()
                 .putString(key, "dark")
                 .commit();
-        fragment.mListener.onSharedPreferenceChanged(
+        fragment.listener.onSharedPreferenceChanged(
                 ShadowSupportPreferenceManager.getDefaultSharedPreferences(activity), key);
         assertNotNull(shadowOf(activity).getNextStartedActivity());
     }
@@ -93,7 +93,7 @@ public class SettingsActivityTest {
                 .edit()
                 .putString(key, "1")
                 .commit();
-        fragment.mListener.onSharedPreferenceChanged(
+        fragment.listener.onSharedPreferenceChanged(
                 ShadowSupportPreferenceManager.getDefaultSharedPreferences(activity), key);
         assertNotNull(shadowOf(activity).getNextStartedActivity());
     }

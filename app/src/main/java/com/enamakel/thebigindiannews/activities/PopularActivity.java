@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.activities;
 
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Menu;
@@ -26,6 +27,7 @@ import com.enamakel.thebigindiannews.activities.base.BaseListActivity;
 import com.enamakel.thebigindiannews.data.clients.AlgoliaPopularClient;
 import com.enamakel.thebigindiannews.fragments.ListFragment;
 import com.enamakel.thebigindiannews.util.Preferences;
+
 
 public class PopularActivity extends BaseListActivity {
     static final String STATE_RANGE = "state:range";
@@ -125,5 +127,4 @@ public class PopularActivity extends BaseListActivity {
         }
         getSupportActionBar().setSubtitle(stringRes);
     }
-
 }

@@ -19,7 +19,7 @@ package com.enamakel.thebigindiannews.activities.base;
 import android.os.Bundle;
 
 import com.enamakel.thebigindiannews.ActivityModule;
-import com.enamakel.thebigindiannews.Application;
+import com.enamakel.thebigindiannews.NewsApplication;
 import com.enamakel.thebigindiannews.util.Injectable;
 
 import dagger.ObjectGraph;
@@ -32,7 +32,7 @@ public abstract class InjectableActivity extends ThemedActivity implements Injec
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActivityGraph = ((Application) getApplication()).getApplicationGraph()
+        mActivityGraph = ((NewsApplication) getApplication()).getApplicationGraph()
                 .plus(new ActivityModule(this));
         mActivityGraph.inject(this);
     }

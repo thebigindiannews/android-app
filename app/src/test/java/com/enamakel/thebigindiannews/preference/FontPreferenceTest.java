@@ -12,7 +12,7 @@ import org.robolectric.Robolectric;
 import java.util.Arrays;
 import java.util.List;
 
-import com.enamakel.thebigindiannews.Application;
+import com.enamakel.thebigindiannews.NewsApplication;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.SettingsActivity;
 import com.enamakel.thebigindiannews.test.ParameterizedRobolectricGradleTestRunner;
@@ -55,9 +55,9 @@ public class FontPreferenceTest {
     public void test() {
         preferenceView.performClick();
         ((Spinner) preferenceView.findViewById(R.id.spinner)).setSelection(selection);
-        assertNotNull(Application.TYPE_FACE);
+        assertNotNull(NewsApplication.TYPE_FACE);
         preferenceView.performClick();
         ((Spinner) preferenceView.findViewById(R.id.spinner)).setSelection(0);
-        assertNull(Application.TYPE_FACE);
+        assertNull(NewsApplication.TYPE_FACE);
     }
 }
