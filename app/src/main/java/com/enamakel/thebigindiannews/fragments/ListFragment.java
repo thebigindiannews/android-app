@@ -23,8 +23,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +38,7 @@ import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.clients.BigIndianClient;
 import com.enamakel.thebigindiannews.data.clients.FetchMode;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
+import com.enamakel.thebigindiannews.fragments.base.BaseListFragment;
 import com.enamakel.thebigindiannews.util.Preferences;
 
 import java.lang.ref.WeakReference;
@@ -67,14 +68,15 @@ public class ListFragment extends BaseListFragment {
     final StoryRecyclerViewAdapter adapter = new StoryRecyclerViewAdapter();
     SwipeRefreshLayout swipeRefreshLayout;
 
-    LinearLayoutManager layoutManager;
     View errorView;
     View emptyView;
     RefreshCallback refreshCallback;
     String filter;
-    FetchMode fetchMode;
-//    boolean loading = false;
-//    int pastVisiblesItems, visibleItemCount, totalItemCount;
+    FetchMode fetchMode = FetchMode.TOP_STORIES;
+
+    boolean hasCompleted = false;
+    boolean isLoading = false;
+    int currentPage = 1;
 
 
     public interface RefreshCallback {
@@ -101,6 +103,8 @@ public class ListFragment extends BaseListFragment {
         else {
             filter = getArguments().getString(EXTRA_FILTER);
             fetchMode = FetchMode.valueOf(getArguments().getString(EXTRA_FILTER2));
+            if (fetchMode == null) fetchMode = FetchMode.TOP_STORIES;
+
             adapter.setHighlightUpdated(Preferences.highlightUpdatedEnabled(getActivity()));
             adapter.setUsername(Preferences.getUsername(getActivity()));
         }
@@ -121,39 +125,14 @@ public class ListFragment extends BaseListFragment {
         swipeRefreshLayout.setProgressBackgroundColorSchemeResource(
                 AppUtils.getThemedResId(getActivity(), R.attr.colorAccent));
 
-//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                if (dy > 0) {
-//                    visibleItemCount = layoutManager.getChildCount();
-//                    totalItemCount = layoutManager.getItemCount();
-//                    pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
-//
-//                    Log.d("dddd", "" + recyclerView.getChildCount());
-//                    Log.d("dddd", String.format("scroll down %d %d %d", visibleItemCount, totalItemCount, pastVisiblesItems));
-//                    if (loading) {
-//                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount) {
-//                            loading = false;
-//                            Log.d("dddd", "Last Item Wow !");
-//                            //Do pagination.. i.e. fetch new data
-//                        }
-//                    }
-//                }
-//            }
-//        });
-
-        // use a linear layout manager
-        layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null)
             swipeRefreshLayout.post(new Runnable() {
                 @Override
                 public void run() {
                     swipeRefreshLayout.setRefreshing(true);
                 }
             });
-        }
+
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -206,7 +185,19 @@ public class ListFragment extends BaseListFragment {
 
     private void refresh() {
         adapter.setShowAll(true);
-        BigIndianClient.getStories(fetchMode, 1, new ListResponseListener(this));
+        currentPage = 1;
+        BigIndianClient.getStories(fetchMode, currentPage, new RefreshListener(this));
+    }
+
+
+    @Override
+    protected void loadNextPage() {
+        if (hasCompleted || isLoading) return;
+
+        isLoading = true;
+        currentPage++;
+        Log.d("fuck", "you" + currentPage);
+        BigIndianClient.getStories(fetchMode, currentPage, new NextPageListener(this));
     }
 
 
@@ -244,11 +235,11 @@ public class ListFragment extends BaseListFragment {
     }
 
 
-    private static class ListResponseListener implements ResponseListener<List<StoryModel>> {
+    class RefreshListener implements ResponseListener<List<StoryModel>> {
         private final WeakReference<ListFragment> listFragment;
 
 
-        public ListResponseListener(ListFragment listFragment) {
+        public RefreshListener(ListFragment listFragment) {
             this.listFragment = new WeakReference<>(listFragment);
         }
 
@@ -264,6 +255,32 @@ public class ListFragment extends BaseListFragment {
         public void onError(String errorMessage) {
             if (listFragment.get() != null && listFragment.get().isAttached())
                 listFragment.get().onItemsLoaded(null);
+        }
+    }
+
+
+    class NextPageListener implements ResponseListener<List<StoryModel>> {
+        final WeakReference<ListFragment> listFragment;
+
+
+        public NextPageListener(ListFragment listFragment) {
+            this.listFragment = new WeakReference<>(listFragment);
+        }
+
+
+        @Override
+        public void onResponse(final List<StoryModel> response) {
+            isLoading = false;
+            if (listFragment.get() != null && listFragment.get().isAttached()) {
+                if (response != null && response.size() > 0) adapter.addItems(response);
+                else hasCompleted = true;
+            }
+        }
+
+
+        @Override
+        public void onError(String errorMessage) {
+            isLoading = false;
         }
     }
 }

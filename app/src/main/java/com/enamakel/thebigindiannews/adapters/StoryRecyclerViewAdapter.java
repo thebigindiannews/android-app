@@ -48,6 +48,7 @@ import com.enamakel.thebigindiannews.widgets.PopupMenu;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -97,6 +98,7 @@ public class StoryRecyclerViewAdapter extends
     @Getter @Setter boolean highlightUpdated = true;
     @Getter @Setter boolean showAll = true;
     ArrayList<StoryModel> updatedItems = new ArrayList<>();
+    ArrayList<StoryModel> stories = new ArrayList<>();
     ArrayList<String> promotedList = new ArrayList<>();
     final HashMap<String, Integer> itemPositions = new HashMap<>();
     final HashMap<String, Integer> updatedPositions = new HashMap<>();
@@ -169,8 +171,16 @@ public class StoryRecyclerViewAdapter extends
 
 
     public void setItems(ArrayList<StoryModel> items) {
+        stories = items;
         setUpdated(items);
         setItemsInternal(items);
+        notifyDataSetChanged();
+    }
+
+
+    public void addItems(List<StoryModel> items) {
+        for (StoryModel story : items) stories.add(story);
+        setItemsInternal(stories);
         notifyDataSetChanged();
     }
 
@@ -187,7 +197,6 @@ public class StoryRecyclerViewAdapter extends
         final StoryModel story = getItem(holder.getAdapterPosition());
         bindItemUpdated(holder, story);
         highlightUserPost(holder, story);
-        holder.storyView.setViewed(false);
         holder.storyView.setViewed(story.isViewed());
         if (story.getLocal_revision() < favoriteRevision) story.setFavorite(false);
 
