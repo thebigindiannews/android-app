@@ -67,7 +67,10 @@ public class NewsApplication extends Application {
         refWatcher = LeakCanary.install(this);
         applicationGraph = ObjectGraph.create();
         Preferences.migrate(this);
-        TYPE_FACE = FontCache.getInstance().get(this, Preferences.Theme.getTypeface(this));
+
+        TYPE_FACE = FontCache.get(this, Preferences.Theme.getTypeface(this));
+        TYPE_FACE_BOLD = FontCache.getBold(this, Preferences.Theme.getTypeface(this));
+
         AppUtils.registerAccountsUpdatedListener(this);
     }
 

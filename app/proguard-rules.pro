@@ -16,4 +16,4 @@
 #   public *;
 #}
 
-#-keep class !com.enamakel.** { *; }
+-keep class !com.enamakel.thebigindiannews.** { *; }
