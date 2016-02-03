@@ -1,92 +1,74 @@
-/*
- * Copyright (c) 2015 Ha Duy Trung
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.enamakel.thebigindiannews.data.clients;
 
-import android.os.Build;
 
-import javax.inject.Inject;
+import android.os.Build;
+import android.util.Log;
 
 import com.enamakel.thebigindiannews.BuildConfig;
-import com.enamakel.thebigindiannews.data.RestServiceFactory;
+import com.enamakel.thebigindiannews.data.RetrofitFactory;
+import com.enamakel.thebigindiannews.data.models.IssueModel;
 
-import retrofit.Call;
-import retrofit.Response;
-import retrofit.Retrofit;
-import retrofit.http.Body;
-import retrofit.http.Headers;
-import retrofit.http.POST;
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.http.Body;
+import retrofit2.http.Headers;
+import retrofit2.http.POST;
 
-public interface FeedbackClient {
-    interface Callback {
-        void onSent(boolean success);
+
+/**
+ * Created by robert on 2/3/16.
+ */
+public class FeedbackClient {
+    static FeedbackService feedbackService;
+    static String GITHUB_API_URL = "https://api.github.com/";
+
+
+    static {
+        // Initialize retrofit
+        retrofit2.Retrofit retrofit = RetrofitFactory.build(GITHUB_API_URL);
+
+        // Create the service!
+        feedbackService = retrofit.create(FeedbackService.class);
     }
 
-    void send(String title, String body, Callback callback);
 
-    class Impl implements FeedbackClient {
-        private final FeedbackService mFeedbackService;
+    public static void send(String title, String body, final FeedbackClient.Callback listener) {
+        body = String.format("%s\nDevice: %s %s, SDK: %s, app version: %s",
+                body,
+                Build.MANUFACTURER,
+                Build.MODEL,
+                Build.VERSION.SDK_INT,
+                BuildConfig.VERSION_CODE);
 
-        @Inject
-        public Impl(RestServiceFactory factory) {
-            mFeedbackService = factory.create(FeedbackService.GITHUB_API_URL, FeedbackService.class);
-        }
+        IssueModel issueModel = new IssueModel(title, body);
 
-        @Override
-        public void send(String title, String body, final Callback callback) {
-            body = String.format("%s\nDevice: %s %s, SDK: %s, app version: %s",
-                    body,
-                    Build.MANUFACTURER,
-                    Build.MODEL,
-                    Build.VERSION.SDK_INT,
-                    BuildConfig.VERSION_CODE);
-            mFeedbackService.createGithubIssue(new Issue(title, body))
-                    .enqueue(new retrofit.Callback<Object>() {
-                        @Override
-                        public void onResponse(Response<Object> response, Retrofit retrofit) {
-                            callback.onSent(true);
-                        }
+        Log.d("fuck", issueModel.toJSON());
 
-                        @Override
-                        public void onFailure(Throwable t) {
-                            callback.onSent(false);
-                        }
-                    });
-        }
+        feedbackService.createGithubIssue(issueModel)
+                .enqueue(new retrofit2.Callback<Object>() {
+                    @Override
+                    public void onResponse(Response<Object> response) {
+                        Log.d("fuck", response.message());
+                        listener.onResponse(true);
+                    }
 
-        interface FeedbackService {
-            String GITHUB_API_URL = "https://api.github.com/";
 
-            @POST("repos/thebigindiannews/android-app/issues")
-            @Headers("Authorization: token " + BuildConfig.GITHUB_TOKEN)
-            Call<Object> createGithubIssue(@Body Issue issue);
-        }
+                    @Override
+                    public void onFailure(Throwable t) {
+                        listener.onResponse(false);
+                    }
+                });
+    }
 
-        static class Issue {
-            private static final String LABEL_FEEDBACK = "feedback";
 
-            private final String title;
-            private final String body;
-            private final String[] labels;
+    interface FeedbackService {
+        @POST("repos/thebigindiannews/android-app/issues")
+        @Headers("Authorization: token " + BuildConfig.GITHUB_TOKEN)
+        Call<Object> createGithubIssue(@Body IssueModel issue);
+    }
 
-            private Issue(String title, String body) {
-                this.title = title;
-                this.body = body;
-                this.labels = new String[]{LABEL_FEEDBACK};
-            }
-        }
+
+    public interface Callback {
+        void onResponse(Boolean status);
     }
 }
