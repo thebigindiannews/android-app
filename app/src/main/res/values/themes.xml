@@ -18,7 +18,7 @@
 <resources>
 
     <!-- =================== -->
-    <!-- Application themes  -->
+    <!-- NewsApplication themes  -->
     <!-- =================== -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- color palette -->
