@@ -1,5 +1,6 @@
 package com.enamakel.thebigindiannews.data.models.base;
 
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -62,5 +63,10 @@ public abstract class BaseModel<T> implements Parcelable {
             next = next > prev ? next : prev + 1;
         } while (!currentTime.compareAndSet(prev, next));
         return next;
+    }
+
+
+    public String toJSON() {
+        return gson.toJson(this);
     }
 }
