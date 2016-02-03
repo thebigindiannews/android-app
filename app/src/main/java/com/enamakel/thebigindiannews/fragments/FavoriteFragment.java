@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.fragments;
 
+
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
@@ -44,16 +45,18 @@ import com.enamakel.thebigindiannews.ActionViewResolver;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.FavoriteActivity;
+import com.enamakel.thebigindiannews.adapters.FavoriteRecyclerViewAdapter;
+import com.enamakel.thebigindiannews.adapters.ListRecyclerViewAdapter;
 import com.enamakel.thebigindiannews.data.Favorite;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+import com.enamakel.thebigindiannews.fragments.base.BaseListFragment;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
-import com.enamakel.thebigindiannews.adapters.FavoriteRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.adapters.ListRecyclerViewAdapter;
 
 import java.util.ArrayList;
 
 import javax.inject.Inject;
+
 
 public class FavoriteFragment extends BaseListFragment
         implements LoaderManager.LoaderCallbacks<Cursor>,
@@ -70,16 +73,16 @@ public class FavoriteFragment extends BaseListFragment
             export(favorites);
         }
     };
-    private final FavoriteRecyclerViewAdapter mAdapter = new FavoriteRecyclerViewAdapter(this);
-    private ProgressDialog mProgressDialog;
-    private ActionMode mActionMode;
-    private String mFilter;
+    private final FavoriteRecyclerViewAdapter adapter = new FavoriteRecyclerViewAdapter(this);
+    private ProgressDialog progressDialog;
+    private ActionMode actionMode;
+    private String filter;
     private boolean mSearchViewExpanded;
-    @Inject FavoriteManager mFavoriteManager;
-    @Inject ActionViewResolver mActionViewResolver;
-    @Inject AlertDialogBuilder mAlertDialogBuilder;
-    private View mEmptySearchView;
-    private View mEmptyView;
+    @Inject FavoriteManager favoriteManager;
+    @Inject ActionViewResolver actionViewResolver;
+    @Inject AlertDialogBuilder alertDialogBuilder;
+    private View emptySearchView;
+    private View emptyView;
 
 
     @Override
@@ -94,11 +97,17 @@ public class FavoriteFragment extends BaseListFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            mFilter = savedInstanceState.getString(STATE_FILTER);
+            filter = savedInstanceState.getString(STATE_FILTER);
             mSearchViewExpanded = savedInstanceState.getBoolean(STATE_SEARCH_VIEW_EXPANDED);
         } else {
-            mFilter = getArguments().getString(EXTRA_FILTER);
+            filter = getArguments().getString(EXTRA_FILTER);
         }
+    }
+
+
+    @Override
+    protected void loadNextPage() {
+
     }
 
 
@@ -108,19 +117,19 @@ public class FavoriteFragment extends BaseListFragment
         View view = getLayoutInflater(savedInstanceState)
                 .inflate(R.layout.fragment_favorite, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        mEmptySearchView = view.findViewById(R.id.empty_search);
-        mEmptyView = view.findViewById(R.id.empty);
-        mEmptyView.findViewById(R.id.header_card_view)
+        emptySearchView = view.findViewById(R.id.empty_search);
+        emptyView = view.findViewById(R.id.empty);
+        emptyView.findViewById(R.id.header_card_view)
                 .setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        View bookmark = mEmptyView.findViewById(R.id.bookmarked);
+                        View bookmark = emptyView.findViewById(R.id.bookmarked);
                         bookmark.setVisibility(bookmark.getVisibility() == View.VISIBLE ?
                                 View.INVISIBLE : View.VISIBLE);
                         return true;
                     }
                 });
-        mEmptyView.setVisibility(View.INVISIBLE);
+        emptyView.setVisibility(View.INVISIBLE);
         return view;
     }
 
@@ -136,7 +145,7 @@ public class FavoriteFragment extends BaseListFragment
     protected void createOptionsMenu(final Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_search, menu);
         createSearchView(menu.findItem(R.id.menu_search));
-        if (mAdapter.getItemCount() > 0) {
+        if (adapter.getItemCount() > 0) {
             inflater.inflate(R.menu.menu_favorite, menu);
             super.createOptionsMenu(menu, inflater);
         }
@@ -146,9 +155,9 @@ public class FavoriteFragment extends BaseListFragment
     @Override
     protected void prepareOptionsMenu(Menu menu) {
         // allow clearing filter if empty, or filter if non-empty
-        menu.findItem(R.id.menu_search).setVisible(!TextUtils.isEmpty(mFilter) ||
-                mAdapter.getItemCount() > 0);
-        if (mAdapter.getItemCount() > 0) {
+        menu.findItem(R.id.menu_search).setVisible(!TextUtils.isEmpty(filter) ||
+                adapter.getItemCount() > 0);
+        if (adapter.getItemCount() > 0) {
             super.prepareOptionsMenu(menu);
         }
     }
@@ -171,7 +180,7 @@ public class FavoriteFragment extends BaseListFragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(STATE_FILTER, mFilter);
+        outState.putString(STATE_FILTER, filter);
         outState.putBoolean(STATE_SEARCH_VIEW_EXPANDED, mSearchViewExpanded);
     }
 
@@ -181,16 +190,16 @@ public class FavoriteFragment extends BaseListFragment
         super.onDetach();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
         recyclerView.setAdapter(null); // detach adapter
-        if (mActionMode != null) {
-            mActionMode.finish();
+        if (actionMode != null) {
+            actionMode.finish();
         }
     }
 
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if (!TextUtils.isEmpty(mFilter)) {
-            return new FavoriteManager.CursorLoader(getActivity(), mFilter);
+        if (!TextUtils.isEmpty(filter)) {
+            return new FavoriteManager.CursorLoader(getActivity(), filter);
         }
         return new FavoriteManager.CursorLoader(getActivity());
     }
@@ -215,14 +224,14 @@ public class FavoriteFragment extends BaseListFragment
      */
     public void filter(String query) {
         mSearchViewExpanded = false;
-        mFilter = query;
+        filter = query;
         getLoaderManager().restartLoader(FavoriteManager.LOADER, null, this);
     }
 
 
     @Override
     protected ListRecyclerViewAdapter getAdapter() {
-        return mAdapter;
+        return adapter;
     }
 
 
@@ -231,8 +240,8 @@ public class FavoriteFragment extends BaseListFragment
         if (mSearchViewExpanded) {
             return false;
         }
-        if (mActionMode == null) {
-            mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(callback);
+        if (actionMode == null) {
+            actionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(callback);
         }
         return true;
     }
@@ -240,13 +249,13 @@ public class FavoriteFragment extends BaseListFragment
 
     @Override
     public boolean isInActionMode() {
-        return mActionMode != null && !mSearchViewExpanded;
+        return actionMode != null && !mSearchViewExpanded;
     }
 
 
     @Override
     public void stopActionMode() {
-        mActionMode = null;
+        actionMode = null;
     }
 
 
@@ -255,9 +264,9 @@ public class FavoriteFragment extends BaseListFragment
             cursor.setNotificationUri(getContext().getContentResolver(),
                     MaterialisticProvider.URI_FAVORITE);
         }
-        mAdapter.setCursor(cursor);
+        adapter.setCursor(cursor);
         if (!isDetached()) {
-            toggleEmptyView(mAdapter.getItemCount() == 0, mFilter);
+            toggleEmptyView(adapter.getItemCount() == 0, filter);
             getActivity().supportInvalidateOptionsMenu();
         }
     }
@@ -266,29 +275,29 @@ public class FavoriteFragment extends BaseListFragment
     private void toggleEmptyView(boolean isEmpty, String filter) {
         if (isEmpty) {
             if (TextUtils.isEmpty(filter)) {
-                mEmptySearchView.setVisibility(View.INVISIBLE);
-                mEmptyView.setVisibility(View.VISIBLE);
-                mEmptyView.bringToFront();
+                emptySearchView.setVisibility(View.INVISIBLE);
+                emptyView.setVisibility(View.VISIBLE);
+                emptyView.bringToFront();
             } else {
-                mEmptyView.setVisibility(View.INVISIBLE);
-                mEmptySearchView.setVisibility(View.VISIBLE);
-                mEmptySearchView.bringToFront();
+                emptyView.setVisibility(View.INVISIBLE);
+                emptySearchView.setVisibility(View.VISIBLE);
+                emptySearchView.bringToFront();
             }
         } else {
-            mEmptyView.setVisibility(View.INVISIBLE);
-            mEmptySearchView.setVisibility(View.INVISIBLE);
+            emptyView.setVisibility(View.INVISIBLE);
+            emptySearchView.setVisibility(View.INVISIBLE);
         }
     }
 
 
     private void createSearchView(MenuItem menuSearch) {
-        final SearchView searchView = (SearchView) mActionViewResolver.getActionView(menuSearch);
+        final SearchView searchView = (SearchView) actionViewResolver.getActionView(menuSearch);
         searchView.setQueryHint(getString(R.string.hint_search_saved_stories));
         searchView.setSearchableInfo(((SearchManager) getActivity()
                 .getSystemService(Context.SEARCH_SERVICE))
                 .getSearchableInfo(getActivity().getComponentName()));
         searchView.setIconified(!mSearchViewExpanded);
-        searchView.setQuery(mFilter, false);
+        searchView.setQuery(filter, false);
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -308,14 +317,14 @@ public class FavoriteFragment extends BaseListFragment
 
 
     private void clear() {
-        mAlertDialogBuilder
+        alertDialogBuilder
                 .init(getActivity())
                 .setMessage(R.string.confirm_clear)
                 .setPositiveButton(android.R.string.ok,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mFavoriteManager.clear(getActivity(), mFilter);
+                                favoriteManager.clear(getActivity(), filter);
                             }
                         })
                 .setNegativeButton(android.R.string.cancel, null)
@@ -324,19 +333,19 @@ public class FavoriteFragment extends BaseListFragment
 
 
     private void startExport() {
-        if (mProgressDialog == null) {
-            mProgressDialog = ProgressDialog.show(getActivity(), null,
+        if (progressDialog == null) {
+            progressDialog = ProgressDialog.show(getActivity(), null,
                     getString(R.string.preparing), true, true);
         } else {
-            mProgressDialog.show();
+            progressDialog.show();
         }
-        mFavoriteManager.get(getActivity(), mFilter);
+        favoriteManager.get(getActivity(), filter);
     }
 
 
     private void export(ArrayList<Favorite> favorites) {
-        if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
+        if (progressDialog != null) {
+            progressDialog.dismiss();
         }
         final Intent intent = AppUtils.makeEmailIntent(
                 getString(R.string.favorite_email_subject),
