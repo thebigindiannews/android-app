@@ -28,7 +28,7 @@ import com.squareup.leakcanary.RefWatcher;
 import dagger.ObjectGraph;
 
 
-public class Application extends android.app.Application {
+public class NewsApplication extends android.app.Application {
     public static Typeface TYPE_FACE = null;
     public static Typeface TYPE_FACE_BOLD = null;
     RefWatcher refWatcher;
@@ -36,8 +36,8 @@ public class Application extends android.app.Application {
 
 
     public static RefWatcher getRefWatcher(Context context) {
-        Application application = (Application) context.getApplicationContext();
-        return application.refWatcher;
+        NewsApplication newsApplication = (NewsApplication) context.getApplicationContext();
+        return newsApplication.refWatcher;
     }
 
 

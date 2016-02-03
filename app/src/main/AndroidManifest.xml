@@ -14,196 +14,195 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.enamakel.thebigindiannews" >
+<manifest package="com.enamakel.thebigindiannews"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-sdk tools:overrideLibrary="android.support.customtabs" />
+    <uses-sdk tools:overrideLibrary="android.support.customtabs"/>
 
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
     <uses-permission
         android:name="android.permission.GET_ACCOUNTS"
-        android:maxSdkVersion="22" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+        android:maxSdkVersion="22"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
-        android:name=".Application"
+        android:name=".NewsApplication"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
-        tools:ignore="UnusedAttribute" >
-        <activity android:name=".activities.ListActivity" >
+        tools:ignore="UnusedAttribute">
+        <activity android:name=".activities.ListActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.SingleStoryActivity"
-            android:label="@string/title_activity_item" >
-            <intent-filter android:label="@string/filter_title_item" >
-                <action android:name="android.intent.action.VIEW" />
+            android:label="@string/title_activity_item">
+            <intent-filter android:label="@string/filter_title_item">
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="news.ycombinator.com"
-                    android:pathPrefix="/item"
-                    android:scheme="https" />
-            </intent-filter>
-            <intent-filter android:label="@string/filter_title_item" >
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="news.ycombinator.com"
                     android:pathPrefix="/item"
-                    android:scheme="http" />
+                    android:scheme="https"/>
             </intent-filter>
-            <intent-filter android:label="@string/filter_title_item" >
-                <action android:name="android.intent.action.VIEW" />
+            <intent-filter android:label="@string/filter_title_item">
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="news.ycombinator.com"
+                    android:pathPrefix="/item"
+                    android:scheme="http"/>
+            </intent-filter>
+            <intent-filter android:label="@string/filter_title_item">
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="item"
                     android:pathPrefix="/"
-                    android:scheme="${applicationId}" />
+                    android:scheme="${applicationId}"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.FavoriteActivity"
             android:label="@string/title_activity_favorite"
-            android:launchMode="singleTop" > <!-- required to build search intents -->
+            android:launchMode="singleTop"> <!-- required to build search intents -->
             <meta-data
                 android:name="android.app.searchable"
-                android:resource="@xml/searchable_favorite" />
+                android:resource="@xml/searchable_favorite"/>
 
             <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
+                <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.NewActivity"
-            android:label="@string/title_activity_new" >
+            android:label="@string/title_activity_new">
         </activity>
         <activity
             android:name=".activities.PopularActivity"
-            android:label="@string/title_activity_popular" >
+            android:label="@string/title_activity_popular">
         </activity>
         <activity
             android:name=".activities.SearchActivity"
-            android:label="@string/title_activity_search" >
+            android:label="@string/title_activity_search">
             <meta-data
                 android:name="android.app.searchable"
-                android:resource="@xml/searchable_stories" />
+                android:resource="@xml/searchable_stories"/>
 
             <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
+                <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.AboutActivity"
-            android:label="@string/title_activity_about" >
+            android:label="@string/title_activity_about">
         </activity>
         <activity
             android:name=".activities.SettingsActivity"
-            android:label="@string/action_settings" >
+            android:label="@string/action_settings">
         </activity>
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppAlertDialog" >
+            android:theme="@style/AppAlertDialog">
         </activity>
         <activity
             android:name=".activities.SubmitActivity"
-            android:label="@string/title_activity_submit" >
+            android:label="@string/title_activity_submit">
             <intent-filter>
-                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
 
-                <data android:mimeType="text/plain" />
+                <data android:mimeType="text/plain"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.ComposeActivity"
-            android:label="@string/title_activity_compose" >
+            android:label="@string/title_activity_compose">
         </activity>
         <activity
             android:name=".activities.UserActivity"
-            android:label="@string/title_activity_user" >
-            <intent-filter android:label="@string/filter_title_item" >
-                <action android:name="android.intent.action.VIEW" />
+            android:label="@string/title_activity_user">
+            <intent-filter android:label="@string/filter_title_item">
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="news.ycombinator.com"
-                    android:pathPrefix="/user"
-                    android:scheme="https" />
-            </intent-filter>
-            <intent-filter android:label="@string/filter_title_item" >
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="news.ycombinator.com"
                     android:pathPrefix="/user"
-                    android:scheme="http" />
+                    android:scheme="https"/>
             </intent-filter>
-            <intent-filter android:label="@string/title_activity_user" >
-                <action android:name="android.intent.action.VIEW" />
+            <intent-filter android:label="@string/filter_title_item">
+                <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="news.ycombinator.com"
+                    android:pathPrefix="/user"
+                    android:scheme="http"/>
+            </intent-filter>
+            <intent-filter android:label="@string/title_activity_user">
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
                     android:host="user"
                     android:pathPrefix="/"
-                    android:scheme="${applicationId}" />
+                    android:scheme="${applicationId}"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.ThreadPreviewActivity"
             android:label="@string/title_activity_thread_preview"
-            android:theme="@style/AppAlertDialog" >
+            android:theme="@style/AppAlertDialog">
         </activity>
 
         <service
             android:name=".accounts.AuthenticatorService"
-            tools:ignore="ExportedService" >
+            tools:ignore="ExportedService">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
+                <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
 
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
+                android:resource="@xml/authenticator"/>
         </service>
 
         <provider
             android:name=".data.providers.MaterialisticProvider"
             android:authorities="com.enamakel.thebigindiannews.provider"
-            android:exported="false" />
+            android:exported="false"/>
         <provider
             android:name=".data.providers.SearchRecentSuggestionsProvider"
             android:authorities="com.enamakel.thebigindiannews.recentprovider"
-            android:exported="false" />
+            android:exported="false"/>
 
-        <receiver android:name=".AppUtils$ShareBroadcastReceiver" />
+        <receiver android:name=".AppUtils$ShareBroadcastReceiver"/>
 
     </application>
 
