@@ -3,6 +3,7 @@ package com.enamakel.thebigindiannews.data.models;
 
 import android.content.Context;
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -11,6 +12,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.style.StrikethroughSpan;
+import android.util.Log;
 
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.BuildConfig;
@@ -19,8 +21,11 @@ import com.enamakel.thebigindiannews.data.clients.BigIndianClient;
 import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
 import com.google.gson.annotations.Expose;
 
+import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 import lombok.Data;
@@ -52,6 +57,7 @@ public class StoryModel extends BaseCardModel<StoryModel> {
     boolean deleted;
     boolean dead;
     boolean viewed;
+
 
     @Data public class Thumbnail {
         @Expose String color;
@@ -172,5 +178,35 @@ public class StoryModel extends BaseCardModel<StoryModel> {
 
         // otherwise set reading time as less than a minute
         return lessThanAMinute;
+    }
+
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public StoryModel createFromParcel(Parcel in) {
+            String json = in.readString();
+            return gson.fromJson(json, StoryModel.class);
+        }
+
+
+        public StoryModel[] newArray(int size) {
+            return new StoryModel[size];
+        }
+    };
+
+
+    @Override
+    public long getLongId() {
+        try {
+            String unecryptedString = _id + title;
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            digest.update(unecryptedString.getBytes());
+            byte[] hash = digest.digest();
+            BigInteger bigInteger = new BigInteger(hash);
+            return bigInteger.longValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return super.getLongId();
     }
 }
