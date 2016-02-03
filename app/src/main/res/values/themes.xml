@@ -47,9 +47,9 @@
 
     <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
         <!-- color palette -->
-        <item name="colorPrimary">@color/orange500</item>
-        <item name="colorPrimaryDark">@color/orange700</item>
-        <item name="colorAccent">@color/redA100</item>
+        <item name="colorPrimary">@color/red500</item>
+        <item name="colorPrimaryDark">@color/red700</item>
+        <item name="colorAccent">@color/red300</item>
         <item name="colorCardBackground">@color/cardview_dark_background</item>
         <item name="colorCardHighlight">@color/grey800</item>
         <item name="android:textColorPrimary">@color/white</item>
@@ -71,9 +71,9 @@
     </style>
 
     <style name="AppTheme.Sepia">
-        <item name="colorPrimary">@color/orange300</item>
-        <item name="colorPrimaryDark">@color/orange500</item>
-        <item name="colorCardBackground">@color/orange50</item>
+        <item name="colorPrimary">@color/red500</item>
+        <item name="colorPrimaryDark">@color/red700</item>
+        <item name="colorAccent">@color/red300</item>
         <item name="android:textColorPrimary">@color/brown500</item>
         <item name="android:textColorSecondary">@color/brown300</item>
         <item name="alertDialogTheme">@style/AppAlertDialog.Sepia</item>
@@ -90,9 +90,9 @@
     </style>
 
     <style name="AppTheme.Solarized">
-        <item name="colorPrimary">@color/orange300</item>
-        <item name="colorPrimaryDark">@color/orange500</item>
-        <item name="colorAccent">@color/solarizedOrange</item>
+        <item name="colorPrimary">@color/red500</item>
+        <item name="colorPrimaryDark">@color/red700</item>
+        <item name="colorAccent">@color/red300</item>
         <item name="colorCardBackground">@color/solarizedBase3</item>
         <item name="colorCardHighlight">@color/solarizedBase2</item>
         <item name="android:textColorPrimary">@color/solarizedBase01</item>
@@ -122,7 +122,7 @@
         <item name="android:textColorTertiary">?android:textColorPrimary</item>
         <item name="android:textColorLink">?colorAccent</item>
         <item name="colorCardBackground">@color/grey100</item>
-        <item name="colorCardHighlight">@color/orange100</item>
+        <item name="colorCardHighlight">@color/red100</item>
     </style>
 
     <style name="AppAlertDialog.Dark" parent="Theme.AppCompat.Dialog.Alert">
@@ -136,14 +136,14 @@
     </style>
 
     <style name="AppAlertDialog.Sepia">
-        <item name="colorPrimary">@color/orange300</item>
+        <item name="colorPrimary">@color/red300</item>
         <item name="android:textColorPrimary">@color/brown500</item>
         <item name="android:textColorSecondary">@color/brown300</item>
         <item name="colorCardBackground">@color/orange50</item>
     </style>
 
     <style name="AppAlertDialog.Green">
-        <item name="colorPrimary">@color/orange300</item>
+        <item name="colorPrimary">@color/red300</item>
         <item name="android:textColorPrimary">@color/teal900</item>
         <item name="android:textColorSecondary">@color/teal500</item>
         <item name="colorCardBackground">@color/teal50</item>
@@ -151,7 +151,7 @@
     </style>
 
     <style name="AppAlertDialog.Solarized">
-        <item name="colorPrimary">@color/orange300</item>
+        <item name="colorPrimary">@color/red300</item>
         <item name="android:textColorPrimary">@color/solarizedBase01</item>
         <item name="android:textColorSecondary">@color/solarizedBase1</item>
         <item name="colorCardBackground">@color/solarizedBase3</item>

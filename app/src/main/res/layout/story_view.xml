@@ -100,7 +100,6 @@
                     android:id="@id/source"
                     style="@style/textSubtitleStyle.Italic"
                     android:text="@string/loading_text"
-                    android:textColor="#000"
                     android:paddingBottom="@dimen/padding"/>
 
                 <LinearLayout

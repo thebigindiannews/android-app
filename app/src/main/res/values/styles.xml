@@ -72,6 +72,10 @@
         <item name="android:paddingRight">@dimen/padding</item>
     </style>
 
+    <style name="textSourceStyle">
+        <item name="android:textAppearance">@style/TextAppearance.App.Subtitle.Italic</item>
+    </style>
+
     <style name="textSubtitleStyle">
         <item name="android:textAppearance">@style/TextAppearance.App.Subtitle</item>
         <item name="android:singleLine">true</item>
