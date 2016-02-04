@@ -19,7 +19,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:clickable="true"
-    tools:context="com.enamakel.thebigindiannews.fragments.DrawerFragment">
+    tools:context="com.enamakel.thebigindiannews.fragments.DrawerFragment"
+              android:weightSum="1">
 
     <FrameLayout
         android:background="?attr/colorPrimary"
@@ -45,6 +46,24 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
     </FrameLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:id="@+id/imageView"
+        android:src="@drawable/logo512"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="www.thebigindian.news"
+        android:id="@+id/textView"
+        android:textStyle="bold"
+        android:textColor="#55000000"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"/>
 
     <View
         android:background="@color/blackT12"
