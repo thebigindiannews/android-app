@@ -32,3 +32,4 @@ proguard/
 secrets.properties
 google-services.json
 screenshots
+*.sublime-*
