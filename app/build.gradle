@@ -1,13 +1,11 @@
-apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
-apply plugin: 'com.google.gms.google-services'
-
+apply plugin: "com.android.application"
+apply plugin: "android-apt"
 
 // Helper function to get the secret keys from the 'secrets.properties' file
 def getSecret(keyname) {
     def Properties props = new Properties()
-    props.load(new FileInputStream(new File('secrets.properties')))
-    return props[keyname]
+    props.load(new FileInputStream(new File("secrets.properties")))
+    return "\"" + props[keyname] + "\""
 }
 
 
@@ -19,17 +17,18 @@ android {
         applicationId "com.enamakel.thebigindiannews"
         minSdkVersion 9
         targetSdkVersion 23
-        versionCode 44
+        versionCode 49
         versionName "1.0.0"
-        buildConfigField "String", "GITHUB_TOKEN", "\"" + getSecret("GITHUB_KEY") + "\""
-        buildConfigField "String", "READABILITY_TOKEN", "\"" + getSecret("READABILITY_KEY") + "\""
-        buildConfigField "String", "API_KEY", "\"" + getSecret("API_KEY") + "\""
+
+        buildConfigField "String", "API_KEY", getSecret("API_KEY")
+        buildConfigField "String", "GITHUB_TOKEN", getSecret("GITHUB_KEY")
+        buildConfigField "String", "READABILITY_TOKEN", getSecret("READABILITY_KEY")
     }
 
     buildTypes {
         leak.initWith(buildTypes.debug)
         release {
-            minifyEnabled true
+//            minifyEnabled true
 //            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             zipAlignEnabled true
         }
@@ -41,25 +40,27 @@ android {
         textReport true
         warningsAsErrors true
         abortOnError true
-        informational 'Overdraw' // http://b.android.com/169879
+        informational "Overdraw" // http://b.android.com/169879
         explainIssues false
         absolutePaths false
     }
 }
 
+
 ext {
     AAVersion = "3.3.2"
     autoParcelVersion = "0.1"
-    daggerVersion = '1.2.2'
-    leakCanaryVersion = '1.3.1'
+    daggerVersion = "1.2.2"
+    googleAnalyticsVersion = "8.3.0"
+    leakCanaryVersion = "1.3.1"
     lombokVersion = "1.16.6"
-    okHttpVersion = '3.0.0-RC1'
+    okHttpVersion = "3.0.0-RC1"
     picassoVersion = "2.5.2"
-    retrofit2Version = '2.0.0-beta3'
-    retrofitVersion = '2.0.0-beta2'
-    supportVersion = '23.1.1'
-    googleAnalyticsVersion = '8.3.0'
+    retrofit2Version = "2.0.0-beta3"
+    retrofitVersion = "2.0.0-beta2"
+    supportVersion = "23.1.1"
 }
+
 
 apt {
     arguments {
@@ -74,6 +75,7 @@ apt {
         // logFile '/var/log/aa.log'
     }
 }
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -127,3 +129,4 @@ dependencies {
 
 apply from: "${rootProject.getRootDir()}/robolectric.gradle"
 apply from: "${rootProject.getRootDir()}/jacoco.gradle"
+apply plugin: "com.google.gms.google-services"

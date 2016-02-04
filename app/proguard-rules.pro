@@ -15,4 +15,5 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontobfuscate
 # -keep class !com.enamakel.thebigindiannews.** { *; }
