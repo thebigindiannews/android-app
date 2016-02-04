@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.data.providers;
 
+
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -28,20 +29,25 @@ import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-public class MaterialisticProvider extends ContentProvider {
+
+public class BigIndianProvider extends ContentProvider {
     private static final String PROVIDER_AUTHORITY = "com.enamakel.thebigindiannews.provider";
     private static final Uri BASE_URI = Uri.parse("content://" + PROVIDER_AUTHORITY);
+
     public static final Uri URI_FAVORITE = BASE_URI.buildUpon()
             .appendPath(FavoriteEntry.TABLE_NAME)
             .build();
+
     public static final Uri URI_VIEWED = BASE_URI.buildUpon()
             .appendPath(ViewedEntry.TABLE_NAME)
             .build();
+
     public static final Uri URI_READABILITY = BASE_URI.buildUpon()
             .appendPath(ReadabilityEntry.TABLE_NAME)
             .build();
-    private static final String READABILITY_MAX_ENTRIES = "50";
-    private DbHelper dbHelper;
+
+    static final String READABILITY_MAX_ENTRIES = "50";
+    DbHelper dbHelper;
 
 
     @Override
@@ -90,13 +96,13 @@ public class MaterialisticProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+
         if (URI_FAVORITE.equals(uri)) {
-            int updated = update(uri, values, FavoriteEntry.COLUMN_NAME_ITEM_ID + " = ?",
-                    new String[]{values.getAsString(FavoriteEntry.COLUMN_NAME_ITEM_ID)});
+            int updated = update(uri, values, FavoriteEntry.COLUMN_NAME_ITEMJSON + " = ?",
+                    new String[]{values.getAsString(FavoriteEntry.COLUMN_NAME_ITEMJSON)});
             long id = -1;
-            if (updated == 0) {
-                id = db.insert(FavoriteEntry.TABLE_NAME, null, values);
-            }
+            if (updated == 0) id = db.insert(FavoriteEntry.TABLE_NAME, null, values);
+
             return id == -1 ? null : ContentUris.withAppendedId(URI_FAVORITE, id);
         } else if (URI_VIEWED.equals(uri)) {
             int updated = update(uri, values, ViewedEntry.COLUMN_NAME_ITEM_ID + " = ?",
@@ -127,13 +133,11 @@ public class MaterialisticProvider extends ContentProvider {
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String table = null;
-        if (URI_FAVORITE.equals(uri)) {
-            table = FavoriteEntry.TABLE_NAME;
-        } else if (URI_VIEWED.equals(uri)) {
-            table = ViewedEntry.TABLE_NAME;
-        } else if (URI_READABILITY.equals(uri)) {
-            table = ReadabilityEntry.TABLE_NAME;
-        }
+
+        if (URI_FAVORITE.equals(uri)) table = FavoriteEntry.TABLE_NAME;
+        else if (URI_VIEWED.equals(uri)) table = ViewedEntry.TABLE_NAME;
+        else if (URI_READABILITY.equals(uri)) table = ReadabilityEntry.TABLE_NAME;
+
 
         if (TextUtils.isEmpty(table)) {
             return 0;
@@ -146,17 +150,12 @@ public class MaterialisticProvider extends ContentProvider {
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String table = null;
-        if (URI_FAVORITE.equals(uri)) {
-            table = FavoriteEntry.TABLE_NAME;
-        } else if (URI_VIEWED.equals(uri)) {
-            table = ViewedEntry.TABLE_NAME;
-        } else if (URI_READABILITY.equals(uri)) {
-            table = ReadabilityEntry.TABLE_NAME;
-        }
 
-        if (TextUtils.isEmpty(table)) {
-            return 0;
-        }
+        if (URI_FAVORITE.equals(uri)) table = FavoriteEntry.TABLE_NAME;
+        else if (URI_VIEWED.equals(uri)) table = ViewedEntry.TABLE_NAME;
+        else if (URI_READABILITY.equals(uri)) table = ReadabilityEntry.TABLE_NAME;
+
+        if (TextUtils.isEmpty(table)) return 0;
 
         return db.update(table, values, selection, selectionArgs);
     }
@@ -165,17 +164,20 @@ public class MaterialisticProvider extends ContentProvider {
     public interface FavoriteEntry extends BaseColumns {
         String TABLE_NAME = "favorite";
         String MIME_TYPE = "vnd.android.cursor.dir/vnd." + PROVIDER_AUTHORITY + "." + TABLE_NAME;
-        String COLUMN_NAME_ITEM_ID = "itemid";
-        String COLUMN_NAME_URL = "url";
+        String COLUMN_NAME_ITEMJSON = "json";
+        //        String COLUMN_NAME_URL = "url";
         String COLUMN_NAME_TITLE = "title";
+        String COLUMN_NAME_EXCERPT = "excerpt";
         String COLUMN_NAME_TIME = "time";
     }
+
 
     public interface ViewedEntry extends BaseColumns {
         String TABLE_NAME = "viewed";
         String MIME_TYPE = "vnd.android.cursor.dir/vnd." + PROVIDER_AUTHORITY + "." + TABLE_NAME;
         String COLUMN_NAME_ITEM_ID = "itemid";
     }
+
 
     public interface ReadabilityEntry extends BaseColumns {
         String TABLE_NAME = "readability";
@@ -184,46 +186,49 @@ public class MaterialisticProvider extends ContentProvider {
         String COLUMN_NAME_CONTENT = "content";
     }
 
-    private static class DbHelper extends SQLiteOpenHelper {
-        private static final String DB_NAME = "Materialistic.db";
-        private static final int DB_VERSION = 3;
-        private static final String TEXT_TYPE = " TEXT";
-        private static final String INTEGER_TYPE = " INTEGER";
-        private static final String PRIMARY_KEY = " PRIMARY KEY";
-        private static final String COMMA_SEP = ",";
-        private static final String ORDER_DESC = " DESC";
-        private static final String SQL_CREATE_FAVORITE_TABLE =
+
+    static class DbHelper extends SQLiteOpenHelper {
+        static final String DB_NAME = "Materialistic.db";
+        static final int DB_VERSION = 4;
+        static final String TEXT_TYPE = " TEXT";
+        static final String INTEGER_TYPE = " INTEGER";
+        static final String PRIMARY_KEY = " PRIMARY KEY";
+        static final String COMMA_SEP = ",";
+        static final String ORDER_DESC = " DESC";
+        static final String SQL_CREATE_FAVORITE_TABLE =
                 "CREATE TABLE " + FavoriteEntry.TABLE_NAME + " (" +
-                        FavoriteEntry._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP +
-                        FavoriteEntry.COLUMN_NAME_ITEM_ID + TEXT_TYPE + COMMA_SEP +
-                        FavoriteEntry.COLUMN_NAME_URL + TEXT_TYPE + COMMA_SEP +
+                        FavoriteEntry._ID + TEXT_TYPE + PRIMARY_KEY + COMMA_SEP +
+                        FavoriteEntry.COLUMN_NAME_ITEMJSON + TEXT_TYPE + COMMA_SEP +
+                        FavoriteEntry.COLUMN_NAME_EXCERPT + TEXT_TYPE + COMMA_SEP +
                         FavoriteEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                         FavoriteEntry.COLUMN_NAME_TIME + TEXT_TYPE +
                         " )";
-        private static final String SQL_CREATE_VIEWED_TABLE =
+        static final String SQL_CREATE_VIEWED_TABLE =
                 "CREATE TABLE " + ViewedEntry.TABLE_NAME + " (" +
-                        ViewedEntry._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP +
+                        ViewedEntry._ID + TEXT_TYPE + PRIMARY_KEY + COMMA_SEP +
                         ViewedEntry.COLUMN_NAME_ITEM_ID + TEXT_TYPE +
                         " )";
-        private static final String SQL_CREATE_READABILITY_TABLE =
+        static final String SQL_CREATE_READABILITY_TABLE =
                 "CREATE TABLE " + ReadabilityEntry.TABLE_NAME + " (" +
-                        ReadabilityEntry._ID + INTEGER_TYPE + PRIMARY_KEY + COMMA_SEP +
+                        ReadabilityEntry._ID + TEXT_TYPE + PRIMARY_KEY + COMMA_SEP +
                         ReadabilityEntry.COLUMN_NAME_ITEM_ID + TEXT_TYPE + COMMA_SEP +
                         ReadabilityEntry.COLUMN_NAME_CONTENT + TEXT_TYPE +
                         " )";
-        private static final String SQL_DROP_FAVORITE_TABLE =
+
+        static final String SQL_DROP_FAVORITE_TABLE =
                 "DROP TABLE IF EXISTS " + FavoriteEntry.TABLE_NAME;
-        private static final String SQL_DROP_VIEWED_TABLE =
+        static final String SQL_DROP_VIEWED_TABLE =
                 "DROP TABLE IF EXISTS " + ViewedEntry.TABLE_NAME;
-        private static final String SQL_DROP_READABILITY_TABLE =
+        static final String SQL_DROP_READABILITY_TABLE =
                 "DROP TABLE IF EXISTS " + ReadabilityEntry.TABLE_NAME;
-        private static final String SQL_WHERE_READABILITY_TRUNCATE = ReadabilityEntry._ID + " IN " +
+
+        static final String SQL_WHERE_READABILITY_TRUNCATE = ReadabilityEntry._ID + " IN " +
                 "(SELECT " + ReadabilityEntry._ID + " FROM " + ReadabilityEntry.TABLE_NAME +
                 " ORDER BY " + ReadabilityEntry._ID + " DESC" +
                 " LIMIT -1 OFFSET " + READABILITY_MAX_ENTRIES + ")";
 
 
-        private DbHelper(Context context) {
+        DbHelper(Context context) {
             super(context, DB_NAME, null, DB_VERSION);
         }
 
@@ -246,10 +251,12 @@ public class MaterialisticProvider extends ContentProvider {
                     db.execSQL(SQL_CREATE_VIEWED_TABLE);
                     break;
                 default:
-                    db.execSQL(SQL_DROP_FAVORITE_TABLE);
-                    db.execSQL(SQL_DROP_VIEWED_TABLE);
-                    db.execSQL(SQL_DROP_READABILITY_TABLE);
-                    onCreate(db);
+                    if (oldVersion < newVersion) {
+                        db.execSQL(SQL_DROP_FAVORITE_TABLE);
+                        db.execSQL(SQL_DROP_VIEWED_TABLE);
+                        db.execSQL(SQL_DROP_READABILITY_TABLE);
+                        onCreate(db);
+                    }
                     break;
             }
         }

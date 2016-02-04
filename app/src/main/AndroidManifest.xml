@@ -195,7 +195,7 @@
         </service>
 
         <provider
-            android:name=".data.providers.MaterialisticProvider"
+            android:name=".data.providers.BigIndianProvider"
             android:authorities="com.enamakel.thebigindiannews.provider"
             android:exported="false"/>
         <provider
