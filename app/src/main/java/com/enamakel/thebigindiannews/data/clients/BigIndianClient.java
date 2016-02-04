@@ -33,6 +33,7 @@ public class BigIndianClient {
     static String TAG = "BigIndianClient";
 
     public static final String BASE_WEB_URL = "https://thebigindian.news";
+    public static final String BASE_CDN_URL = "https://cdn.thebigindian.news";
     //    public static final String BASE_WEB_URL = "http://192.168.1.106:3000";
     public static final String BASE_API_URL = BASE_WEB_URL + "/api/";
     public static final String WEB_STORY_PATH = BASE_WEB_URL + "/story/%s";
@@ -78,11 +79,11 @@ public class BigIndianClient {
 
         switch (mode) {
             case LATEST_STORIES:
-                restService.search("true", page).enqueue(callback);
+                restService.latest("true", page).enqueue(callback);
                 break;
 
             case TOP_STORIES:
-                restService.search("false", page).enqueue(callback);
+                restService.top(page).enqueue(callback);
                 break;
         }
     }
@@ -212,9 +213,11 @@ public class BigIndianClient {
 
 
     interface RestService {
-        @Headers("Cache-Control: max-age=600")
         @GET("news/stories")
-        Call<StoryHits> search(@Query("recent") String recent, @Query("page") int page);
+        Call<StoryHits> latest(@Query("recent") String recent, @Query("page") int page);
+
+        @GET("news/stories")
+        Call<StoryHits> top(@Query("page") int page);
 
 
         @GET("news/stories/{id}")
