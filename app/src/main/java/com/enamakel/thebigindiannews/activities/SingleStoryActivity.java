@@ -128,7 +128,7 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
     void initializeFromPreferences() {
         externalBrowser = Preferences.externalBrowserEnabled(this);
         if (getIntent().getBooleanExtra(EXTRA_OPEN_COMMENTS, false))
-            storyViewMode = Preferences.StoryViewMode.Comment;
+            storyViewMode = Preferences.StoryViewMode.Article;
         else storyViewMode = Preferences.getDefaultStoryView(this);
     }
 
@@ -138,10 +138,9 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
         super.onCreate(savedInstanceState);
         Log.d(getLocalClassName(), "onCreate()");
         externalBrowser = Preferences.externalBrowserEnabled(this);
-        externalBrowser = false;
 
         if (getIntent().getBooleanExtra(EXTRA_OPEN_COMMENTS, false))
-            storyViewMode = Preferences.StoryViewMode.Comment;
+            storyViewMode = Preferences.StoryViewMode.Article;
         else storyViewMode = Preferences.getDefaultStoryView(this);
 
         setContentView(R.layout.activity_item);
@@ -288,7 +287,6 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
 
         bindFavorite();
         sessionManager.view(this, story.getId());
-//        voteButton.setVisibility(View.VISIBLE);
 
 //        replyButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -313,21 +311,9 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
 
         final TextView postedTextView = (TextView) findViewById(R.id.posted);
 //        postedTextView.setText(story.getDisplayedTime(this, false, true));
-//        postedTextView.setMovementMethod(LinkMovementMethod.getInstance());
-
+        postedTextView.setMovementMethod(LinkMovementMethod.getInstance());
         postedTextView.setText(String.format("read %d times · %s read", story.getClicks_count(),
                 story.getReadtime()));
-
-//        switch (story.getType()) {
-//            case ItemManager.Item.JOB_TYPE:
-//                postedTextView.setCompoundDrawablesWithIntrinsicBounds(
-//                        R.drawable.ic_work_white_18dp, 0, 0, 0);
-//                break;
-//            case ItemManager.Item.POLL_TYPE:
-//                postedTextView.setCompoundDrawablesWithIntrinsicBounds(
-//                        R.drawable.ic_poll_white_18dp, 0, 0, 0);
-//                break;
-//        }
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.divider));
@@ -357,14 +343,17 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
         }
 
         if (externalBrowser) {
-            findViewById(R.id.header_card_view).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AppUtils.openWebUrlExternal(SingleStoryActivity.this,
-                            story.getTitle(),
-                            story.getUrl());
-                }
-            });
+            AppUtils.openWebUrlExternal(SingleStoryActivity.this,
+                    story.getTitle(),
+                    story.getUrl());
+//            findViewById(R.id.header_card_view).setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    AppUtils.openWebUrlExternal(SingleStoryActivity.this,
+//                            story.getTitle(),
+//                            story.getUrl());
+//                }
+//            });
         } else findViewById(R.id.header_card_view).setClickable(false);
     }
 

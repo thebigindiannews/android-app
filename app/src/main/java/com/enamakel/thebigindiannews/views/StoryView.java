@@ -157,10 +157,11 @@ public class StoryView extends RelativeLayout implements Checkable {
 
 
         title.setText(story.getTitle());
-        description.setText(story.getExcerpt().replace('\n', ' '));
+        if (story.getExcerpt() != null)
+            description.setText(story.getExcerpt().replace('\n', ' '));
+
         source.setText(story.getSource());
         source.setCompoundDrawables(null, null, null, null);
-
     }
 
 

@@ -35,21 +35,21 @@ public class HelpLazyLoadView extends ScrollView {
     protected void onFinishInflate() {
         super.onFinishInflate();
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.comments));
+//        tabLayout.addTab(tabLayout.newTab().setText(R.string.comments));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.article));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.readability));
         Preferences.StoryViewMode defaultView = Preferences.getDefaultStoryView(getContext());
-        int defaultTab;
+        int defaultTab = 0;
         switch (defaultView) {
-            case Comment:
-            default:
+//            case Comment:
+//            default:
+//                defaultTab = 0;
+//                break;
+            case Article:
                 defaultTab = 0;
                 break;
-            case Article:
-                defaultTab = 1;
-                break;
             case Readability:
-                defaultTab = 2;
+                defaultTab = 1;
                 break;
         }
         tabLayout.getTabAt(defaultTab).select();

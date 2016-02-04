@@ -37,7 +37,6 @@ import java.util.Map;
 
 public class Preferences {
     public enum StoryViewMode {
-        Comment,
         Article,
         Readability
     }
@@ -45,7 +44,7 @@ public class Preferences {
 
     private static final BoolToStringPref[] PREF_MIGRATION = new BoolToStringPref[]{
             new BoolToStringPref(R.string.pref_item_click, false,
-                    R.string.pref_story_display, R.string.pref_story_display_value_comments),
+                    R.string.pref_story_display, R.string.pref_story_display_value_article),
             new BoolToStringPref(R.string.pref_item_search_recent, true,
                     R.string.pref_search_sort, R.string.pref_search_sort_value_default)
     };
@@ -132,8 +131,8 @@ public class Preferences {
                 .getString(context.getString(R.string.pref_story_display),
                         context.getString(R.string.pref_story_display_value_article));
 
-        if (TextUtils.equals(context.getString(R.string.pref_story_display_value_comments), pref))
-            return StoryViewMode.Comment;
+//        if (TextUtils.equals(context.getString(R.string.pref_story_display_value_comments), pref))
+//            return StoryViewMode.Comment;
         if (TextUtils.equals(context.getString(R.string.pref_story_display_value_readability), pref))
             return StoryViewMode.Readability;
 

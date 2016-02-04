@@ -16,64 +16,66 @@
 
 package com.enamakel.thebigindiannews.fragments.base;
 
+
 import android.os.Bundle;
 
 import com.enamakel.thebigindiannews.AppUtils;
-import com.enamakel.thebigindiannews.fragments.base.BaseFragment;
 import com.enamakel.thebigindiannews.util.Preferences;
+
 
 /**
  * Base fragment that controls load timing depends on WIFI and visibility
  */
 public abstract class LazyLoadFragment extends BaseFragment {
     private static final String STATE_EAGER_LOAD = "state:eagerLoad";
-    private boolean mEagerLoad;
-    private boolean mActivityCreated;
+    private boolean eagerLoad;
+    private boolean activityCreated;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            mEagerLoad = savedInstanceState.getBoolean(STATE_EAGER_LOAD);
-        } else {
-            mEagerLoad = !Preferences.shouldLazyLoad(getActivity()) && AppUtils.isOnWiFi(getContext());
-        }
+        if (savedInstanceState != null) eagerLoad = savedInstanceState.getBoolean(STATE_EAGER_LOAD);
+        else eagerLoad = !Preferences.shouldLazyLoad(getActivity()) &&
+                AppUtils.isOnWiFi(getContext());
     }
+
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && !mEagerLoad) {
-            mEagerLoad = true;
+        if (isVisibleToUser && !eagerLoad) {
+            eagerLoad = true;
             eagerLoad();
         }
     }
 
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mActivityCreated = true;
+        activityCreated = true;
         eagerLoad();
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(STATE_EAGER_LOAD, mEagerLoad);
+        outState.putBoolean(STATE_EAGER_LOAD, eagerLoad);
     }
+
 
     /**
      * Load data after fragment becomes visible or if WIFI is enabled
      */
     protected abstract void load();
 
+
     protected final void eagerLoad() {
-        if (!mEagerLoad) {
-            return;
-        }
-        if (!mActivityCreated) {
-            return;
-        }
+        if (!eagerLoad) return;
+        if (!activityCreated) return;
+
         load();
     }
 }

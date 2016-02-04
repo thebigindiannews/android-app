@@ -26,7 +26,6 @@ import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
-
     @VisibleForTesting
     protected SharedPreferences.OnSharedPreferenceChangeListener listener;
 

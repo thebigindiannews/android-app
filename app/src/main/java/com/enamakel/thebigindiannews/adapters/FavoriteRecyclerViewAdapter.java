@@ -30,8 +30,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.ComposeActivity;
+import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.util.MenuTintDelegate;
@@ -282,22 +284,57 @@ public class FavoriteRecyclerViewAdapter extends ListRecyclerViewAdapter
     }
 
 
-    void showMoreOptions(View v, final StoryModel item) {
-        popupMenu.create(context, v, Gravity.NO_GRAVITY);
+    void showMoreOptions(View view, final StoryModel story) {
+        popupMenu.create(context, view, Gravity.NO_GRAVITY);
         popupMenu.inflate(R.menu.menu_contextual_favorite);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                if (menuItem.getItemId() == R.id.menu_contextual_comment) {
-                    context.startActivity(new Intent(context, ComposeActivity.class)
-                            .putExtra(ComposeActivity.EXTRA_PARENT_ID, item.getId())
-                            .putExtra(ComposeActivity.EXTRA_PARENT_TEXT, item.getTitle()));
-                    return true;
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_contextual_share:
+                        AppUtils.share(FavoriteRecyclerViewAdapter.this.context, alertDialogBuilder, story);
+                        return true;
+
+                    case R.id.menu_contextual_open:
+                        context.startActivity(
+                                new Intent(context, SingleStoryActivity.class)
+                                        .putExtra(SingleStoryActivity.EXTRA_ITEM, story)
+                                        .putExtra(SingleStoryActivity.EXTRA_OPEN_COMMENTS, true));
+                        return true;
                 }
+
+//                if (item.getItemId() == R.id.menu_contextual_comment) {
+//                    context.startActivity(new Intent(context, ComposeActivity.class)
+//                            .putExtra(ComposeActivity.EXTRA_PARENT_ID, story.get_id())
+//                            .putExtra(ComposeActivity.EXTRA_PARENT_TEXT, story.getTitle()));
+//                    return true;
+//                }
+//
+//                if (item.getItemId() == R.id.menu_contextual_profile) {
+//                    context.startActivity(new Intent(context, UserActivity.class)
+//                            .putExtra(UserActivity.EXTRA_USERNAME, story.getCreated_by()));
+//                    return true;
+//                }
 
                 return false;
             }
         });
         popupMenu.show();
+//        popupMenu.create(context, v, Gravity.NO_GRAVITY);
+//        popupMenu.inflate(R.menu.menu_contextual_favorite);
+//        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem menuItem) {
+//                if (menuItem.getItemId() == R.id.menu_contextual_comment) {
+//                    context.startActivity(new Intent(context, ComposeActivity.class)
+//                            .putExtra(ComposeActivity.EXTRA_PARENT_ID, item.getId())
+//                            .putExtra(ComposeActivity.EXTRA_PARENT_TEXT, item.getTitle()));
+//                    return true;
+//                }
+//
+//                return false;
+//            }
+//        });
+//        popupMenu.show();
     }
 }

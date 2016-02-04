@@ -41,6 +41,7 @@ import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
+import com.enamakel.thebigindiannews.fragments.base.LazyLoadFragment;
 import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.util.Scrollable;
 import com.enamakel.thebigindiannews.widgets.CommentItemDecoration;
