@@ -70,7 +70,7 @@ public class StoryModel extends BaseCardModel<StoryModel> {
 
 
         public String getUrl() {
-            if (filename != null) return BigIndianClient.BASE_WEB_URL + "/uploads/" + filename;
+            if (filename != null) return BigIndianClient.BASE_CDN_URL + "/uploads/" + filename;
             return null;
         }
     }
