@@ -26,6 +26,7 @@ import android.support.annotation.StyleRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +35,7 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.enamakel.thebigindiannews.AppUtils;
@@ -41,10 +43,12 @@ import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.clients.ReadabilityClient;
 import com.enamakel.thebigindiannews.data.clients.ReadabilityClient2;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
+import com.enamakel.thebigindiannews.fragments.base.LazyLoadFragment;
 import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.util.Scrollable;
 
 import java.lang.ref.WeakReference;
+import java.net.URI;
 
 import javax.inject.Inject;
 
@@ -67,6 +71,7 @@ public class ReadabilityFragment extends LazyLoadFragment implements Scrollable 
     String typefaceName;
     String[] fontOptionValues;
     boolean isAttached;
+    StoryModel story;
     String textColor;
     String textLinkColor;
 
@@ -196,11 +201,10 @@ public class ReadabilityFragment extends LazyLoadFragment implements Scrollable 
 
 
     private void parse() {
-        StoryModel item = getArguments().getParcelable(EXTRA_ITEM);
-        if (item == null) return;
+        story = getArguments().getParcelable(EXTRA_ITEM);
+        if (story == null) return;
         progressBar.setVisibility(View.VISIBLE);
-        ReadabilityClient2.parse(item.getId(), item.getUrl(), new ReadabilityCallback(this));
-//        readabilityClient.parse(item.getId(), item.getUrl(), new ReadabilityCallback(this));
+        ReadabilityClient2.parse(story.getId(), story.getUrl(), new ReadabilityCallback(this));
     }
 
 
@@ -221,7 +225,42 @@ public class ReadabilityFragment extends LazyLoadFragment implements Scrollable 
 
 
     private void render() {
-        webView.loadDataWithBaseURL(null, wrap(content), "text/html", "UTF-8", null);
+        String host = "/";
+        if (story != null) host = getDomainName(story.getUrl());
+
+        Log.d("fuck",  wrap(content));
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onReceivedError(WebView view, int errorCode,
+                                        String description, String failingUrl) {
+                Log.d("fuckss", failingUrl);
+            }
+
+
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                Log.d("fuckss", url);
+                view.loadUrl(url);
+                return true;
+            }
+
+
+            public void onPageFinished(WebView view, String url) {
+
+            }
+        });
+        webView.loadDataWithBaseURL(host, wrap(content), "text/html", "UTF-8", null);
+    }
+
+
+    String getDomainName(String url) {
+        try {
+            URI uri = new URI(url);
+//            return uri.getHost();
+            return uri.getScheme() + "://" + uri.getHost() + "/";
+        } catch (Exception e) {
+
+        }
+        return "/";
     }
 
 

@@ -46,6 +46,7 @@ import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
+import com.enamakel.thebigindiannews.fragments.base.LazyLoadFragment;
 import com.enamakel.thebigindiannews.util.Scrollable;
 
 import java.lang.ref.WeakReference;
@@ -55,14 +56,13 @@ import javax.inject.Named;
 
 
 public class WebFragment extends LazyLoadFragment implements Scrollable {
-
-    private static final String EXTRA_ITEM = WebFragment.class.getName() + ".EXTRA_ITEM";
-    private StoryModel story;
-    private WebView webView;
-    private TextView textView;
-    private NestedScrollView scrollView;
-    private boolean isHackerNewsUrl;
-    private boolean mExternalRequired = false;
+    static final String EXTRA_ITEM = WebFragment.class.getName() + ".EXTRA_ITEM";
+    StoryModel story;
+    WebView webView;
+    TextView textView;
+    NestedScrollView scrollView;
+    boolean isHackerNewsUrl;
+    boolean externalRequired = false;
     @Inject @Named(ActivityModule.HN) ItemManager mItemManager;
 
 
@@ -101,7 +101,7 @@ public class WebFragment extends LazyLoadFragment implements Scrollable {
                 if (newProgress == 100) {
                     progressBar.setVisibility(View.GONE);
                     webView.setBackgroundColor(Color.WHITE);
-                    webView.setVisibility(mExternalRequired ? View.GONE : View.VISIBLE);
+                    webView.setVisibility(externalRequired ? View.GONE : View.VISIBLE);
                 }
             }
         });
@@ -116,7 +116,7 @@ public class WebFragment extends LazyLoadFragment implements Scrollable {
                 if (intent.resolveActivity(getActivity().getPackageManager()) == null) {
                     return;
                 }
-                mExternalRequired = true;
+                externalRequired = true;
                 webView.setVisibility(View.GONE);
                 view.findViewById(R.id.empty).setVisibility(View.VISIBLE);
                 view.findViewById(R.id.download_button).setOnClickListener(new View.OnClickListener() {
@@ -165,7 +165,7 @@ public class WebFragment extends LazyLoadFragment implements Scrollable {
     }
 
 
-    private View createLocalView(ViewGroup container, Bundle savedInstanceState) {
+    View createLocalView(ViewGroup container, Bundle savedInstanceState) {
         final View view = getLayoutInflater(savedInstanceState)
                 .inflate(R.layout.fragment_web_hn, container, false);
         scrollView = (NestedScrollView) view.findViewById(R.id.nested_scroll_view);
@@ -176,7 +176,7 @@ public class WebFragment extends LazyLoadFragment implements Scrollable {
 
     @SuppressLint("SetJavaScriptEnabled")
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setWebViewSettings(WebSettings webSettings) {
+    void setWebViewSettings(WebSettings webSettings) {
         webSettings.setJavaScriptEnabled(true);
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setUseWideViewPort(true);
@@ -187,12 +187,12 @@ public class WebFragment extends LazyLoadFragment implements Scrollable {
     }
 
 
-    private void onItemLoaded(ItemManager.Item response) {
+    void onItemLoaded(ItemManager.Item response) {
         AppUtils.setTextWithLinks(textView, response.getText());
     }
 
 
-    private void bindContent() {
+    void bindContent() {
         if (story instanceof ItemManager.Item) {
             AppUtils.setTextWithLinks(textView, ((ItemManager.Item) story).getText());
         } else {
@@ -201,8 +201,8 @@ public class WebFragment extends LazyLoadFragment implements Scrollable {
     }
 
 
-    private static class ItemResponseListener implements ResponseListener<ItemManager.Item> {
-        private final WeakReference<WebFragment> weakReference;
+    static class ItemResponseListener implements ResponseListener<ItemManager.Item> {
+        final WeakReference<WebFragment> weakReference;
 
 
         public ItemResponseListener(WebFragment webFragment) {
