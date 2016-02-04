@@ -39,12 +39,12 @@
         app:entries="@array/font_options"
         app:entryValues="@array/font_values" />
 
-    <!--<android.support.v7.preference.ListPreference-->
-        <!--android:key="@string/pref_story_display"-->
-        <!--android:title="@string/pref_story_display_title"-->
-        <!--android:entries="@array/pref_story_display_options"-->
-        <!--android:entryValues="@array/pref_story_display_values"-->
-        <!--android:defaultValue="@string/pref_story_display_value_article" />-->
+    <android.support.v7.preference.ListPreference
+        android:key="@string/pref_story_display"
+        android:title="@string/pref_story_display_title"
+        android:entries="@array/pref_story_display_options"
+        android:entryValues="@array/pref_story_display_values"
+        android:defaultValue="@string/pref_story_display_value_article" />
 
     <!--<android.support.v7.preference.SwitchPreferenceCompat-->
         <!--android:key="@string/pref_highlight_updated"-->
@@ -58,28 +58,28 @@
         <!--app:dialogTitle="@string/pref_highlight_updated_title"-->
         <!--app:dialogLayout="@layout/help_list_view" />-->
 
-    <!--<android.support.v7.preference.SwitchPreferenceCompat-->
-        <!--android:key="@string/pref_external"-->
-        <!--android:title="@string/pref_external_title"-->
-        <!--android:summary="@string/pref_external_summary"-->
-        <!--android:defaultValue="false" />-->
+    <android.support.v7.preference.SwitchPreferenceCompat
+        android:key="@string/pref_external"
+        android:title="@string/pref_external_title"
+        android:summary="@string/pref_external_summary"
+        android:defaultValue="false" />
 
-    <!--<android.support.v7.preference.SwitchPreferenceCompat-->
-        <!--android:key="@string/pref_custom_tab"-->
-        <!--android:title="@string/pref_custom_tab_title"-->
-        <!--android:summary="@string/pref_custom_tab_summary"-->
-        <!--android:defaultValue="true" />-->
+    <android.support.v7.preference.SwitchPreferenceCompat
+        android:key="@string/pref_custom_tab"
+        android:title="@string/pref_custom_tab_title"
+        android:summary="@string/pref_custom_tab_summary"
+        android:defaultValue="true" />
 
-    <!--<android.support.v7.preference.SwitchPreferenceCompat-->
-        <!--android:key="@string/pref_lazy_load"-->
-        <!--android:title="@string/pref_lazy_load_title"-->
-        <!--android:summary="@string/pref_lazy_load_summary"-->
-        <!--android:defaultValue="true" />-->
+    <android.support.v7.preference.SwitchPreferenceCompat
+        android:key="@string/pref_lazy_load"
+        android:title="@string/pref_lazy_load_title"
+        android:summary="@string/pref_lazy_load_summary"
+        android:defaultValue="true" />
 
-    <!--<com.enamakel.thebigindiannews.preference.PreferenceHelp-->
-        <!--android:key="@string/pref_lazy_load_help"-->
-        <!--android:title="@string/whats_this"-->
-        <!--app:dialogTitle="@string/pref_lazy_load_title"-->
-        <!--app:dialogLayout="@layout/help_lazy_load" />-->
+    <com.enamakel.thebigindiannews.preference.PreferenceHelp
+        android:key="@string/pref_lazy_load_help"
+        android:title="@string/whats_this"
+        app:dialogTitle="@string/pref_lazy_load_title"
+        app:dialogLayout="@layout/help_lazy_load" />
 
 </android.support.v7.preference.PreferenceScreen>
