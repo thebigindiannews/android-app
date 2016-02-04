@@ -30,7 +30,7 @@ android {
         leak.initWith(buildTypes.debug)
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+//            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             zipAlignEnabled true
         }
     }
