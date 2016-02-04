@@ -34,7 +34,7 @@ import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.providers.SearchRecentSuggestionsProvider;
 
 public class SettingsActivity extends DrawerActivity {
-    @Inject AlertDialogBuilder mAlertDialogBuilder;
+    @Inject AlertDialogBuilder alertDialogBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class SettingsActivity extends DrawerActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_clear_recent) {
-            mAlertDialogBuilder
+            alertDialogBuilder
                     .init(this)
                     .setMessage(R.string.clear_search_history_confirm)
                     .setNegativeButton(android.R.string.cancel, null)
@@ -73,7 +73,7 @@ public class SettingsActivity extends DrawerActivity {
         }
 
         if (item.getItemId() == R.id.menu_reset) {
-            mAlertDialogBuilder
+            alertDialogBuilder
                     .init(this)
                     .setMessage(R.string.reset_settings_confirm)
                     .setNegativeButton(android.R.string.cancel, null)
