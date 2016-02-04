@@ -16,9 +16,11 @@
 
 package com.enamakel.thebigindiannews.util;
 
+
 import android.support.annotation.Nullable;
 
-import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
+import com.enamakel.thebigindiannews.data.models.StoryModel;
+
 
 /**
  * Interface for multi-pane view events
@@ -29,15 +31,15 @@ public interface MultiPaneListener {
      *
      * @param item selected item or null if selection is clear
      */
-    void onItemSelected(@Nullable BaseCardModel item);
+    void onItemSelected(@Nullable StoryModel item);
 
 
     /**
-     * Gets item that has been opened via {@link #onItemSelected(BaseCardModel)}
+     * Gets item that has been opened via {@link #onItemSelected(StoryModel)}
      *
      * @return opened item or null
      */
-    BaseCardModel getSelectedItem();
+    StoryModel getSelectedItem();
 
 
     /**

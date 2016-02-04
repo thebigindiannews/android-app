@@ -24,7 +24,8 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
+
 
 /**
  * Data repository for session state
@@ -43,8 +44,8 @@ public class SessionManager {
         if (TextUtils.isEmpty(itemId) || callbacks == null) return;
 
         new SessionHandler(contentResolver, itemId, callbacks).startQuery(0, itemId,
-                MaterialisticProvider.URI_VIEWED, null,
-                MaterialisticProvider.ViewedEntry.COLUMN_NAME_ITEM_ID + " = ?",
+                BigIndianProvider.URI_VIEWED, null,
+                BigIndianProvider.ViewedEntry.COLUMN_NAME_ITEM_ID + " = ?",
                 new String[]{itemId}, null);
     }
 
@@ -59,14 +60,14 @@ public class SessionManager {
         if (TextUtils.isEmpty(itemId)) return;
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(MaterialisticProvider.ViewedEntry.COLUMN_NAME_ITEM_ID, itemId);
+        contentValues.put(BigIndianProvider.ViewedEntry.COLUMN_NAME_ITEM_ID, itemId);
         ContentResolver cr = context.getContentResolver();
 
         new SessionHandler(cr, itemId).startInsert(0, itemId,
-                MaterialisticProvider.URI_VIEWED, contentValues);
+                BigIndianProvider.URI_VIEWED, contentValues);
 
         // optimistically assume insert ok
-        cr.notifyChange(MaterialisticProvider.URI_VIEWED
+        cr.notifyChange(BigIndianProvider.URI_VIEWED
                         .buildUpon()
                         .appendPath(itemId)
                         .build(),

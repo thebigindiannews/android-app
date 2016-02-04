@@ -37,6 +37,7 @@ public class NewsApplication extends Application {
     RefWatcher refWatcher;
     Tracker tracker;
     ObjectGraph applicationGraph;
+    static Context context;
 
 
     /**
@@ -64,6 +65,8 @@ public class NewsApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        context = getApplicationContext();
+
         refWatcher = LeakCanary.install(this);
         applicationGraph = ObjectGraph.create();
         Preferences.migrate(this);
@@ -74,6 +77,9 @@ public class NewsApplication extends Application {
         AppUtils.registerAccountsUpdatedListener(this);
     }
 
+    public static Context getContext() {
+        return context;
+    }
 
     public ObjectGraph getApplicationGraph() {
         return applicationGraph;

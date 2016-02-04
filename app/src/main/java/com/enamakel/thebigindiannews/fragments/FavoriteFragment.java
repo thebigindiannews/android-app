@@ -34,6 +34,7 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,9 +48,9 @@ import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.FavoriteActivity;
 import com.enamakel.thebigindiannews.adapters.FavoriteRecyclerViewAdapter;
 import com.enamakel.thebigindiannews.adapters.ListRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.data.Favorite;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
-import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+import com.enamakel.thebigindiannews.data.models.StoryModel;
+import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
 import com.enamakel.thebigindiannews.fragments.base.BaseListFragment;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 
@@ -58,37 +59,43 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 
-public class FavoriteFragment extends BaseListFragment
-        implements LoaderManager.LoaderCallbacks<Cursor>,
+public class FavoriteFragment extends BaseListFragment implements LoaderManager.LoaderCallbacks<Cursor>,
         FavoriteRecyclerViewAdapter.ActionModeDelegate {
-    public static final String EXTRA_FILTER = FavoriteFragment.class.getName() + ".EXTRA_FILTER";
-    private static final String STATE_FILTER = "state:filter";
-    private static final String STATE_SEARCH_VIEW_EXPANDED = "state:searchViewExpanded";
 
-    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+    public static final String EXTRA_FILTER = FavoriteFragment.class.getName() + ".EXTRA_FILTER";
+
+    static final String TAG = FavoriteFragment.class.getSimpleName();
+    static final String STATE_FILTER = "state:filter";
+    static final String STATE_SEARCH_VIEW_EXPANDED = "state:searchViewExpanded";
+
+    final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ArrayList<Favorite> favorites =
+            ArrayList<StoryModel> favorites =
                     intent.getParcelableArrayListExtra(FavoriteManager.ACTION_GET_EXTRA_DATA);
             export(favorites);
         }
     };
-    private final FavoriteRecyclerViewAdapter adapter = new FavoriteRecyclerViewAdapter(this);
-    private ProgressDialog progressDialog;
-    private ActionMode actionMode;
-    private String filter;
-    private boolean mSearchViewExpanded;
+    final FavoriteRecyclerViewAdapter adapter = new FavoriteRecyclerViewAdapter(this);
+
     @Inject FavoriteManager favoriteManager;
     @Inject ActionViewResolver actionViewResolver;
     @Inject AlertDialogBuilder alertDialogBuilder;
-    private View emptySearchView;
-    private View emptyView;
+
+    ProgressDialog progressDialog;
+    ActionMode actionMode;
+    String filter;
+    boolean searchViewExpanded;
+    View emptySearchView;
+    View emptyView;
 
 
     @Override
     public void onAttach(final Context context) {
         super.onAttach(context);
-        LocalBroadcastManager.getInstance(context).registerReceiver(mBroadcastReceiver,
+        Log.d(TAG, "onAttach");
+
+        LocalBroadcastManager.getInstance(context).registerReceiver(broadcastReceiver,
                 FavoriteManager.makeGetIntentFilter());
     }
 
@@ -96,12 +103,12 @@ public class FavoriteFragment extends BaseListFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate");
+
         if (savedInstanceState != null) {
             filter = savedInstanceState.getString(STATE_FILTER);
-            mSearchViewExpanded = savedInstanceState.getBoolean(STATE_SEARCH_VIEW_EXPANDED);
-        } else {
-            filter = getArguments().getString(EXTRA_FILTER);
-        }
+            searchViewExpanded = savedInstanceState.getBoolean(STATE_SEARCH_VIEW_EXPANDED);
+        } else filter = getArguments().getString(EXTRA_FILTER);
     }
 
 
@@ -157,9 +164,8 @@ public class FavoriteFragment extends BaseListFragment
         // allow clearing filter if empty, or filter if non-empty
         menu.findItem(R.id.menu_search).setVisible(!TextUtils.isEmpty(filter) ||
                 adapter.getItemCount() > 0);
-        if (adapter.getItemCount() > 0) {
-            super.prepareOptionsMenu(menu);
-        }
+
+        if (adapter.getItemCount() > 0) super.prepareOptionsMenu(menu);
     }
 
 
@@ -169,10 +175,12 @@ public class FavoriteFragment extends BaseListFragment
             clear();
             return true;
         }
+
         if (item.getItemId() == R.id.menu_email) {
             startExport();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -181,26 +189,24 @@ public class FavoriteFragment extends BaseListFragment
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(STATE_FILTER, filter);
-        outState.putBoolean(STATE_SEARCH_VIEW_EXPANDED, mSearchViewExpanded);
+        outState.putBoolean(STATE_SEARCH_VIEW_EXPANDED, searchViewExpanded);
     }
 
 
     @Override
     public void onDetach() {
         super.onDetach();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mBroadcastReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         recyclerView.setAdapter(null); // detach adapter
-        if (actionMode != null) {
-            actionMode.finish();
-        }
+        if (actionMode != null) actionMode.finish();
     }
 
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if (!TextUtils.isEmpty(filter)) {
+        if (!TextUtils.isEmpty(filter))
             return new FavoriteManager.CursorLoader(getActivity(), filter);
-        }
+
         return new FavoriteManager.CursorLoader(getActivity());
     }
 
@@ -223,7 +229,7 @@ public class FavoriteFragment extends BaseListFragment
      * @param query query used to filter data
      */
     public void filter(String query) {
-        mSearchViewExpanded = false;
+        searchViewExpanded = false;
         filter = query;
         getLoaderManager().restartLoader(FavoriteManager.LOADER, null, this);
     }
@@ -237,19 +243,18 @@ public class FavoriteFragment extends BaseListFragment
 
     @Override
     public boolean startActionMode(ActionMode.Callback callback) {
-        if (mSearchViewExpanded) {
-            return false;
-        }
-        if (actionMode == null) {
+        if (searchViewExpanded) return false;
+
+        if (actionMode == null)
             actionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(callback);
-        }
+
         return true;
     }
 
 
     @Override
     public boolean isInActionMode() {
-        return actionMode != null && !mSearchViewExpanded;
+        return actionMode != null && !searchViewExpanded;
     }
 
 
@@ -259,12 +264,13 @@ public class FavoriteFragment extends BaseListFragment
     }
 
 
-    private void swapCursor(FavoriteManager.Cursor cursor) {
-        if (cursor != null) {
+    void swapCursor(FavoriteManager.Cursor cursor) {
+        if (cursor != null)
             cursor.setNotificationUri(getContext().getContentResolver(),
-                    MaterialisticProvider.URI_FAVORITE);
-        }
+                    BigIndianProvider.URI_FAVORITE);
+
         adapter.setCursor(cursor);
+
         if (!isDetached()) {
             toggleEmptyView(adapter.getItemCount() == 0, filter);
             getActivity().supportInvalidateOptionsMenu();
@@ -272,7 +278,7 @@ public class FavoriteFragment extends BaseListFragment
     }
 
 
-    private void toggleEmptyView(boolean isEmpty, String filter) {
+    void toggleEmptyView(boolean isEmpty, String filter) {
         if (isEmpty) {
             if (TextUtils.isEmpty(filter)) {
                 emptySearchView.setVisibility(View.INVISIBLE);
@@ -290,18 +296,18 @@ public class FavoriteFragment extends BaseListFragment
     }
 
 
-    private void createSearchView(MenuItem menuSearch) {
+    void createSearchView(MenuItem menuSearch) {
         final SearchView searchView = (SearchView) actionViewResolver.getActionView(menuSearch);
         searchView.setQueryHint(getString(R.string.hint_search_saved_stories));
         searchView.setSearchableInfo(((SearchManager) getActivity()
                 .getSystemService(Context.SEARCH_SERVICE))
                 .getSearchableInfo(getActivity().getComponentName()));
-        searchView.setIconified(!mSearchViewExpanded);
+        searchView.setIconified(!searchViewExpanded);
         searchView.setQuery(filter, false);
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSearchViewExpanded = true;
+                searchViewExpanded = true;
                 v.requestFocus();
             }
         });
@@ -316,7 +322,10 @@ public class FavoriteFragment extends BaseListFragment
     }
 
 
-    private void clear() {
+    /**
+     * Remove all the stories from the favorites
+     */
+    void clear() {
         alertDialogBuilder
                 .init(getActivity())
                 .setMessage(R.string.confirm_clear)
@@ -332,31 +341,29 @@ public class FavoriteFragment extends BaseListFragment
     }
 
 
-    private void startExport() {
-        if (progressDialog == null) {
+    void startExport() {
+        if (progressDialog == null)
             progressDialog = ProgressDialog.show(getActivity(), null,
                     getString(R.string.preparing), true, true);
-        } else {
-            progressDialog.show();
-        }
+        else progressDialog.show();
+
         favoriteManager.get(getActivity(), filter);
     }
 
 
-    private void export(ArrayList<Favorite> favorites) {
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-        }
+    void export(ArrayList<StoryModel> favorites) {
+        if (progressDialog != null) progressDialog.dismiss();
+
         final Intent intent = AppUtils.makeEmailIntent(
                 getString(R.string.favorite_email_subject),
                 makeEmailContent(favorites));
-        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null)
             startActivity(intent);
-        }
     }
 
 
-    private String makeEmailContent(ArrayList<Favorite> favorites) {
+    String makeEmailContent(ArrayList<StoryModel> favorites) {
         return TextUtils.join("\n\n", favorites);
     }
 }

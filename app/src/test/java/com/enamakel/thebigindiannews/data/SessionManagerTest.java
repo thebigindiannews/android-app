@@ -3,7 +3,7 @@ package com.enamakel.thebigindiannews.data;
 import android.content.ContentValues;
 import android.content.ShadowAsyncQueryHandler;
 
-import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,10 +35,10 @@ public class SessionManagerTest {
         resolver = shadowOf(ShadowApplication.getInstance().getContentResolver());
         ContentValues cv = new ContentValues();
         cv.put("itemid", "1");
-        resolver.insert(MaterialisticProvider.URI_VIEWED, cv);
+        resolver.insert(BigIndianProvider.URI_VIEWED, cv);
         cv = new ContentValues();
         cv.put("itemid", "2");
-        resolver.insert(MaterialisticProvider.URI_VIEWED, cv);
+        resolver.insert(BigIndianProvider.URI_VIEWED, cv);
         manager = new SessionManager();
     }
 

@@ -51,7 +51,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 public class ItemFragment extends LazyLoadFragment implements Scrollable {
-
     public static final String EXTRA_ITEM = ItemFragment.class.getName() + ".EXTRA_ITEM";
     static final String STATE_ITEM = "state:story";
     static final String STATE_ITEM_ID = "state:itemId";
@@ -68,7 +67,7 @@ public class ItemFragment extends LazyLoadFragment implements Scrollable {
     @Inject @Named(ActivityModule.HN) ItemManager itemManager;
 
     SwipeRefreshLayout swipeRefreshLayout;
-    SinglePageItemRecyclerViewAdapter.SavedState mAdapterItems;
+    SinglePageItemRecyclerViewAdapter.SavedState adapterItems;
     ItemRecyclerViewAdapter adapter;
     boolean isColorCoded = true;
     String[] displayOptionValues;
@@ -114,7 +113,7 @@ public class ItemFragment extends LazyLoadFragment implements Scrollable {
         if (savedInstanceState != null) {
             story = savedInstanceState.getParcelable(STATE_ITEM);
             itemId = savedInstanceState.getString(STATE_ITEM_ID);
-            mAdapterItems = savedInstanceState.getParcelable(STATE_ADAPTER_ITEMS);
+            adapterItems = savedInstanceState.getParcelable(STATE_ADAPTER_ITEMS);
             isColorCoded = savedInstanceState.getBoolean(STATE_COLOR_CODED);
             displayOption = savedInstanceState.getString(STATE_DISPLAY_OPTION);
             maxLines = savedInstanceState.getInt(STATE_MAX_LINES, Integer.MAX_VALUE);
@@ -230,7 +229,7 @@ public class ItemFragment extends LazyLoadFragment implements Scrollable {
         super.onSaveInstanceState(outState);
         outState.putParcelable(STATE_ITEM, story);
         outState.putString(STATE_ITEM_ID, itemId);
-        outState.putParcelable(STATE_ADAPTER_ITEMS, mAdapterItems);
+        outState.putParcelable(STATE_ADAPTER_ITEMS, adapterItems);
         outState.putBoolean(STATE_COLOR_CODED, isColorCoded);
         outState.putString(STATE_DISPLAY_OPTION, displayOption);
         outState.putInt(STATE_MAX_LINES, maxLines);
@@ -261,14 +260,14 @@ public class ItemFragment extends LazyLoadFragment implements Scrollable {
 
 
     private void loadKidData() {
-//        itemManager.getItem(itemId, new ItemResponseListener(this));
+//        itemManager.getItem(itemId, new StoryResponseListener(this));
     }
 
 
     private void onItemLoaded(StoryModel item) {
         swipeRefreshLayout.setRefreshing(false);
         if (item != null) {
-            mAdapterItems = null;
+            adapterItems = null;
             this.story = item;
             bindKidData();
         }
@@ -284,12 +283,12 @@ public class ItemFragment extends LazyLoadFragment implements Scrollable {
         if (Preferences.isSinglePage(getActivity(), displayOption)) {
             boolean autoExpand = Preferences.isAutoExpand(getActivity(), displayOption);
             // if collapsed or no saved state then start a fresh (adapter items all collapsed)
-            if (!autoExpand || mAdapterItems == null) {
-//                mAdapterItems = new SinglePageItemRecyclerViewAdapter.SavedState(
+            if (!autoExpand || adapterItems == null) {
+//                adapterItems = new SinglePageItemRecyclerViewAdapter.SavedState(
 //                        new ArrayList<>(Arrays.asList(story.getKidItems())));
             }
 
-            adapter = new SinglePageItemRecyclerViewAdapter(itemManager, mAdapterItems, autoExpand);
+            adapter = new SinglePageItemRecyclerViewAdapter(itemManager, adapterItems, autoExpand);
             ((SinglePageItemRecyclerViewAdapter) adapter).toggleColorCode(isColorCoded);
         } else {
 //            adapter = new MultiPageItemRecyclerViewAdapter(itemManager, story.getKidItems());

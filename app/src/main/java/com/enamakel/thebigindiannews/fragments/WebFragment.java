@@ -45,7 +45,7 @@ import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
-import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
+import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.util.Scrollable;
 
 import java.lang.ref.WeakReference;
@@ -57,7 +57,7 @@ import javax.inject.Named;
 public class WebFragment extends LazyLoadFragment implements Scrollable {
 
     private static final String EXTRA_ITEM = WebFragment.class.getName() + ".EXTRA_ITEM";
-    private BaseCardModel item;
+    private StoryModel story;
     private WebView webView;
     private TextView textView;
     private NestedScrollView scrollView;
@@ -66,9 +66,9 @@ public class WebFragment extends LazyLoadFragment implements Scrollable {
     @Inject @Named(ActivityModule.HN) ItemManager mItemManager;
 
 
-    public static WebFragment instantiate(Context context, BaseCardModel item) {
+    public static WebFragment instantiate(Context context, StoryModel story) {
         final WebFragment fragment = (WebFragment) instantiate(context, WebFragment.class.getName());
-        fragment.item = item;
+        fragment.story = story;
 //        fragment.isHackerNewsUrl = AppUtils.isHackerNewsUrl(story);
         return fragment;
     }
@@ -77,7 +77,7 @@ public class WebFragment extends LazyLoadFragment implements Scrollable {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) item = savedInstanceState.getParcelable(EXTRA_ITEM);
+        if (savedInstanceState != null) story = savedInstanceState.getParcelable(EXTRA_ITEM);
     }
 
 
@@ -148,7 +148,7 @@ public class WebFragment extends LazyLoadFragment implements Scrollable {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(EXTRA_ITEM, item);
+        outState.putParcelable(EXTRA_ITEM, story);
     }
 
 
@@ -161,9 +161,7 @@ public class WebFragment extends LazyLoadFragment implements Scrollable {
     @Override
     protected void load() {
         if (isHackerNewsUrl) bindContent();
-        else if (item != null) {
-//            webView.loadUrl(item.getUrl());
-        }
+        else if (story != null) webView.loadUrl(story.getUrl());
     }
 
 
@@ -195,10 +193,10 @@ public class WebFragment extends LazyLoadFragment implements Scrollable {
 
 
     private void bindContent() {
-        if (item instanceof ItemManager.Item) {
-            AppUtils.setTextWithLinks(textView, ((ItemManager.Item) item).getText());
+        if (story instanceof ItemManager.Item) {
+            AppUtils.setTextWithLinks(textView, ((ItemManager.Item) story).getText());
         } else {
-//            itemManager.getItem(item.getId(), new ItemResponseListener(this));
+//            itemManager.getItem(story.getId(), new StoryResponseListener(this));
         }
     }
 

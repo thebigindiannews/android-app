@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.enamakel.thebigindiannews.activities.FavoriteActivity;
 import com.enamakel.thebigindiannews.activities.SubmitActivity;
 import com.enamakel.thebigindiannews.fragments.base.BaseFragment;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
@@ -138,12 +139,12 @@ public class DrawerFragment extends BaseFragment {
                 navigate(AboutActivity.class);
             }
         });
-//        view.findViewById(R.id.drawer_favorite).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                navigate(FavoriteActivity.class);
-//            }
-//        });
+        view.findViewById(R.id.drawer_favorite).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigate(FavoriteActivity.class);
+            }
+        });
         view.findViewById(R.id.drawer_submit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

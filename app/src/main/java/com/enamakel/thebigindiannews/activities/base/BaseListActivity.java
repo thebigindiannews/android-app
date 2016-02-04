@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.activities.base;
 
+
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -41,8 +42,9 @@ import android.view.View;
 import com.enamakel.thebigindiannews.ActionViewResolver;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
 import com.enamakel.thebigindiannews.activities.SearchActivity;
+import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
+import com.enamakel.thebigindiannews.adapters.StoryPagerAdapter;
 import com.enamakel.thebigindiannews.data.SessionManager;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
@@ -50,7 +52,6 @@ import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.util.MultiPaneListener;
 import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.util.Scrollable;
-import com.enamakel.thebigindiannews.adapters.ItemPagerAdapter;
 
 import javax.inject.Inject;
 
@@ -89,7 +90,7 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
     };
 
 
-    protected BaseCardModel selectedItem;
+    protected StoryModel selectedItem;
 
 
     @Override
@@ -218,9 +219,9 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
 
 
     @Override
-    public void onItemSelected(@Nullable BaseCardModel item) {
+    public void onItemSelected(@Nullable StoryModel item) {
         if (isMultiPane) {
-            BaseCardModel previousItem = selectedItem;
+            StoryModel previousItem = selectedItem;
 
             if (previousItem != null && item != null &&
                     TextUtils.equals(item.getId(), previousItem.getId())) return;
@@ -236,7 +237,7 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
 
 
     @Override
-    public BaseCardModel getSelectedItem() {
+    public StoryModel getSelectedItem() {
         return selectedItem;
     }
 
@@ -275,17 +276,18 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
 
     private void openSinglePaneItem(BaseCardModel item) {
         if (item instanceof StoryModel) {
-//        if (useExternalBrowser && item instanceof StoryModel) {
-            StoryModel story = (StoryModel) item;
-            AppUtils.openWebUrlExternal(this, story.getTitle(), story.getUrl());
-        } else {
-            startActivity(new Intent(this, SingleStoryActivity.class)
-                    .putExtra(SingleStoryActivity.EXTRA_ITEM, item));
+            if (false && useExternalBrowser) {
+                StoryModel story = (StoryModel) item;
+                AppUtils.openWebUrlExternal(this, story.getTitle(), story.getUrl());
+            } else {
+                startActivity(new Intent(this, SingleStoryActivity.class)
+                        .putExtra(SingleStoryActivity.EXTRA_ITEM, item));
+            }
         }
     }
 
 
-    private void openMultiPaneItem(final BaseCardModel item) {
+    private void openMultiPaneItem(final StoryModel item) {
         if (item == null) {
             setTitle(getDefaultTitle());
             findViewById(R.id.empty_selection).setVisibility(View.VISIBLE);
@@ -313,8 +315,8 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
     }
 
 
-    private void bindViewPager(BaseCardModel item) {
-        final ItemPagerAdapter adapter = new ItemPagerAdapter(this,
+    private void bindViewPager(StoryModel item) {
+        final StoryPagerAdapter adapter = new StoryPagerAdapter(this,
                 getSupportFragmentManager(), item, true);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

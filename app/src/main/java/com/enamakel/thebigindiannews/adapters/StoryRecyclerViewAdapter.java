@@ -36,13 +36,12 @@ import com.enamakel.thebigindiannews.ActivityModule;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.accounts.UserServices;
-import com.enamakel.thebigindiannews.activities.ComposeActivity;
-import com.enamakel.thebigindiannews.activities.UserActivity;
+import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
-import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
 import com.enamakel.thebigindiannews.widgets.PopupMenu;
 
 import java.lang.ref.WeakReference;
@@ -59,40 +58,16 @@ import lombok.Setter;
 
 public class StoryRecyclerViewAdapter extends
         ListRecyclerViewAdapter<ListRecyclerViewAdapter.ItemViewHolder, StoryModel> {
-    private static final String STATE_ITEMS = "state:items";
-    private static final String STATE_UPDATED = "state:updated";
-    private static final String STATE_PROMOTED = "state:promoted";
-    private static final String STATE_SHOW_ALL = "state:showAll";
-    private static final String STATE_HIGHLIGHT_UPDATED = "state:highlightUpdated";
-    private static final String STATE_FAVORITE_REVISION = "state:favoriteRevision";
-    private static final String STATE_USERNAME = "state:username";
-
-    private final ContentObserver contentObserver = new ContentObserver(new Handler()) {
-        @Override
-        public void onChange(boolean selfChange, Uri uri) {
-            if (FavoriteManager.isCleared(uri)) {
-                favoriteRevision++; // invalidate all favorite statuses
-                notifyDataSetChanged();
-                return;
-            }
-
-//            String position = itemPositions.build(Long.valueOf(uri.getLastPathSegment()));
-//            if (position == null) return;
-
-//            ItemManager.Item item = items.build(position);
-//            if (FavoriteManager.isAdded(uri)) {
-//                item.setFavorite(true);
-//                item.setLocalRevision(favoriteRevision);
-//            } else if (FavoriteManager.isRemoved(uri)) {
-//                item.setFavorite(false);
-//                item.setLocalRevision(favoriteRevision);
-//            } else item.setIsViewed(true);
-//
-//            notifyItemChanged(position);
-        }
-    };
+    static final String STATE_ITEMS = "state:items";
+    static final String STATE_UPDATED = "state:updated";
+    static final String STATE_PROMOTED = "state:promoted";
+    static final String STATE_SHOW_ALL = "state:showAll";
+    static final String STATE_HIGHLIGHT_UPDATED = "state:highlightUpdated";
+    static final String STATE_FAVORITE_REVISION = "state:favoriteRevision";
+    static final String STATE_USERNAME = "state:username";
 
     @Inject @Named(ActivityModule.HN) ItemManager itemManager;
+
     @Getter ArrayList<StoryModel> items;
     @Setter String username;
     @Getter @Setter boolean highlightUpdated = true;
@@ -104,13 +79,37 @@ public class StoryRecyclerViewAdapter extends
     final HashMap<String, Integer> updatedPositions = new HashMap<>();
     int favoriteRevision = -1;
 
+    final ContentObserver contentObserver = new ContentObserver(new Handler()) {
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            if (FavoriteManager.isCleared(uri)) {
+                favoriteRevision++; // invalidate all favorite statuses
+                notifyDataSetChanged();
+                return;
+            }
+
+            int index = itemPositions.get(uri.getLastPathSegment());
+            if (index >= 0) {
+                StoryModel story = items.get(index);
+                if (FavoriteManager.isAdded(uri)) {
+                    story.setFavorite(true);
+                    story.setLocal_revision(favoriteRevision);
+                } else if (FavoriteManager.isRemoved(uri)) {
+                    story.setFavorite(false);
+                    story.setLocal_revision(favoriteRevision);
+                } else story.setViewed(true);
+                notifyItemChanged(index);
+            }
+        }
+    };
+
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         ContentResolver cr = recyclerView.getContext().getContentResolver();
-        cr.registerContentObserver(MaterialisticProvider.URI_VIEWED, true, contentObserver);
-        cr.registerContentObserver(MaterialisticProvider.URI_FAVORITE, true, contentObserver);
+        cr.registerContentObserver(BigIndianProvider.URI_VIEWED, true, contentObserver);
+        cr.registerContentObserver(BigIndianProvider.URI_FAVORITE, true, contentObserver);
     }
 
 
@@ -204,16 +203,17 @@ public class StoryRecyclerViewAdapter extends
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                showMoreOptions(holder.storyView.getMoreOptions(), story, holder);
+                toggleSave(story);
+//                showMoreOptions(holder.storyView.getMoreOptions(), story, holder);
                 return true;
             }
         });
-//        holder.storyView.getMoreOptions().setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showMoreOptions(v, story, holder);
-//            }
-//        });
+        holder.storyView.getMoreOptions().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMoreOptions(v, story, holder);
+            }
+        });
     }
 
 
@@ -300,18 +300,16 @@ public class StoryRecyclerViewAdapter extends
                 updatedPositions.get(item.get_id());
 
         // ignore changes if item was invalidated by refresh / filter
-        if (position != null && position >= 0 && position < getItemCount()) {
+        if (position != null && position >= 0 && position < getItemCount())
             notifyItemChanged(position);
-        }
     }
 
 
     private void bindItemUpdated(ItemViewHolder holder, StoryModel story) {
-        if (highlightUpdated) {
+        if (highlightUpdated)
             holder.storyView.setUpdated(story,
                     updatedPositions.containsKey(story.get_id()),
                     promotedList.contains(story.get_id()));
-        }
     }
 
 
@@ -323,28 +321,35 @@ public class StoryRecyclerViewAdapter extends
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.menu_contextual_save) {
-                    toggleSave(story);
-                    return true;
+                switch (item.getItemId()) {
+                    case R.id.menu_contextual_save:
+                        toggleSave(story);
+                        return true;
+
+                    case R.id.menu_contextual_share:
+                        AppUtils.share(StoryRecyclerViewAdapter.this.context, alertDialogBuilder, story);
+                        return true;
+
+                    case R.id.menu_contextual_open:
+                        context.startActivity(
+                                new Intent(context, SingleStoryActivity.class)
+                                        .putExtra(SingleStoryActivity.EXTRA_ITEM, story)
+                                        .putExtra(SingleStoryActivity.EXTRA_OPEN_COMMENTS, true));
+                        return true;
                 }
 
-                if (item.getItemId() == R.id.menu_contextual_vote) {
-                    readStory(story, holder);
-                    return true;
-                }
-
-                if (item.getItemId() == R.id.menu_contextual_comment) {
-                    context.startActivity(new Intent(context, ComposeActivity.class)
-                            .putExtra(ComposeActivity.EXTRA_PARENT_ID, story.get_id())
-                            .putExtra(ComposeActivity.EXTRA_PARENT_TEXT, story.getTitle()));
-                    return true;
-                }
-
-                if (item.getItemId() == R.id.menu_contextual_profile) {
-                    context.startActivity(new Intent(context, UserActivity.class)
-                            .putExtra(UserActivity.EXTRA_USERNAME, story.getCreated_by()));
-                    return true;
-                }
+//                if (item.getItemId() == R.id.menu_contextual_comment) {
+//                    context.startActivity(new Intent(context, ComposeActivity.class)
+//                            .putExtra(ComposeActivity.EXTRA_PARENT_ID, story.get_id())
+//                            .putExtra(ComposeActivity.EXTRA_PARENT_TEXT, story.getTitle()));
+//                    return true;
+//                }
+//
+//                if (item.getItemId() == R.id.menu_contextual_profile) {
+//                    context.startActivity(new Intent(context, UserActivity.class)
+//                            .putExtra(UserActivity.EXTRA_USERNAME, story.getCreated_by()));
+//                    return true;
+//                }
 
                 return false;
             }

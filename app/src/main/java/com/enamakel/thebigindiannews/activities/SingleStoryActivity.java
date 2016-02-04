@@ -51,13 +51,14 @@ import com.enamakel.thebigindiannews.BuildConfig;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.activities.base.InjectableActivity;
-import com.enamakel.thebigindiannews.adapters.ItemPagerAdapter;
+import com.enamakel.thebigindiannews.adapters.StoryPagerAdapter;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.SessionManager;
+import com.enamakel.thebigindiannews.data.clients.BigIndianClient;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
-import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.util.Scrollable;
@@ -71,22 +72,24 @@ import javax.inject.Named;
 public class SingleStoryActivity extends InjectableActivity implements Scrollable {
     public static final String EXTRA_ITEM = SingleStoryActivity.class.getName() + ".EXTRA_ITEM";
     public static final String EXTRA_OPEN_COMMENTS = SingleStoryActivity.class.getName() + ".EXTRA_OPEN_COMMENTS";
-    private static final String PARAM_ID = "id";
-    private static final String STATE_ITEM = "state:item";
-    private static final String STATE_ITEM_ID = "state:itemId";
 
-    private StoryModel story;
-    private String itemId = null;
-    private boolean externalBrowser;
-    private Preferences.StoryViewMode storyViewMode;
+    static final String TAG = SingleStoryActivity.class.getSimpleName();
+    static final String PARAM_ID = "id";
+    static final String STATE_ITEM = "state:item";
+    static final String STATE_ITEM_ID = "state:itemId";
 
-    private boolean bookmarkedUndo;
+    StoryModel story;
+    String itemId = null;
+    boolean externalBrowser;
+    boolean bookmarkedUndo;
+    Preferences.StoryViewMode storyViewMode;
 
     @Inject @Named(ActivityModule.HN) ItemManager mItemManager;
     @Inject FavoriteManager favoriteManager;
-    @Inject AlertDialogBuilder mAlertDialogBuilder;
+    @Inject AlertDialogBuilder alertDialogBuilder;
     @Inject UserServices mUserServices;
     @Inject SessionManager sessionManager;
+    @Inject BigIndianClient bigIndianClient;
 
     ImageView bookmarked;
     TabLayout tabLayout;
@@ -95,16 +98,17 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
     ImageButton voteButton;
     FloatingActionButton replyButton;
 
-    private final ContentObserver mObserver = new ContentObserver(new Handler()) {
+    private final ContentObserver contentObserver = new ContentObserver(new Handler()) {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
-            if (story == null) {
-                return;
-            }
+            if (story == null) return;
+
+
             if (FavoriteManager.isCleared(uri)) {
                 story.setFavorite(false);
                 bindFavorite();
             } else if (TextUtils.equals(itemId, uri.getLastPathSegment())) {
+
                 story.setFavorite(FavoriteManager.isAdded(uri));
                 bindFavorite();
             }
@@ -123,11 +127,9 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
     //    @AfterViews
     void initializeFromPreferences() {
         externalBrowser = Preferences.externalBrowserEnabled(this);
-        if (getIntent().getBooleanExtra(EXTRA_OPEN_COMMENTS, false)) {
+        if (getIntent().getBooleanExtra(EXTRA_OPEN_COMMENTS, false))
             storyViewMode = Preferences.StoryViewMode.Comment;
-        } else {
-            storyViewMode = Preferences.getDefaultStoryView(this);
-        }
+        else storyViewMode = Preferences.getDefaultStoryView(this);
     }
 
 
@@ -136,11 +138,12 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
         super.onCreate(savedInstanceState);
         Log.d(getLocalClassName(), "onCreate()");
         externalBrowser = Preferences.externalBrowserEnabled(this);
-        if (getIntent().getBooleanExtra(EXTRA_OPEN_COMMENTS, false)) {
+        externalBrowser = false;
+
+        if (getIntent().getBooleanExtra(EXTRA_OPEN_COMMENTS, false))
             storyViewMode = Preferences.StoryViewMode.Comment;
-        } else {
-            storyViewMode = Preferences.getDefaultStoryView(this);
-        }
+        else storyViewMode = Preferences.getDefaultStoryView(this);
+
         setContentView(R.layout.activity_item);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME |
@@ -154,35 +157,27 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
         final Intent intent = getIntent();
-        getContentResolver().registerContentObserver(MaterialisticProvider.URI_FAVORITE,
-                true, mObserver);
+        getContentResolver().registerContentObserver(BigIndianProvider.URI_FAVORITE,
+                true, contentObserver);
 
         if (savedInstanceState != null) {
             story = savedInstanceState.getParcelable(STATE_ITEM);
             itemId = savedInstanceState.getString(STATE_ITEM_ID);
         } else {
             if (Intent.ACTION_VIEW.equalsIgnoreCase(intent.getAction())) {
-                if (intent.getData() != null) {
-                    if (TextUtils.equals(intent.getData().getScheme(), BuildConfig.APPLICATION_ID)) {
+                if (intent.getData() != null)
+                    if (TextUtils.equals(intent.getData().getScheme(), BuildConfig.APPLICATION_ID))
                         itemId = intent.getData().getLastPathSegment();
-                    } else {
-                        itemId = intent.getData().getQueryParameter(PARAM_ID);
-                    }
-                }
+                    else itemId = intent.getData().getQueryParameter(PARAM_ID);
             } else if (intent.hasExtra(EXTRA_ITEM)) {
-                StoryModel item = intent.getParcelableExtra(EXTRA_ITEM);
-                itemId = item.getId();
-//
-//                if (item instanceof ItemManager.Item) {
-//                    story = (ItemManager.Item) item;
-//                }
+                story = intent.getParcelableExtra(EXTRA_ITEM);
+                itemId = story.getId();
             }
         }
 
         if (story != null) bindData();
-        else if (!TextUtils.isEmpty(itemId)) {
-//            mItemManager.getItem(itemId, new ItemResponseListener(this));
-        }
+        else if (!TextUtils.isEmpty(itemId))
+            bigIndianClient.getItem(itemId, new StoryResponseListener(this));
     }
 
 
@@ -208,12 +203,12 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
         }
 
         if (item.getItemId() == R.id.menu_external) {
-//            AppUtils.openExternal(SingleStoryActivity.this, alertDialogBuilder, story);
+            AppUtils.openExternal(SingleStoryActivity.this, alertDialogBuilder, story);
             return true;
         }
 
         if (item.getItemId() == R.id.menu_share) {
-//            AppUtils.share(SingleStoryActivity.this, alertDialogBuilder, story);
+            AppUtils.share(SingleStoryActivity.this, alertDialogBuilder, story);
             return true;
         }
 
@@ -232,7 +227,7 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        getContentResolver().unregisterContentObserver(mObserver);
+        getContentResolver().unregisterContentObserver(contentObserver);
     }
 
 
@@ -251,11 +246,10 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
 
     private void bindFavorite() {
         if (story == null) return;
-//        if (!story.isStoryType()) return;
 
         bookmarked.setVisibility(View.VISIBLE);
         bookmarked.setOnClickListener(new View.OnClickListener() {
-            private boolean mUndo;
+            boolean undo;
 
 
             @Override
@@ -268,20 +262,21 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
                     favoriteManager.remove(SingleStoryActivity.this, story);
                     toastMessageResId = R.string.toast_removed;
                 }
-                if (!mUndo) {
+                if (!undo) {
                     Snackbar.make(coordinatorLayout, toastMessageResId, Snackbar.LENGTH_SHORT)
                             .setAction(R.string.undo, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    mUndo = true;
+                                    undo = true;
                                     bookmarked.performClick();
                                 }
                             })
                             .show();
                 }
-                mUndo = false;
+                undo = false;
             }
         });
+
         decorateFavorite(story.isFavorite());
     }
 
@@ -289,9 +284,11 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
     private void bindData() {
         if (story == null) return;
 
+        bigIndianClient.readStory(story);
+
         bindFavorite();
         sessionManager.view(this, story.getId());
-        voteButton.setVisibility(View.VISIBLE);
+//        voteButton.setVisibility(View.VISIBLE);
 
 //        replyButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -305,18 +302,21 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
         final TextView titleTextView = (TextView) findViewById(android.R.id.text2);
 
 //        if (story.isStoryType()) {
-//            titleTextView.setText(story.getDisplayedTitle());
-//            if (!TextUtils.isEmpty(story.getSource())) {
-//                TextView sourceTextView = (TextView) findViewById(R.id.source);
-//                sourceTextView.setText(story.getSource());
-//                sourceTextView.setVisibility(View.VISIBLE);
-//            }
-//
+        titleTextView.setText(story.getTitle());
+        if (!TextUtils.isEmpty(story.getSource())) {
+            TextView sourceTextView = (TextView) findViewById(R.id.source);
+            sourceTextView.setText(story.getSource());
+            sourceTextView.setVisibility(View.VISIBLE);
+        }
+
 //        } else AppUtils.setHtmlText(titleTextView, story.getDisplayedTitle());
 
         final TextView postedTextView = (TextView) findViewById(R.id.posted);
 //        postedTextView.setText(story.getDisplayedTime(this, false, true));
-        postedTextView.setMovementMethod(LinkMovementMethod.getInstance());
+//        postedTextView.setMovementMethod(LinkMovementMethod.getInstance());
+
+        postedTextView.setText(String.format("read %d times · %s read", story.getClicks_count(),
+                story.getReadtime()));
 
 //        switch (story.getType()) {
 //            case ItemManager.Item.JOB_TYPE:
@@ -333,7 +333,7 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
         viewPager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.divider));
         viewPager.setPageMarginDrawable(R.color.blackT12);
 
-        final ItemPagerAdapter adapter = new ItemPagerAdapter(this, getSupportFragmentManager(),
+        final StoryPagerAdapter adapter = new StoryPagerAdapter(this, getSupportFragmentManager(),
                 story, !externalBrowser);
 
         viewPager.setAdapter(adapter);
@@ -342,9 +342,7 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                 Fragment activeFragment = adapter.getItem(viewPager.getCurrentItem());
-                if (activeFragment != null) {
-                    ((Scrollable) activeFragment).scrollToTop();
-                }
+                if (activeFragment != null) ((Scrollable) activeFragment).scrollToTop();
                 scrollToTop();
             }
         });
@@ -358,18 +356,16 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
                 break;
         }
 
-//        if (story.isStoryType() && externalBrowser) {
-//            findViewById(R.id.header_card_view).setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    AppUtils.openWebUrlExternal(SingleStoryActivity.this,
-//                            story.getDisplayedTitle(),
-//                            story.getUrl());
-//                }
-//            });
-//        } else {
-//            findViewById(R.id.header_card_view).setClickable(false);
-//        }
+        if (externalBrowser) {
+            findViewById(R.id.header_card_view).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AppUtils.openWebUrlExternal(SingleStoryActivity.this,
+                            story.getTitle(),
+                            story.getUrl());
+                }
+            });
+        } else findViewById(R.id.header_card_view).setClickable(false);
     }
 
 
@@ -401,26 +397,24 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
             Drawable drawable = DrawableCompat.wrap(voteButton.getDrawable());
             DrawableCompat.setTint(drawable, ContextCompat.getColor(this, R.color.greenA700));
             Toast.makeText(this, R.string.voted, Toast.LENGTH_SHORT).show();
-        } else {
-            AppUtils.showLogin(this, mAlertDialogBuilder);
-        }
+        } else AppUtils.showLogin(this, alertDialogBuilder);
+
     }
 
 
-    private static class ItemResponseListener implements ResponseListener<StoryModel> {
-        private final WeakReference<SingleStoryActivity> itemActivity;
+    private static class StoryResponseListener implements ResponseListener<StoryModel> {
+        private final WeakReference<SingleStoryActivity> weakReference;
 
 
-        public ItemResponseListener(SingleStoryActivity singleStoryActivity) {
-            this.itemActivity = new WeakReference<>(singleStoryActivity);
+        public StoryResponseListener(SingleStoryActivity singleStoryActivity) {
+            this.weakReference = new WeakReference<>(singleStoryActivity);
         }
 
 
         @Override
         public void onResponse(StoryModel response) {
-            if (itemActivity.get() != null && !itemActivity.get().isActivityDestroyed()) {
-                itemActivity.get().onItemLoaded(response);
-            }
+            if (weakReference.get() != null && !weakReference.get().isActivityDestroyed())
+                weakReference.get().onItemLoaded(response);
         }
 
 
@@ -450,9 +444,8 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
 
         @Override
         public void onError() {
-            if (weakReference.get() != null && !weakReference.get().isActivityDestroyed()) {
+            if (weakReference.get() != null && !weakReference.get().isActivityDestroyed())
                 weakReference.get().onVoted(null);
-            }
         }
     }
 }

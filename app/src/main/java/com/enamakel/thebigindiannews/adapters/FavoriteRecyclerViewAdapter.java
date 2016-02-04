@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.adapters;
 
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
@@ -28,27 +29,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.activities.ComposeActivity;
-import com.enamakel.thebigindiannews.data.Favorite;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
+import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.util.MenuTintDelegate;
 import com.enamakel.thebigindiannews.widgets.PopupMenu;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
 public class FavoriteRecyclerViewAdapter extends ListRecyclerViewAdapter
-        <ListRecyclerViewAdapter.ItemViewHolder, Favorite> {
+        <ListRecyclerViewAdapter.ItemViewHolder, StoryModel> {
+    static String TAG = FavoriteRecyclerViewAdapter.class.getSimpleName();
 
     public interface ActionModeDelegate {
-
         boolean startActionMode(ActionMode.Callback callback);
 
 
@@ -58,14 +56,15 @@ public class FavoriteRecyclerViewAdapter extends ListRecyclerViewAdapter
         void stopActionMode();
     }
 
-    private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-        private boolean mPendingClear;
+
+    final ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
+        boolean pendingClear;
 
 
         @Override
         public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
             actionMode.getMenuInflater().inflate(R.menu.menu_favorite_action, menu);
-            mMenuTintDelegate.onOptionsMenuCreated(menu);
+            menuTintDelegate.onOptionsMenuCreated(menu);
             return true;
         }
 
@@ -86,7 +85,7 @@ public class FavoriteRecyclerViewAdapter extends ListRecyclerViewAdapter
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        mPendingClear = true;
+                                        pendingClear = true;
                                         removeSelection();
                                         actionMode.finish();
                                     }
@@ -103,36 +102,34 @@ public class FavoriteRecyclerViewAdapter extends ListRecyclerViewAdapter
 
         @Override
         public void onDestroyActionMode(ActionMode actionMode) {
-            if (!isAttached()) {
-                return;
-            }
-            mActionModeDelegate.stopActionMode();
-            if (mPendingClear) {
-                mPendingClear = false;
-            } else {
-                mSelected.clear();
-            }
+            if (!isAttached()) return;
+
+            actionModeDelegate.stopActionMode();
+            if (pendingClear) pendingClear = false;
+            else selected.clear();
+
             notifyDataSetChanged();
         }
     };
-    private ActionModeDelegate mActionModeDelegate;
-    private MenuTintDelegate mMenuTintDelegate;
-    private FavoriteManager.Cursor mCursor;
-    private ArrayMap<Integer, String> mSelected = new ArrayMap<>();
-    private int mPendingAdd = -1;
+
+    ActionModeDelegate actionModeDelegate;
+    MenuTintDelegate menuTintDelegate;
+    FavoriteManager.Cursor cursor;
+    ArrayMap<Integer, String> selected = new ArrayMap<>();
+    int pendingAdd = -1;
 
 
     public FavoriteRecyclerViewAdapter(ActionModeDelegate actionModeDelegate) {
         super();
-        mActionModeDelegate = actionModeDelegate;
+        this.actionModeDelegate = actionModeDelegate;
     }
 
 
     @Override
     public void onAttachedToRecyclerView(final RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        mMenuTintDelegate = new MenuTintDelegate();
-        mMenuTintDelegate.onActivityCreated(context);
+        menuTintDelegate = new MenuTintDelegate();
+        menuTintDelegate.onActivityCreated(context);
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -146,9 +143,7 @@ public class FavoriteRecyclerViewAdapter extends ListRecyclerViewAdapter
             @Override
             public int getSwipeDirs(RecyclerView recyclerView,
                                     RecyclerView.ViewHolder viewHolder) {
-                if (mActionModeDelegate.isInActionMode()) {
-                    return 0;
-                }
+                if (actionModeDelegate.isInActionMode()) return 0;
                 return super.getSwipeDirs(recyclerView, viewHolder);
             }
 
@@ -164,10 +159,11 @@ public class FavoriteRecyclerViewAdapter extends ListRecyclerViewAdapter
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
-        mActionModeDelegate = null;
-        if (mCursor != null) {
-            mCursor.close();
-            mCursor = null;
+        actionModeDelegate = null;
+
+        if (cursor != null) {
+            cursor.close();
+            cursor = null;
         }
     }
 
@@ -180,17 +176,17 @@ public class FavoriteRecyclerViewAdapter extends ListRecyclerViewAdapter
 
     @Override
     public int getItemCount() {
-        return mCursor == null ? 0 : mCursor.getCount();
+        return cursor == null ? 0 : cursor.getCount();
     }
 
 
     @Override
     protected void bindItem(final ItemViewHolder holder) {
-        final Favorite favorite = getItem(holder.getAdapterPosition());
+        final StoryModel favorite = getItem(holder.getAdapterPosition());
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (mActionModeDelegate.startActionMode(mActionModeCallback)) {
+                if (actionModeDelegate.startActionMode(actionModeCallback)) {
                     toggle(favorite.getId(), holder.getAdapterPosition());
                     return true;
                 }
@@ -208,100 +204,94 @@ public class FavoriteRecyclerViewAdapter extends ListRecyclerViewAdapter
 
 
     @Override
-    protected boolean isItemAvailable(Favorite item) {
+    protected boolean isItemAvailable(StoryModel item) {
         return item != null;
     }
 
 
     @Override
-    protected void handleItemClick(Favorite item, ItemViewHolder holder) {
-        if (!mActionModeDelegate.isInActionMode()) super.handleItemClick(item, holder);
+    protected void handleItemClick(StoryModel item, ItemViewHolder holder) {
+        if (!actionModeDelegate.isInActionMode()) super.handleItemClick(item, holder);
         else toggle(item.getId(), holder.getLayoutPosition());
-
     }
 
 
     @Override
-    protected Favorite getItem(int position) {
-        if (mCursor == null || !mCursor.moveToPosition(position)) return null;
-        return mCursor.getFavorite();
+    protected StoryModel getItem(int position) {
+        if (cursor == null || !cursor.moveToPosition(position)) return null;
+        return cursor.getFavorite();
     }
 
 
     @Override
     protected boolean isSelected(String itemId) {
-        return super.isSelected(itemId) || mSelected.containsValue(itemId);
+        return super.isSelected(itemId) || selected.containsValue(itemId);
     }
 
 
     public void setCursor(FavoriteManager.Cursor cursor) {
-        mCursor = cursor;
+        this.cursor = cursor;
         if (cursor == null) {
             notifyDataSetChanged();
             return;
         }
-        if (!mSelected.isEmpty()) { // has pending removals, notify removed
-            List<Integer> positions = new ArrayList<>(mSelected.keySet());
+
+        if (!selected.isEmpty()) { // has pending removals, notify removed
+            List<Integer> positions = new ArrayList<>(selected.keySet());
             Collections.sort(positions);
-            mSelected.clear();
-            for (int i = positions.size() - 1; i >= 0; i--) {
+            selected.clear();
+
+            for (int i = positions.size() - 1; i >= 0; i--)
                 notifyItemRemoved(positions.get(i));
-            }
-        } else if (mPendingAdd >= 0) { // has pending insertion, notify inserted
-            notifyItemInserted(mPendingAdd);
-            mPendingAdd = -1;
-        } else { // no pending changes, simply refresh list
+
+        } else if (pendingAdd >= 0) { // has pending insertion, notify inserted
+            notifyItemInserted(pendingAdd);
+            pendingAdd = -1;
+        } else
+            // no pending changes, simply refresh list
             notifyDataSetChanged();
-        }
+
     }
 
 
-    private void removeSelection() {
-        favoriteManager.remove(context, mSelected.values());
+    void removeSelection() {
+        favoriteManager.remove(context, selected.values());
     }
 
 
-    private void dismiss(final int position) {
-        final Favorite item = getItem(position);
-        mSelected.put(position, item.getId());
-        favoriteManager.remove(context, mSelected.values());
+    void dismiss(final int position) {
+        final StoryModel story = getItem(position);
+        selected.put(position, story.getId());
+        favoriteManager.remove(context, selected.values());
         Snackbar.make(recyclerView, R.string.toast_removed, Snackbar.LENGTH_LONG)
                 .setAction(R.string.undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mPendingAdd = position;
-//                        favoriteManager.add(context, item);
+                        pendingAdd = position;
+                        favoriteManager.add(context, story);
                     }
                 })
                 .show();
     }
 
 
-    private void toggle(String itemId, int position) {
-        if (mSelected.containsValue(itemId)) {
-            mSelected.remove(position);
-        } else {
-            mSelected.put(position, itemId);
-        }
+    void toggle(String itemId, int position) {
+        if (selected.containsValue(itemId)) selected.remove(position);
+        else selected.put(position, itemId);
         notifyItemChanged(position);
     }
 
 
-    private void showMoreOptions(View v, final Favorite item) {
+    void showMoreOptions(View v, final StoryModel item) {
         popupMenu.create(context, v, Gravity.NO_GRAVITY);
         popupMenu.inflate(R.menu.menu_contextual_favorite);
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                if (menuItem.getItemId() == R.id.menu_contextual_vote) {
-                    vote(item);
-                    return true;
-                }
-
                 if (menuItem.getItemId() == R.id.menu_contextual_comment) {
                     context.startActivity(new Intent(context, ComposeActivity.class)
                             .putExtra(ComposeActivity.EXTRA_PARENT_ID, item.getId())
-                            .putExtra(ComposeActivity.EXTRA_PARENT_TEXT, item.getDisplayedTitle()));
+                            .putExtra(ComposeActivity.EXTRA_PARENT_TEXT, item.getTitle()));
                     return true;
                 }
 
@@ -309,44 +299,5 @@ public class FavoriteRecyclerViewAdapter extends ListRecyclerViewAdapter
             }
         });
         popupMenu.show();
-    }
-
-
-    private void vote(final Favorite item) {
-        userServices.voteUp(context, item.getId(), new VoteCallback(this));
-    }
-
-
-    private void onVoted(Boolean successful) {
-        if (successful == null) {
-            Toast.makeText(context, R.string.vote_failed, Toast.LENGTH_SHORT).show();
-        } else if (successful) {
-            Toast.makeText(context, R.string.voted, Toast.LENGTH_SHORT).show();
-        } else {
-            AppUtils.showLogin(context, alertDialogBuilder);
-        }
-    }
-
-
-    private static class VoteCallback extends UserServices.Callback {
-        private final WeakReference<FavoriteRecyclerViewAdapter> adapter;
-
-
-        public VoteCallback(FavoriteRecyclerViewAdapter adapter) {
-            this.adapter = new WeakReference<>(adapter);
-        }
-
-
-        @Override
-        public void onDone(boolean successful) {
-            if (adapter.get() != null && adapter.get().isAttached())
-                adapter.get().onVoted(successful);
-        }
-
-
-        @Override
-        public void onError() {
-            if (adapter.get() != null && adapter.get().isAttached()) adapter.get().onVoted(null);
-        }
     }
 }

@@ -19,7 +19,7 @@ import org.robolectric.shadows.support.v4.ShadowLocalBroadcastManager;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
 import com.enamakel.thebigindiannews.test.TestWebItem;
 
 import static junit.framework.Assert.assertEquals;
@@ -52,13 +52,13 @@ public class FavoriteManagerTest {
         cv.put("title", "title");
         cv.put("url", "http://example.com");
         cv.put("time", String.valueOf(System.currentTimeMillis()));
-        resolver.insert(MaterialisticProvider.URI_FAVORITE, cv);
+        resolver.insert(BigIndianProvider.URI_FAVORITE, cv);
         cv = new ContentValues();
         cv.put("itemid", "2");
         cv.put("title", "ask HN");
         cv.put("url", "http://example.com");
         cv.put("time", String.valueOf(System.currentTimeMillis()));
-        resolver.insert(MaterialisticProvider.URI_FAVORITE, cv);
+        resolver.insert(BigIndianProvider.URI_FAVORITE, cv);
         manager = new FavoriteManager();
     }
 
@@ -121,7 +121,7 @@ public class FavoriteManagerTest {
 
     @Test
     public void testReAdd() {
-        Favorite favorite = mock(Favorite.class);
+        FavoriteModel favorite = mock(FavoriteModel.class);
         when(favorite.getId()).thenReturn("3");
         when(favorite.getUrl()).thenReturn("http://example.com");
         when(favorite.getDisplayedTitle()).thenReturn("title");
@@ -173,7 +173,7 @@ public class FavoriteManagerTest {
         parcel.writeString("http://example.com");
         parcel.writeString("title");
         parcel.setDataPosition(0);
-        Favorite favorite = Favorite.CREATOR.createFromParcel(parcel);
+        FavoriteModel favorite = FavoriteModel.CREATOR.createFromParcel(parcel);
         assertEquals("title", favorite.getDisplayedTitle());
         assertEquals("example.com", favorite.getSource());
         assertEquals("http://example.com", favorite.getUrl());
@@ -187,7 +187,7 @@ public class FavoriteManagerTest {
         favorite.writeToParcel(output, 0);
         output.setDataPosition(0);
         assertEquals("1", output.readString());
-        assertThat(Favorite.CREATOR.newArray(1)).hasSize(1);
+        assertThat(FavoriteModel.CREATOR.newArray(1)).hasSize(1);
     }
 
     private Intent getBroadcastIntent() {

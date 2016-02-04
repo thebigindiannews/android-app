@@ -69,7 +69,8 @@
                 android:scrollbarStyle="outsideOverlay"
                 android:hint="@string/submit_content_hint"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="textWebEmailAddress"/>
 
         </android.support.design.widget.TextInputLayout>
 

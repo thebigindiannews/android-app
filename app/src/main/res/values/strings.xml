@@ -27,6 +27,7 @@
     <string name="view_in_browser">View in external browser</string>
     <string name="favorite_email_subject">Your saved stories</string>
     <string name="share">Share</string>
+    <string name="open">Open Story</string>
     <string name="title_activity_about">About</string>
     <string name="license_title">License</string>
     <string name="third_party_licenses_title">3rd Party Licenses</string>
@@ -231,6 +232,8 @@
     <string name="submit_content_hint">URL</string>
     <string name="title_activity_submit">Submit an Article</string>
     <string name="url_text_required">URL is required</string>
+
+    <string name="submit_ongoing">Story is being sent. Please wait.</string>
     <string name="submit_failed">Failed to submit. Please try again.</string>
     <string name="submit_successful">Successfully submitted</string>
     <string name="confirm_no_submit">Exit without submitting?</string>

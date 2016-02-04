@@ -49,7 +49,7 @@ import com.enamakel.thebigindiannews.activities.UserActivity;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
 import com.enamakel.thebigindiannews.data.ItemManager;
-import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.SessionManager;
 import com.enamakel.thebigindiannews.data.TestHnItem;
@@ -133,7 +133,7 @@ public class ListFragmentViewHolderTest {
         ContentValues cv = new ContentValues();
         cv.put("itemid", "1");
         shadowOf(ShadowApplication.getInstance().getContentResolver())
-                .insert(MaterialisticProvider.URI_VIEWED, cv);
+                .insert(BigIndianProvider.URI_VIEWED, cv);
         verify(itemManager).getItem(anyString(), itemListener.capture());
         itemListener.getValue().onResponse(item);
         RecyclerView.ViewHolder holder = adapter.getViewHolder(0);
@@ -312,12 +312,12 @@ public class ListFragmentViewHolderTest {
         controller.pause();
         ShadowContentObserver observer = shadowOf(shadowOf(ShadowApplication.getInstance()
                 .getContentResolver())
-                .getContentObservers(MaterialisticProvider.URI_VIEWED)
+                .getContentObservers(BigIndianProvider.URI_VIEWED)
                 .iterator()
                 .next());
-        observer.dispatchChange(false, MaterialisticProvider.URI_VIEWED
+        observer.dispatchChange(false, BigIndianProvider.URI_VIEWED
                 .buildUpon().appendPath("2").build()); // not in view
-        observer.dispatchChange(false, MaterialisticProvider.URI_VIEWED
+        observer.dispatchChange(false, BigIndianProvider.URI_VIEWED
                     .buildUpon().appendPath("1").build()); // in view
         controller.resume();
         assertViewed();
@@ -334,11 +334,11 @@ public class ListFragmentViewHolderTest {
 
         ShadowContentObserver observer = shadowOf(shadowOf(ShadowApplication.getInstance()
                 .getContentResolver())
-                .getContentObservers(MaterialisticProvider.URI_FAVORITE)
+                .getContentObservers(BigIndianProvider.URI_FAVORITE)
                 .iterator()
                 .next());
         // observed clear
-        observer.dispatchChange(false, MaterialisticProvider.URI_FAVORITE
+        observer.dispatchChange(false, BigIndianProvider.URI_FAVORITE
                 .buildUpon()
                 .appendPath("clear")
                 .build());
@@ -347,14 +347,14 @@ public class ListFragmentViewHolderTest {
         assertFalse(item.isFavorite());
         assertThat(viewHolder.itemView.findViewById(R.id.bookmarked)).isNotVisible();
         // observed add
-        observer.dispatchChange(false, MaterialisticProvider.URI_FAVORITE
+        observer.dispatchChange(false, BigIndianProvider.URI_FAVORITE
                 .buildUpon()
                 .appendPath("add")
                 .appendPath("1")
                 .build());
         assertTrue(item.isFavorite());
         // observed remove
-        observer.dispatchChange(false, MaterialisticProvider.URI_FAVORITE
+        observer.dispatchChange(false, BigIndianProvider.URI_FAVORITE
                 .buildUpon()
                 .appendPath("remove")
                 .appendPath("1")
@@ -369,7 +369,7 @@ public class ListFragmentViewHolderTest {
     public void testSaveItem() {
         ShadowContentObserver observer = shadowOf(shadowOf(ShadowApplication.getInstance()
                 .getContentResolver())
-                .getContentObservers(MaterialisticProvider.URI_FAVORITE)
+                .getContentObservers(BigIndianProvider.URI_FAVORITE)
                 .iterator()
                 .next());
         verify(itemManager).getItem(anyString(), itemListener.capture());
@@ -380,7 +380,7 @@ public class ListFragmentViewHolderTest {
         shadowOf(popupMenu).getOnMenuItemClickListener()
                 .onMenuItemClick(new RoboMenuItem(R.id.menu_contextual_save));
         verify(favoriteManager).add(any(Context.class), eq(item));
-        observer.dispatchChange(false, MaterialisticProvider.URI_FAVORITE
+        observer.dispatchChange(false, BigIndianProvider.URI_FAVORITE
                 .buildUpon()
                 .appendPath("add")
                 .appendPath("1")
@@ -391,7 +391,7 @@ public class ListFragmentViewHolderTest {
                 .containsText(R.string.toast_saved);
         activity.findViewById(R.id.snackbar_action).performClick();
         verify(favoriteManager).remove(any(Context.class), eq("1"));
-        observer.dispatchChange(false, MaterialisticProvider.URI_FAVORITE
+        observer.dispatchChange(false, BigIndianProvider.URI_FAVORITE
                 .buildUpon()
                 .appendPath("remove")
                 .appendPath("1")

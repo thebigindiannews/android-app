@@ -29,7 +29,6 @@ import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
-import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.util.Injectable;
 import com.enamakel.thebigindiannews.util.MultiPaneListener;
@@ -45,7 +44,7 @@ import javax.inject.Inject;
  * @param <T>  item type, should provide title, posted, source
  */
 public abstract class ListRecyclerViewAdapter
-        <VH extends ListRecyclerViewAdapter.ItemViewHolder, T extends BaseCardModel>
+        <VH extends ListRecyclerViewAdapter.ItemViewHolder, T extends StoryModel>
         extends RecyclerView.Adapter<VH> {
     static final String STATE_LAST_SELECTION_POSITION = "state:lastSelectedPosition";
     static final String STATE_CARD_VIEW_ENABLED = "state:cardViewEnabled";

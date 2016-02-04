@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.data;
 
+
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -28,19 +29,26 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.enamakel.thebigindiannews.data.models.StoryModel;
-import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+
+import javax.inject.Inject;
+
 
 /**
- * Data repository for {@link Favorite}
+ * Data repository for {@link FavoriteModel}
  */
 public class FavoriteManager {
-
+    static final String TAG = FavoriteManager.class.getSimpleName();
     public static final int LOADER = 0;
+    public static ArrayList<String> favoriteIds = new ArrayList<>();
+
 
     /**
      * {@link android.content.Intent#getAction()} for broadcasting getting favorites matching query
@@ -49,12 +57,19 @@ public class FavoriteManager {
 
     /**
      * {@link android.os.Bundle} key for {@link #ACTION_GET} that contains {@link ArrayList} of
-     * {@link Favorite}
+     * {@link FavoriteModel}
      */
     public static final String ACTION_GET_EXTRA_DATA = ACTION_GET + ".EXTRA_DATA";
-    private static final String URI_PATH_ADD = "add";
-    private static final String URI_PATH_REMOVE = "remove";
-    private static final String URI_PATH_CLEAR = "clear";
+    static final String URI_PATH_ADD = "add";
+    static final String URI_PATH_REMOVE = "remove";
+    static final String URI_PATH_CLEAR = "clear";
+
+
+    @Inject
+    public FavoriteManager(Context context) {
+        Log.d(TAG, "initialize");
+        refresh(context);
+    }
 
 
     /**
@@ -68,23 +83,40 @@ public class FavoriteManager {
     public void get(Context context, String query) {
         final String selection;
         final String[] selectionArgs;
+
         if (TextUtils.isEmpty(query)) {
+            Log.d(TAG + ":get", "");
             selection = null;
             selectionArgs = null;
-
         } else {
-            selection = MaterialisticProvider.FavoriteEntry.COLUMN_NAME_TITLE + " LIKE ?";
+            Log.d(TAG + ":get", query);
+            selection = BigIndianProvider.FavoriteEntry.COLUMN_NAME_TITLE + " LIKE ?";
             selectionArgs = new String[]{"%" + query + "%"};
         }
 
         final LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(context);
         new FavoriteHandler(context.getContentResolver(), new FavoriteCallback() {
             @Override
-            void onQueryComplete(ArrayList<Favorite> favorites) {
+            void onQueryComplete(ArrayList<StoryModel> favorites) {
+                favorites.clear();
+                for (StoryModel story : favorites) favoriteIds.add(story.getId());
+
                 broadcastManager.sendBroadcast(makeGetBroadcastIntent(favorites));
             }
-        }).startQuery(0, null, MaterialisticProvider.URI_FAVORITE,
+        }).startQuery(0, null, BigIndianProvider.URI_FAVORITE,
                 null, selection, selectionArgs, null);
+    }
+
+
+    public void refresh(Context context) {
+        Log.d(TAG + ":refresh", "");
+        new FavoriteHandler(context.getContentResolver(), new FavoriteCallback() {
+            @Override
+            void onQueryComplete(ArrayList<StoryModel> favorites) {
+                favorites.clear();
+                for (StoryModel story : favorites) favoriteIds.add(story.getId());
+            }
+        }).startQuery(0, null, BigIndianProvider.URI_FAVORITE, null, null, null, null);
     }
 
 
@@ -95,18 +127,21 @@ public class FavoriteManager {
      * @param story   story to be added as favorite
      */
     public void add(Context context, StoryModel story) {
+        Log.d(TAG + ":add", story.getId());
+
         final ContentValues contentValues = new ContentValues();
-        contentValues.put(MaterialisticProvider.FavoriteEntry.COLUMN_NAME_ITEM_ID, story.get_id());
-        contentValues.put(MaterialisticProvider.FavoriteEntry.COLUMN_NAME_URL, story.getUrl());
-        contentValues.put(MaterialisticProvider.FavoriteEntry.COLUMN_NAME_TITLE, story.getTitle());
-//        contentValues.put(MaterialisticProvider.FavoriteEntry.COLUMN_NAME_TIME,
-//                story instanceof Favorite ?
-//                        String.valueOf(((Favorite) story).time) :
-//                        String.valueOf(System.currentTimeMillis()));
-        ContentResolver cr = context.getContentResolver();
-        new FavoriteHandler(cr).startInsert(0, story.get_id(),
-                MaterialisticProvider.URI_FAVORITE, contentValues);
-        cr.notifyChange(buildAdded().appendPath(story.get_id()).build(), null);
+        contentValues.put(BigIndianProvider.FavoriteEntry._ID, story.getId());
+        contentValues.put(BigIndianProvider.FavoriteEntry.COLUMN_NAME_ITEMJSON, story.toJSON());
+        contentValues.put(BigIndianProvider.FavoriteEntry.COLUMN_NAME_TIME, String.valueOf((new Date()).getTime()));
+        contentValues.put(BigIndianProvider.FavoriteEntry.COLUMN_NAME_EXCERPT, story.getExcerpt());
+        contentValues.put(BigIndianProvider.FavoriteEntry.COLUMN_NAME_TITLE, story.getTitle());
+
+        ContentResolver contentResolver = context.getContentResolver();
+        new FavoriteHandler(contentResolver).startInsert(0, story.getId(),
+                BigIndianProvider.URI_FAVORITE, contentValues);
+
+        favoriteIds.add(story.getId());
+        contentResolver.notifyChange(buildAdded().appendPath(story.getId()).build(), null);
     }
 
 
@@ -125,13 +160,15 @@ public class FavoriteManager {
             selection = null;
             selectionArgs = null;
         } else {
-            selection = MaterialisticProvider.FavoriteEntry.COLUMN_NAME_TITLE + " LIKE ?";
+            selection = BigIndianProvider.FavoriteEntry.COLUMN_NAME_TITLE + " LIKE ?";
             selectionArgs = new String[]{"%" + query + "%"};
         }
 
         ContentResolver cr = context.getContentResolver();
-        new FavoriteHandler(cr).startDelete(0, null, MaterialisticProvider.URI_FAVORITE,
+        new FavoriteHandler(cr).startDelete(0, null, BigIndianProvider.URI_FAVORITE,
                 selection, selectionArgs);
+
+        refresh(context);
         cr.notifyChange(buildCleared().build(), null);
     }
 
@@ -145,16 +182,18 @@ public class FavoriteManager {
      */
     public void check(ContentResolver contentResolver, final String itemId,
                       final OperationCallbacks callbacks) {
+        Log.d(TAG + ":check", itemId);
         if (itemId == null) return;
         if (callbacks == null) return;
 
         new FavoriteHandler(contentResolver, new FavoriteCallback() {
             @Override
             void onCheckComplete(boolean isFavorite) {
-                callbacks.onCheckComplete(isFavorite);
+                Log.d(TAG + ":check", itemId + " -> " + isFavorite);
+                callbacks.onCheckFavoriteComplete(isFavorite);
             }
-        }).startQuery(0, itemId, MaterialisticProvider.URI_FAVORITE, null,
-                MaterialisticProvider.FavoriteEntry.COLUMN_NAME_ITEM_ID + " = ?",
+        }).startQuery(0, itemId, BigIndianProvider.URI_FAVORITE, null,
+                BigIndianProvider.FavoriteEntry._ID + " = ?",
                 new String[]{itemId}, null);
     }
 
@@ -168,19 +207,21 @@ public class FavoriteManager {
      */
     public void remove(Context context, StoryModel story) {
         if (story == null) return;
+        Log.d(TAG + ":remove", story.getId());
 
         ContentResolver cr = context.getContentResolver();
         new FavoriteHandler(cr).startDelete(0, story.get_id(),
-                MaterialisticProvider.URI_FAVORITE,
-                MaterialisticProvider.FavoriteEntry.COLUMN_NAME_ITEM_ID + " = ?",
-                new String[]{story.get_id()});
-        cr.notifyChange(buildRemoved().appendPath(story.get_id()).build(), null);
+                BigIndianProvider.URI_FAVORITE,
+                BigIndianProvider.FavoriteEntry._ID + " = ?",
+                new String[]{story.getId()});
+
+        favoriteIds.remove(story.getId());
+        cr.notifyChange(buildRemoved().appendPath(story.getId()).build(), null);
     }
 
 
     /**
-     * Removes multiple stories with given IDs from favorites
-     * be sent upon completion
+     * Removes multiple stories with given IDs from favorites be sent upon completion
      *
      * @param context an instance of {@link android.content.Context}
      * @param itemIds array of story IDs to be removed from favorites
@@ -193,8 +234,8 @@ public class FavoriteManager {
             @Override
             protected Void doInBackground(String... params) {
                 for (String param : params) {
-                    contentResolver.delete(MaterialisticProvider.URI_FAVORITE,
-                            MaterialisticProvider.FavoriteEntry.COLUMN_NAME_ITEM_ID + " = ?",
+                    contentResolver.delete(BigIndianProvider.URI_FAVORITE,
+                            BigIndianProvider.FavoriteEntry._ID + " = ?",
                             new String[]{param});
                 }
 
@@ -203,6 +244,7 @@ public class FavoriteManager {
         }.execute(itemIds.toArray(new String[itemIds.size()]));
 
         for (String itemId : itemIds) {
+            favoriteIds.remove(itemId);
             contentResolver.notifyChange(buildRemoved().appendPath(itemId).build(), null);
         }
     }
@@ -234,22 +276,22 @@ public class FavoriteManager {
     }
 
 
-    private static Uri.Builder buildAdded() {
-        return MaterialisticProvider.URI_FAVORITE.buildUpon().appendPath(URI_PATH_ADD);
+    static Uri.Builder buildAdded() {
+        return BigIndianProvider.URI_FAVORITE.buildUpon().appendPath(URI_PATH_ADD);
     }
 
 
-    private static Uri.Builder buildRemoved() {
-        return MaterialisticProvider.URI_FAVORITE.buildUpon().appendPath(URI_PATH_REMOVE);
+    static Uri.Builder buildRemoved() {
+        return BigIndianProvider.URI_FAVORITE.buildUpon().appendPath(URI_PATH_REMOVE);
     }
 
 
-    private static Uri.Builder buildCleared() {
-        return MaterialisticProvider.URI_FAVORITE.buildUpon().appendPath(URI_PATH_CLEAR);
+    static Uri.Builder buildCleared() {
+        return BigIndianProvider.URI_FAVORITE.buildUpon().appendPath(URI_PATH_CLEAR);
     }
 
 
-    private static Intent makeGetBroadcastIntent(ArrayList<Favorite> favorites) {
+    static Intent makeGetBroadcastIntent(ArrayList<StoryModel> favorites) {
         final Intent intent = new Intent(ACTION_GET);
         intent.putExtra(ACTION_GET_EXTRA_DATA, favorites);
         return intent;
@@ -257,7 +299,7 @@ public class FavoriteManager {
 
 
     /**
-     * A cursor wrapper to retrieve associated {@link Favorite}
+     * A cursor wrapper to retrieve associated {@link FavoriteModel}
      */
     public static class Cursor extends CursorWrapper {
         public Cursor(android.database.Cursor cursor) {
@@ -265,43 +307,44 @@ public class FavoriteManager {
         }
 
 
-        public Favorite getFavorite() {
-            final String itemId = getString(getColumnIndexOrThrow(MaterialisticProvider.FavoriteEntry.COLUMN_NAME_ITEM_ID));
-            final String url = getString(getColumnIndexOrThrow(MaterialisticProvider.FavoriteEntry.COLUMN_NAME_URL));
-            final String title = getString(getColumnIndexOrThrow(MaterialisticProvider.FavoriteEntry.COLUMN_NAME_TITLE));
-            final String time = getString(getColumnIndexOrThrow(MaterialisticProvider.FavoriteEntry.COLUMN_NAME_TIME));
-            return new Favorite(itemId, url, title, Long.valueOf(time));
+        public StoryModel getFavorite() {
+            String json = getString(getColumnIndexOrThrow(
+                    BigIndianProvider.FavoriteEntry.COLUMN_NAME_ITEMJSON));
+            StoryModel story = StoryModel.fromJSON(json);
+            story.setFavorite(true);
+            return story;
         }
     }
 
 
     /**
-     * A {@link android.support.v4.content.CursorLoader} to query {@link Favorite}
+     * A {@link android.support.v4.content.CursorLoader} to query {@link FavoriteModel}
      */
     public static class CursorLoader extends android.support.v4.content.CursorLoader {
         /**
-         * Constructs a cursor loader to query all {@link Favorite}
+         * Constructs a cursor loader to query all {@link FavoriteModel}
          *
          * @param context an instance of {@link android.content.Context}
          */
         public CursorLoader(Context context) {
-            super(context, MaterialisticProvider.URI_FAVORITE, null, null, null, null);
+            super(context, BigIndianProvider.URI_FAVORITE, null, null, null, null);
         }
 
 
         /**
-         * Constructs a cursor loader to query {@link Favorite}
+         * Constructs a cursor loader to query {@link FavoriteModel}
          * with title matching given query
          *
          * @param context an instance of {@link android.content.Context}
          * @param query   query to filter
          */
         public CursorLoader(Context context, String query) {
-            super(context, MaterialisticProvider.URI_FAVORITE, null,
-                    MaterialisticProvider.FavoriteEntry.COLUMN_NAME_TITLE + " LIKE ?",
+            super(context, BigIndianProvider.URI_FAVORITE, null,
+                    BigIndianProvider.FavoriteEntry.COLUMN_NAME_TITLE + " LIKE ?",
                     new String[]{"%" + query + "%"}, null);
         }
     }
+
 
     /**
      * Callback interface for asynchronous favorite CRUD operations
@@ -312,11 +355,12 @@ public class FavoriteManager {
          *
          * @param isFavorite true if is favorite, false otherwise
          */
-        void onCheckComplete(boolean isFavorite);
+        void onCheckFavoriteComplete(boolean isFavorite);
     }
 
-    private static class FavoriteHandler extends AsyncQueryHandler {
-        private FavoriteCallback callback;
+
+    static class FavoriteHandler extends AsyncQueryHandler {
+        FavoriteCallback callback;
 
 
         public FavoriteHandler(ContentResolver cr, @NonNull FavoriteCallback callback) {
@@ -340,12 +384,15 @@ public class FavoriteManager {
             // cookie represents id
             if (cookie != null) callback.onCheckComplete(cursor.getCount() > 0);
             else {
-                ArrayList<Favorite> favorites = new ArrayList<>(cursor.getCount());
+                ArrayList<StoryModel> favorites = new ArrayList<>(cursor.getCount());
+                favorites.clear();
                 Cursor favoriteCursor = new Cursor(cursor);
                 boolean any = favoriteCursor.moveToFirst();
 
                 if (any) do {
-                    favorites.add(favoriteCursor.getFavorite());
+                    StoryModel story = favoriteCursor.getFavorite();
+                    favorites.add(story);
+                    favoriteIds.add(story.getId());
                 } while (favoriteCursor.moveToNext());
 
                 callback.onQueryComplete(favorites);
@@ -354,12 +401,15 @@ public class FavoriteManager {
         }
     }
 
-    private static abstract class FavoriteCallback {
-        void onQueryComplete(ArrayList<Favorite> favorites) {
+
+    static abstract class FavoriteCallback {
+        void onQueryComplete(ArrayList<StoryModel> favorites) {
+
         }
 
 
         void onCheckComplete(boolean isFavorite) {
+
         }
     }
 }

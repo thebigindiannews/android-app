@@ -12,11 +12,12 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.style.StrikethroughSpan;
-import android.util.Log;
 
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.BuildConfig;
 import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.data.FavoriteManager;
+import com.enamakel.thebigindiannews.data.SessionManager;
 import com.enamakel.thebigindiannews.data.clients.BigIndianClient;
 import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
 import com.google.gson.annotations.Expose;
@@ -25,8 +26,9 @@ import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+
+import javax.inject.Inject;
 
 import lombok.Data;
 import lombok.ToString;
@@ -57,6 +59,7 @@ public class StoryModel extends BaseCardModel<StoryModel> {
     boolean deleted;
     boolean dead;
     boolean viewed;
+    boolean local;
 
 
     @Data public class Thumbnail {
@@ -73,15 +76,43 @@ public class StoryModel extends BaseCardModel<StoryModel> {
     }
 
 
+    @Inject FavoriteManager favoriteManager;
+    @Inject SessionManager sessionManager;
+
+
     public static StoryModel readFromParcel(Parcel source) {
-        String json = source.readString();
+        return fromJSON(source.readString());
+    }
+
+
+    public static StoryModel fromJSON(String json) {
         return gson.fromJson(json, StoryModel.class);
+    }
+
+
+    public StoryModel(String title, String url) {
+        super();
+        this.title = title;
+        this.url = url;
+    }
+
+
+    public StoryModel(String _id, String title, String url) {
+        super();
+        this._id = _id;
+        this.title = title;
+        this.url = url;
     }
 
 
     public void populate(StoryModel source) {
         _id = source._id;
         excerpt = source.excerpt;
+    }
+
+
+    public boolean isFavorite() {
+        return favoriteManager.favoriteIds.contains(getId());
     }
 
 

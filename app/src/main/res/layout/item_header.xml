@@ -76,7 +76,8 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
                 android:textSize="?attr/subtitleTextSize"
-                android:textColor="?android:attr/textColorPrimary"/>
+                android:textColor="?android:attr/textColorPrimary"
+                />
 
         </LinearLayout>
 
@@ -92,8 +93,8 @@
             <ImageButton
                 android:id="@+id/vote_button"
                 android:contentDescription="@string/vote_up"
-                tools:visibility="visible"
-                android:visibility="invisible"
+                tools:visibility="gone"
+                android:visibility="gone"
                 android:src="@drawable/ic_thumb_up_white_24dp"
                 android:tint="?android:attr/textColorPrimary"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"

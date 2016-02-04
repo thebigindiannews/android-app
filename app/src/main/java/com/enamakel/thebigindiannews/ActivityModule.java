@@ -43,13 +43,14 @@ import com.enamakel.thebigindiannews.adapters.SubmissionRecyclerViewAdapter;
 import com.enamakel.thebigindiannews.adapters.ThreadPreviewRecyclerViewAdapter;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ItemManager;
-import com.enamakel.thebigindiannews.data.ReadabilityClient;
 import com.enamakel.thebigindiannews.data.RestServiceFactory;
 import com.enamakel.thebigindiannews.data.SessionManager;
 import com.enamakel.thebigindiannews.data.UserManager;
 import com.enamakel.thebigindiannews.data.clients.AlgoliaClient;
 import com.enamakel.thebigindiannews.data.clients.AlgoliaPopularClient;
+import com.enamakel.thebigindiannews.data.clients.BigIndianClient;
 import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
+import com.enamakel.thebigindiannews.data.clients.ReadabilityClient;
 import com.enamakel.thebigindiannews.fragments.DrawerFragment;
 import com.enamakel.thebigindiannews.fragments.FavoriteFragment;
 import com.enamakel.thebigindiannews.fragments.ItemFragment;
@@ -85,6 +86,7 @@ import dagger.Provides;
                 FavoriteFragment.class,
                 ItemFragment.class,
                 ListFragment.class,
+                BigIndianClient.class,
                 WebFragment.class,
                 DrawerFragment.class,
                 ReadabilityFragment.class,
@@ -102,18 +104,18 @@ public class ActivityModule {
     public static final String POPULAR = "popular";
     public static final String HN = "hn";
 
-    private final Context mContext;
+    private final Context context;
 
 
     public ActivityModule(Context context) {
-        mContext = context;
+        this.context = context;
     }
 
 
     @Provides
     @Singleton
     public Context provideContext() {
-        return mContext;
+        return context;
     }
 
 
@@ -158,7 +160,7 @@ public class ActivityModule {
     @Provides
     @Singleton
     public FavoriteManager provideFavoriteManager() {
-        return new FavoriteManager();
+        return new FavoriteManager(context);
     }
 
 

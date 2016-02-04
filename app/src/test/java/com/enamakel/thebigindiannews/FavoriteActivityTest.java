@@ -61,10 +61,10 @@ import com.enamakel.thebigindiannews.activities.ComposeActivity;
 import com.enamakel.thebigindiannews.activities.FavoriteActivity;
 import com.enamakel.thebigindiannews.activities.ListActivity;
 import com.enamakel.thebigindiannews.activities.LoginActivity;
-import com.enamakel.thebigindiannews.data.Favorite;
+import com.enamakel.thebigindiannews.data.FavoriteModel;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ItemManager;
-import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
 import com.enamakel.thebigindiannews.data.TestHnItem;
 import com.enamakel.thebigindiannews.fragments.FavoriteFragment;
 import com.enamakel.thebigindiannews.test.ShadowItemTouchHelper;
@@ -121,13 +121,13 @@ public class FavoriteActivityTest {
         cv.put("title", "title");
         cv.put("url", "http://example.com");
         cv.put("time", String.valueOf(System.currentTimeMillis()));
-        resolver.insert(MaterialisticProvider.URI_FAVORITE, cv);
+        resolver.insert(BigIndianProvider.URI_FAVORITE, cv);
         cv = new ContentValues();
         cv.put("itemid", "2");
         cv.put("title", "ask HN");
         cv.put("url", "http://example.com");
         cv.put("time", String.valueOf(System.currentTimeMillis()));
-        resolver.insert(MaterialisticProvider.URI_FAVORITE, cv);
+        resolver.insert(BigIndianProvider.URI_FAVORITE, cv);
         activity = controller.create().postCreate(null).start().resume().visible().get(); // skip menu due to search view
         recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view);
         adapter = recyclerView.getAdapter();
@@ -154,8 +154,8 @@ public class FavoriteActivityTest {
         dialog = ShadowAlertDialog.getLatestAlertDialog();
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).performClick();
         verify(favoriteManager).clear(any(Context.class), anyString());
-        resolver.delete(MaterialisticProvider.URI_FAVORITE, null, null);
-        notifyChange(MaterialisticProvider.URI_FAVORITE);
+        resolver.delete(BigIndianProvider.URI_FAVORITE, null, null);
+        notifyChange(BigIndianProvider.URI_FAVORITE);
         assertEquals(0, adapter.getItemCount());
     }
 
@@ -236,8 +236,8 @@ public class FavoriteActivityTest {
         assertThat(selection.getValue()).contains("2"); // sort by date desc
         verify(actionMode).finish();
 
-        resolver.delete(MaterialisticProvider.URI_FAVORITE, "itemid=?", new String[]{"2"});
-        notifyChange(MaterialisticProvider.URI_FAVORITE);
+        resolver.delete(BigIndianProvider.URI_FAVORITE, "itemid=?", new String[]{"2"});
+        notifyChange(BigIndianProvider.URI_FAVORITE);
         assertEquals(1, adapter.getItemCount());
     }
 
@@ -250,8 +250,8 @@ public class FavoriteActivityTest {
         ((ShadowRecyclerView) ShadowExtractor.extract(recyclerView)).getItemTouchHelperCallback()
                 .onSwiped(holder, ItemTouchHelper.LEFT);
         verify(favoriteManager).remove(any(Context.class), anyCollection());
-        resolver.delete(MaterialisticProvider.URI_FAVORITE, "itemid=?", new String[]{"2"});
-        notifyChange(MaterialisticProvider.URI_FAVORITE);
+        resolver.delete(BigIndianProvider.URI_FAVORITE, "itemid=?", new String[]{"2"});
+        notifyChange(BigIndianProvider.URI_FAVORITE);
         assertEquals(1, adapter.getItemCount());
         assertThat((TextView) activity.findViewById(R.id.snackbar_text))
                 .isNotNull()
@@ -263,8 +263,8 @@ public class FavoriteActivityTest {
         cv.put("title", "ask HN");
         cv.put("url", "http://example.com");
         cv.put("time", String.valueOf(System.currentTimeMillis()));
-        resolver.insert(MaterialisticProvider.URI_FAVORITE, cv);
-        notifyChange(MaterialisticProvider.URI_FAVORITE);
+        resolver.insert(BigIndianProvider.URI_FAVORITE, cv);
+        notifyChange(BigIndianProvider.URI_FAVORITE);
         assertEquals(2, adapter.getItemCount());
     }
 
@@ -286,7 +286,7 @@ public class FavoriteActivityTest {
                 emailResolveInfo);
         ShadowLocalBroadcastManager manager = shadowOf(LocalBroadcastManager.getInstance(activity));
         Intent intent = new Intent(FavoriteManager.ACTION_GET);
-        intent.putExtra(FavoriteManager.ACTION_GET_EXTRA_DATA, new ArrayList<Favorite>());
+        intent.putExtra(FavoriteManager.ACTION_GET_EXTRA_DATA, new ArrayList<FavoriteModel>());
         manager.getRegisteredBroadcastReceivers().get(0).broadcastReceiver
                 .onReceive(activity, intent);
         assertThat(progressDialog).isNotShowing();
@@ -392,23 +392,23 @@ public class FavoriteActivityTest {
     public void testRemoveClearSelection() {
         ShadowContentObserver observer = shadowOf(shadowOf(ShadowApplication.getInstance()
                 .getContentResolver())
-                .getContentObservers(MaterialisticProvider.URI_FAVORITE)
+                .getContentObservers(BigIndianProvider.URI_FAVORITE)
                 .iterator()
                 .next());
-        observer.dispatchChange(false, MaterialisticProvider.URI_FAVORITE
+        observer.dispatchChange(false, BigIndianProvider.URI_FAVORITE
                 .buildUpon()
                 .appendPath("remove")
                 .appendPath("3")
                 .build());
         assertNull(activity.getSelectedItem());
         activity.onItemSelected(new TestHnItem(1L));
-        observer.dispatchChange(false, MaterialisticProvider.URI_FAVORITE
+        observer.dispatchChange(false, BigIndianProvider.URI_FAVORITE
                 .buildUpon()
                 .appendPath("remove")
                 .appendPath("2")
                 .build());
         assertNotNull(activity.getSelectedItem());
-        observer.dispatchChange(false, MaterialisticProvider.URI_FAVORITE
+        observer.dispatchChange(false, BigIndianProvider.URI_FAVORITE
                 .buildUpon()
                 .appendPath("remove")
                 .appendPath("1")
@@ -421,10 +421,10 @@ public class FavoriteActivityTest {
         activity.onItemSelected(new TestHnItem(1L));
         shadowOf(shadowOf(ShadowApplication.getInstance()
                 .getContentResolver())
-                .getContentObservers(MaterialisticProvider.URI_FAVORITE)
+                .getContentObservers(BigIndianProvider.URI_FAVORITE)
                 .iterator()
                 .next())
-                .dispatchChange(false, MaterialisticProvider.URI_FAVORITE
+                .dispatchChange(false, BigIndianProvider.URI_FAVORITE
                         .buildUpon()
                         .appendPath("clear")
                         .build());

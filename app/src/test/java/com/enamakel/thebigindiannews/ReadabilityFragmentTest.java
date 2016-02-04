@@ -24,7 +24,7 @@ import org.robolectric.util.ActivityController;
 import javax.inject.Inject;
 
 import com.enamakel.thebigindiannews.data.ItemManager;
-import com.enamakel.thebigindiannews.data.ReadabilityClient;
+import com.enamakel.thebigindiannews.data.clients.ReadabilityClient;
 import com.enamakel.thebigindiannews.fragments.ReadabilityFragment;
 import com.enamakel.thebigindiannews.test.ShadowNestedScrollView;
 import com.enamakel.thebigindiannews.test.ShadowSupportPreferenceManager;

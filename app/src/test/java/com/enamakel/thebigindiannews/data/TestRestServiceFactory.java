@@ -2,6 +2,7 @@ package com.enamakel.thebigindiannews.data;
 
 import com.enamakel.thebigindiannews.data.clients.AlgoliaClient;
 import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
+import com.enamakel.thebigindiannews.data.clients.ReadabilityClient;
 
 import static org.mockito.Mockito.mock;
 

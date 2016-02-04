@@ -3,7 +3,8 @@ package com.enamakel.thebigindiannews.data;
 import android.content.ContentValues;
 import android.content.ShadowAsyncQueryHandler;
 
-import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+import com.enamakel.thebigindiannews.data.clients.ReadabilityClient;
+import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
 import com.google.gson.GsonBuilder;
 
 import org.junit.Before;
@@ -97,7 +98,7 @@ public class ReadabilityClientTest {
         ContentValues cv = new ContentValues();
         cv.put("itemid", "1");
         cv.put("content", "<div>content</div>");
-        resolver.insert(MaterialisticProvider.URI_READABILITY, cv);
+        resolver.insert(BigIndianProvider.URI_READABILITY, cv);
         client.parse("1", "http://example.com/article.html", callback);
         verify(TestRestServiceFactory.readabilityService, never()).parse(anyString());
         verify(call, never()).enqueue(any(Callback.class));
@@ -109,7 +110,7 @@ public class ReadabilityClientTest {
         ContentValues cv = new ContentValues();
         cv.put("itemid", "1");
         cv.put("content", "<div></div>");
-        resolver.insert(MaterialisticProvider.URI_READABILITY, cv);
+        resolver.insert(BigIndianProvider.URI_READABILITY, cv);
         client.parse("1", "http://example.com/article.html", callback);
         verify(TestRestServiceFactory.readabilityService, never()).parse(anyString());
         verify(call, never()).enqueue(any(Callback.class));

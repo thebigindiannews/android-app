@@ -45,6 +45,8 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 
 public class ListFragment extends BaseListFragment {
     public static final String EXTRA_ITEM_MANAGER = ListFragment.class.getName() + ".EXTRA_ITEM_MANAGER";
@@ -78,6 +80,7 @@ public class ListFragment extends BaseListFragment {
     boolean isLoading = false;
     int currentPage = 1;
 
+    @Inject BigIndianClient bigIndianClient;
 
     public interface RefreshCallback {
         void onRefreshed();
@@ -186,7 +189,7 @@ public class ListFragment extends BaseListFragment {
     private void refresh() {
         adapter.setShowAll(true);
         currentPage = 1;
-        BigIndianClient.getStories(fetchMode, currentPage, new RefreshListener(this));
+        bigIndianClient.getStories(fetchMode, currentPage, new RefreshListener(this));
     }
 
 
@@ -196,8 +199,7 @@ public class ListFragment extends BaseListFragment {
 
         isLoading = true;
         currentPage++;
-        Log.d("fuck", "you" + currentPage);
-        BigIndianClient.getStories(fetchMode, currentPage, new NextPageListener(this));
+        bigIndianClient.getStories(fetchMode, currentPage, new NextPageListener(this));
     }
 
 

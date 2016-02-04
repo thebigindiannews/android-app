@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.activities;
 
+
 import android.app.SearchManager;
 import android.content.Intent;
 import android.database.ContentObserver;
@@ -24,30 +25,38 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.base.BaseListActivity;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
-import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
-import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+import com.enamakel.thebigindiannews.data.models.StoryModel;
+import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
 import com.enamakel.thebigindiannews.fragments.FavoriteFragment;
 
+
 public class FavoriteActivity extends BaseListActivity {
-    public static final String EMPTY_QUERY = MaterialisticProvider.class.getName();
+    public static final String EMPTY_QUERY = BigIndianProvider.class.getName();
+
+    static final String TAG = FavoriteActivity.class.getName();
     static final String STATE_FILTER = "state:filter";
-    final ContentObserver mObserver = new ContentObserver(new Handler()) {
+
+    final ContentObserver contentObserver = new ContentObserver(new Handler()) {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
-            if (FavoriteManager.isRemoved(uri)) {
-                BaseCardModel selected = getSelectedItem();
+            Log.d(TAG + ":contentObserver", uri.toString());
 
-                if (selected != null &&
-                        TextUtils.equals(selected.getId(), uri.getLastPathSegment()))
+            if (FavoriteManager.isRemoved(uri)) {
+                StoryModel storyModel = getSelectedItem();
+
+                if (storyModel != null &&
+                        TextUtils.equals(storyModel.getId(), uri.getLastPathSegment()))
                     onItemSelected(null);
 
             } else if (FavoriteManager.isCleared(uri)) onItemSelected(null);
         }
     };
+
     String filter;
 
 
@@ -58,8 +67,9 @@ public class FavoriteActivity extends BaseListActivity {
             filter = savedInstanceState.getString(STATE_FILTER);
             getSupportActionBar().setSubtitle(filter);
         }
-        getContentResolver().registerContentObserver(MaterialisticProvider.URI_FAVORITE,
-                true, mObserver);
+
+        getContentResolver().registerContentObserver(BigIndianProvider.URI_FAVORITE,
+                true, contentObserver);
     }
 
 
@@ -91,7 +101,7 @@ public class FavoriteActivity extends BaseListActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        getContentResolver().unregisterContentObserver(mObserver);
+        getContentResolver().unregisterContentObserver(contentObserver);
     }
 
 
@@ -112,5 +122,11 @@ public class FavoriteActivity extends BaseListActivity {
     @Override
     protected boolean isSearchable() {
         return false;
+    }
+
+
+    @Override
+    protected String getTrackingName() {
+        return "Favoirites page";
     }
 }

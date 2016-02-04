@@ -94,7 +94,8 @@ public class StoryView extends RelativeLayout implements Checkable {
         backgroundColor = ContextCompat.getColor(context, typedArray1.getResourceId(2, 0));
         highlightColor = ContextCompat.getColor(context, typedArray1.getResourceId(3, 0));
         promotedColorResId = ContextCompat.getColor(context, R.color.greenA700);
-        inflate(context, isLocal ? R.layout.local_story_view : R.layout.story_view, this);
+//        inflate(context, isLocal ? R.layout.local_story_view : R.layout.story_view, this);
+        inflate(context, R.layout.story_view, this);
         setBackgroundColor(backgroundColor);
 
         typedArray.recycle();
@@ -126,9 +127,9 @@ public class StoryView extends RelativeLayout implements Checkable {
 //                        .getQuantityString(R.plurals.comments_count, item.getKidCount(), item.getKidCount()));
 //                comment.setVisibility(View.VISIBLE);
 //            } else {
-            comment.setVisibility(View.GONE);
 //            }
         }
+//        comment.setVisibility(View.GONE);
 
         // show The Image in a ImageView
         if (story.hasImage()) {
@@ -151,13 +152,15 @@ public class StoryView extends RelativeLayout implements Checkable {
                     });
         } else imageContainer.setVisibility(GONE);
 
+        posted.setText(String.format("read %d times · %s read", story.getClicks_count(),
+                story.getReadtime()));
+
 
         title.setText(story.getTitle());
         description.setText(story.getExcerpt().replace('\n', ' '));
         source.setText(story.getSource());
         source.setCompoundDrawables(null, null, null, null);
-        posted.setText(String.format("read %d times · %s read", story.getClicks_count(),
-                story.getReadtime()));
+
     }
 
 
@@ -169,7 +172,7 @@ public class StoryView extends RelativeLayout implements Checkable {
         source.setText(R.string.loading_text);
         thumbnail.setImageResource(0);
         source.setCompoundDrawables(null, null, null, null);
-        comment.setVisibility(View.GONE);
+//        comment.setVisibility(View.GONE);
     }
 
 
@@ -186,7 +189,7 @@ public class StoryView extends RelativeLayout implements Checkable {
 
 
     public void setOnCommentClickListener(OnClickListener listener) {
-        comment.setOnClickListener(listener);
+//        comment.setOnClickListener(listener);
     }
 
 

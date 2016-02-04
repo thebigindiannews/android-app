@@ -15,7 +15,7 @@ import com.google.android.gms.analytics.Tracker;
  */
 public abstract class BaseActivity extends AppCompatActivity {
     protected Tracker tracker;
-    static String TAG = "ThemedActivity";
+    static String TAG = "BaseActivity";
 
 
     protected String getTrackingName() {

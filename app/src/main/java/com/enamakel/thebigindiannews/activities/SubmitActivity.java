@@ -29,7 +29,6 @@ import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.activities.base.InjectableActivity;
@@ -53,7 +52,9 @@ public class SubmitActivity extends InjectableActivity {
     private TextView contentEditText;
     private TextInputLayout titleLayout;
     private TextInputLayout contentLayout;
-    private boolean sending;
+    private boolean sending, loading;
+
+    @Inject BigIndianClient bigIndianClient;
 
 
     @Override
@@ -159,19 +160,24 @@ public class SubmitActivity extends InjectableActivity {
 
 
     private void submit(boolean isUrl) {
-        toggleControls(true);
-        Toast.makeText(this, R.string.sending, Toast.LENGTH_SHORT).show();
+        if (sending) {
+            Toast.makeText(this, R.string.submit_ongoing, Toast.LENGTH_SHORT).show();
+        } else {
+            toggleControls(true);
+            Toast.makeText(this, R.string.sending, Toast.LENGTH_LONG).show();
 
-        StoryModel storyModel = new StoryModel();
-        storyModel.setTitle(titleEditText.getText().toString());
-        storyModel.setUrl(contentEditText.getText().toString());
-        BigIndianClient.submit(storyModel, new SubmitCallback(this));
+            StoryModel storyModel = new StoryModel(titleEditText.getText().toString(),
+                    contentEditText.getText().toString());
+
+            bigIndianClient.submit(storyModel, new SubmitCallback(this));
+        }
     }
 
 
     private void onSubmitted(Boolean successful) {
+        toggleControls(false);
+
         if (successful == null || !successful) {
-            toggleControls(false);
             Toast.makeText(this, R.string.submit_failed, Toast.LENGTH_SHORT).show();
         } else if (successful) {
             Toast.makeText(this, R.string.submit_successful, Toast.LENGTH_SHORT).show();
@@ -183,7 +189,7 @@ public class SubmitActivity extends InjectableActivity {
                 finish();
             }
         }
-            // TODO If it failed then show login
+        // TODO If it failed then show login
 //        } else if (!isFinishing()) AppUtils.showLogin(this, alertDialogBuilder);
 
     }

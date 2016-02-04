@@ -16,12 +16,14 @@
 
 package com.enamakel.thebigindiannews.widgets;
 
+
 import android.content.Context;
 import android.support.annotation.MenuRes;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 
 public interface PopupMenu {
     /**
@@ -84,31 +86,32 @@ public interface PopupMenu {
         boolean onMenuItemClick(MenuItem item);
     }
 
+
     class Impl implements PopupMenu {
-        private android.support.v7.widget.PopupMenu mSupportPopupMenu;
+        private android.support.v7.widget.PopupMenu supportPopupMenu;
 
 
         @Override
         public void create(Context context, View anchor, int gravity) {
-            mSupportPopupMenu = new android.support.v7.widget.PopupMenu(context, anchor, gravity);
+            supportPopupMenu = new android.support.v7.widget.PopupMenu(context, anchor, gravity);
         }
 
 
         @Override
         public void inflate(@MenuRes int menuRes) {
-            mSupportPopupMenu.inflate(menuRes);
+            supportPopupMenu.inflate(menuRes);
         }
 
 
         @Override
         public Menu getMenu() {
-            return mSupportPopupMenu.getMenu();
+            return supportPopupMenu.getMenu();
         }
 
 
         @Override
         public void setOnMenuItemClickListener(final OnMenuItemClickListener listener) {
-            mSupportPopupMenu.setOnMenuItemClickListener(new android.support.v7.widget.PopupMenu.OnMenuItemClickListener() {
+            supportPopupMenu.setOnMenuItemClickListener(new android.support.v7.widget.PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     return listener.onMenuItemClick(item);
@@ -119,7 +122,7 @@ public interface PopupMenu {
 
         @Override
         public void show() {
-            mSupportPopupMenu.show();
+            supportPopupMenu.show();
         }
     }
 }

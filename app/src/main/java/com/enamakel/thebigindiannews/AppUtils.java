@@ -62,6 +62,7 @@ import android.widget.Toast;
 import com.enamakel.thebigindiannews.activities.LoginActivity;
 import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
+import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.util.ScrollAwareFABBehavior;
@@ -82,32 +83,30 @@ public class AppUtils {
     public static void openWebUrlExternal(Context context, String title, String url) {
         Intent intent = createViewIntent(context, title, url);
         if (!HackerNewsClient.BASE_WEB_URL.contains(Uri.parse(url).getHost())) {
-            if (intent.resolveActivity(context.getPackageManager()) != null) {
+            if (intent.resolveActivity(context.getPackageManager()) != null)
                 context.startActivity(intent);
-            }
             return;
         }
+
         List<ResolveInfo> activities = context.getPackageManager()
                 .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         ArrayList<Intent> intents = new ArrayList<>();
         for (ResolveInfo info : activities) {
-            if (info.activityInfo.packageName.equalsIgnoreCase(context.getPackageName())) {
+            if (info.activityInfo.packageName.equalsIgnoreCase(context.getPackageName()))
                 continue;
-            }
+
             intents.add(createViewIntent(context, title, url)
                     .setPackage(info.activityInfo.packageName));
         }
-        if (intents.isEmpty()) {
-            return;
-        }
-        if (intents.size() == 1) {
-            context.startActivity(intents.remove(0));
-        } else {
-            context.startActivity(Intent.createChooser(intents.remove(0),
-                    context.getString(R.string.chooser_title))
-                    .putExtra(Intent.EXTRA_INITIAL_INTENTS,
-                            intents.toArray(new Parcelable[intents.size()])));
-        }
+
+        if (intents.isEmpty()) return;
+
+        if (intents.size() == 1) context.startActivity(intents.remove(0));
+        else context.startActivity(Intent.createChooser(intents.remove(0),
+                context.getString(R.string.chooser_title))
+                .putExtra(Intent.EXTRA_INITIAL_INTENTS,
+                        intents.toArray(new Parcelable[intents.size()])));
+
     }
 
 
@@ -140,9 +139,7 @@ public class AppUtils {
                             .getSpans(off, off, ClickableSpan.class);
 
                     if (link.length != 0) {
-                        if (action == MotionEvent.ACTION_UP) {
-                            link[0].onClick(widget);
-                        }
+                        if (action == MotionEvent.ACTION_UP) link[0].onClick(widget);
                         return true;
                     }
                 }
@@ -168,70 +165,76 @@ public class AppUtils {
 
     public static void openExternal(@NonNull final Context context,
                                     @NonNull AlertDialogBuilder alertDialogBuilder,
-                                    @NonNull final ItemManager.WebItem item) {
+                                    @NonNull final StoryModel item) {
         if (TextUtils.isEmpty(item.getUrl()) ||
                 item.getUrl().startsWith(HackerNewsClient.BASE_WEB_URL)) {
             openWebUrlExternal(context,
-                    item.getDisplayedTitle(),
+                    item.getTitle(),
                     String.format(HackerNewsClient.WEB_ITEM_PATH, item.getId()));
             return;
         }
-        alertDialogBuilder
-                .init(context)
-                .setMessage(R.string.view_in_browser)
-                .setPositiveButton(R.string.article, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        openWebUrlExternal(context,
-                                item.getDisplayedTitle(),
-                                item.getUrl());
-                    }
-                })
-                .setNegativeButton(R.string.comments, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        openWebUrlExternal(context,
-                                item.getDisplayedTitle(),
-                                String.format(HackerNewsClient.WEB_ITEM_PATH, item.getId()));
-                    }
-                })
-                .create()
-                .show();
+        openWebUrlExternal(context,
+                item.getTitle(),
+                item.getUrl());
+//        alertDialogBuilder
+//                .init(context)
+//                .setMessage(R.string.view_in_browser)
+//                .setPositiveButton(R.string.article, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        openWebUrlExternal(context,
+//                                item.getTitle(),
+//                                item.getUrl());
+//                    }
+//                })
+//                .setNegativeButton(R.string.comments, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        openWebUrlExternal(context,
+//                                item.getTitle(),
+//                                String.format(HackerNewsClient.WEB_ITEM_PATH, item.getId()));
+//                    }
+//                })
+//                .create()
+//                .show();
 
     }
 
 
     public static void share(@NonNull final Context context,
                              @NonNull AlertDialogBuilder alertDialogBuilder,
-                             @NonNull final ItemManager.WebItem item) {
+                             @NonNull final StoryModel item) {
         if (TextUtils.isEmpty(item.getUrl()) ||
                 item.getUrl().startsWith(HackerNewsClient.BASE_WEB_URL)) {
             context.startActivity(makeChooserShareIntent(context,
-                    item.getDisplayedTitle(),
+                    item.getTitle(),
                     String.format(HackerNewsClient.WEB_ITEM_PATH, item.getId())));
             return;
         }
-        alertDialogBuilder
-                .init(context)
-                .setMessage(R.string.share)
-                .setPositiveButton(R.string.article, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        context.startActivity(makeChooserShareIntent(context,
-                                item.getDisplayedTitle(),
-                                item.getUrl()));
-                    }
-                })
-                .setNegativeButton(R.string.comments, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        context.startActivity(makeChooserShareIntent(context,
-                                item.getDisplayedTitle(),
-                                String.format(HackerNewsClient.WEB_ITEM_PATH, item.getId())));
-                    }
-                })
-                .create()
-                .show();
+        context.startActivity(makeChooserShareIntent(context,
+                item.getTitle(),
+                item.getUrl()));
+//        alertDialogBuilder
+//                .init(context)
+//                .setMessage(R.string.share)
+//                .setPositiveButton(R.string.article, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        context.startActivity(makeChooserShareIntent(context,
+//                                item.getTitle(),
+//                                item.getUrl()));
+//                    }
+//                })
+//                .setNegativeButton(R.string.comments, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        context.startActivity(makeChooserShareIntent(context,
+//                                item.getDisplayedTitle(),
+//                                String.format(HackerNewsClient.WEB_ITEM_PATH, item.getId())));
+//                    }
+//                })
+//                .create()
+//                .show();
     }
 
 
@@ -273,18 +276,10 @@ public class AppUtils {
 
     public static String getAbbreviatedTimeSpan(long timeMillis) {
         long span = Math.max(System.currentTimeMillis() - timeMillis, 0);
-        if (span >= DateUtils.YEAR_IN_MILLIS) {
-            return (span / DateUtils.YEAR_IN_MILLIS) + ABBR_YEAR;
-        }
-        if (span >= DateUtils.WEEK_IN_MILLIS) {
-            return (span / DateUtils.WEEK_IN_MILLIS) + ABBR_WEEK;
-        }
-        if (span >= DateUtils.DAY_IN_MILLIS) {
-            return (span / DateUtils.DAY_IN_MILLIS) + ABBR_DAY;
-        }
-        if (span >= DateUtils.HOUR_IN_MILLIS) {
-            return (span / DateUtils.HOUR_IN_MILLIS) + ABBR_HOUR;
-        }
+        if (span >= DateUtils.YEAR_IN_MILLIS) return (span / DateUtils.YEAR_IN_MILLIS) + ABBR_YEAR;
+        if (span >= DateUtils.WEEK_IN_MILLIS) return (span / DateUtils.WEEK_IN_MILLIS) + ABBR_WEEK;
+        if (span >= DateUtils.DAY_IN_MILLIS) return (span / DateUtils.DAY_IN_MILLIS) + ABBR_DAY;
+        if (span >= DateUtils.HOUR_IN_MILLIS) return (span / DateUtils.HOUR_IN_MILLIS) + ABBR_HOUR;
         return (span / DateUtils.MINUTE_IN_MILLIS) + ABBR_MINUTE;
     }
 
@@ -292,6 +287,7 @@ public class AppUtils {
     public static boolean isOnWiFi(Context context) {
         NetworkInfo activeNetwork = ((ConnectivityManager) context.getSystemService(
                 Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+
         return activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting() &&
                 activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
@@ -300,16 +296,14 @@ public class AppUtils {
 
     public static Pair<String, String> getCredentials(Context context) {
         String username = Preferences.getUsername(context);
-        if (TextUtils.isEmpty(username)) {
-            return null;
-        }
+        if (TextUtils.isEmpty(username)) return null;
+
         AccountManager accountManager = AccountManager.get(context);
         Account[] accounts = accountManager.getAccountsByType(BuildConfig.APPLICATION_ID);
-        for (Account account : accounts) {
-            if (TextUtils.equals(username, account.name)) {
+        for (Account account : accounts)
+            if (TextUtils.equals(username, account.name))
                 return Pair.create(username, accountManager.getPassword(account));
-            }
-        }
+
         return null;
     }
 
@@ -325,13 +319,18 @@ public class AppUtils {
      */
     public static void showLogin(Context context, AlertDialogBuilder alertDialogBuilder) {
         Account[] accounts = AccountManager.get(context).getAccountsByType(BuildConfig.APPLICATION_ID);
-        if (accounts.length == 0) { // no accounts, ask to login or re-login
+
+        // no accounts, ask to login or re-login
+        if (accounts.length == 0) context.startActivity(new Intent(context, LoginActivity.class));
+
+        else if (!TextUtils.isEmpty(Preferences.getUsername(context)))
+            // stale account, ask to re-login
             context.startActivity(new Intent(context, LoginActivity.class));
-        } else if (!TextUtils.isEmpty(Preferences.getUsername(context))) { // stale account, ask to re-login
-            context.startActivity(new Intent(context, LoginActivity.class));
-        } else { // logged out, choose from existing accounts to log in
+
+        else
+            // logged out, choose from existing accounts to log in
             showAccountChooser(context, alertDialogBuilder, accounts);
-        }
+
     }
 
 
@@ -340,14 +339,11 @@ public class AppUtils {
             @Override
             public void onAccountsUpdated(Account[] accounts) {
                 String username = Preferences.getUsername(context);
-                if (TextUtils.isEmpty(username)) {
-                    return;
-                }
-                for (Account account : accounts) {
-                    if (TextUtils.equals(account.name, username)) {
-                        return;
-                    }
-                }
+                if (TextUtils.isEmpty(username)) return;
+
+                for (Account account : accounts)
+                    if (TextUtils.equals(account.name, username)) return;
+
                 Preferences.setUsername(context, null);
             }
         }, null, true);
@@ -360,11 +356,11 @@ public class AppUtils {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(PLAY_STORE_URL));
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
                 Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-        } else {
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        }
+        else intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
         try {
             context.startActivity(intent);
         } catch (ActivityNotFoundException e) {
@@ -381,10 +377,10 @@ public class AppUtils {
         for (int i = 0; i < accounts.length; i++) {
             String accountName = accounts[i].name;
             items[i] = accountName;
-            if (TextUtils.equals(accountName, username)) {
-                checked = i;
-            }
+
+            if (TextUtils.equals(accountName, username)) checked = i;
         }
+
         items[items.length - 1] = context.getString(R.string.add_account);
         alertDialogBuilder
                 .init(context)
@@ -423,13 +419,10 @@ public class AppUtils {
 
 
     private static CharSequence trim(CharSequence charSequence) {
-        if (TextUtils.isEmpty(charSequence)) {
-            return charSequence;
-        }
+        if (TextUtils.isEmpty(charSequence)) return charSequence;
         int end = charSequence.length() - 1;
-        while (Character.isWhitespace(charSequence.charAt(end))) {
-            end--;
-        }
+
+        while (Character.isWhitespace(charSequence.charAt(end))) end--;
         return charSequence.subSequence(0, end + 1);
     }
 
@@ -467,9 +460,8 @@ public class AppUtils {
                     .build();
             customTabsIntent.intent.setData(Uri.parse(url));
             return customTabsIntent.intent;
-        } else {
-            return new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        }
+
+        } else return new Intent(Intent.ACTION_VIEW, Uri.parse(url));
     }
 
 

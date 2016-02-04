@@ -743,7 +743,7 @@ public class HackerNewsClient implements ItemManager, UserManager {
 
 
         @Override
-        public void onCheckComplete(boolean isFavorite) {
+        public void onCheckFavoriteComplete(boolean isFavorite) {
             this.isFavorite = isFavorite;
             done();
         }

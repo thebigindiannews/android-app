@@ -42,7 +42,7 @@ import com.enamakel.thebigindiannews.activities.LoginActivity;
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
 import com.enamakel.thebigindiannews.data.ItemManager;
-import com.enamakel.thebigindiannews.data.providers.MaterialisticProvider;
+import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.TestHnItem;
 import com.enamakel.thebigindiannews.test.ShadowFloatingActionButton;
@@ -343,11 +343,11 @@ public class ItemActivityTest {
                         .getCreatedFromResId());
         ShadowContentObserver observer = shadowOf(shadowOf(ShadowApplication.getInstance()
                 .getContentResolver())
-                .getContentObservers(MaterialisticProvider.URI_FAVORITE)
+                .getContentObservers(BigIndianProvider.URI_FAVORITE)
                 .iterator()
                 .next());
         activity.findViewById(R.id.bookmarked).performClick();
-        observer.dispatchChange(false, MaterialisticProvider.URI_FAVORITE
+        observer.dispatchChange(false, BigIndianProvider.URI_FAVORITE
                 .buildUpon()
                 .appendPath("remove")
                 .appendPath("1")
@@ -359,7 +359,7 @@ public class ItemActivityTest {
                 .isNotNull()
                 .containsText(R.string.toast_removed);
         activity.findViewById(R.id.snackbar_action).performClick();
-        observer.dispatchChange(false, MaterialisticProvider.URI_FAVORITE
+        observer.dispatchChange(false, BigIndianProvider.URI_FAVORITE
                 .buildUpon()
                 .appendPath("add")
                 .appendPath("1")
@@ -386,10 +386,10 @@ public class ItemActivityTest {
         activity.findViewById(R.id.bookmarked).performClick();
         ShadowContentObserver observer = shadowOf(shadowOf(ShadowApplication.getInstance()
                 .getContentResolver())
-                .getContentObservers(MaterialisticProvider.URI_FAVORITE)
+                .getContentObservers(BigIndianProvider.URI_FAVORITE)
                 .iterator()
                 .next());
-        observer.dispatchChange(false, MaterialisticProvider.URI_FAVORITE
+        observer.dispatchChange(false, BigIndianProvider.URI_FAVORITE
                 .buildUpon()
                 .appendPath("add")
                 .appendPath("1")
