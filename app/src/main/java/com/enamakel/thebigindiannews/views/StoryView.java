@@ -157,8 +157,10 @@ public class StoryView extends RelativeLayout implements Checkable {
 
 
         title.setText(story.getTitle());
-        if (story.getExcerpt() != null)
+        if (story.getExcerpt() != null && story.getExcerpt().length() > 10) {
+            description.setVisibility(VISIBLE);
             description.setText(story.getExcerpt().replace('\n', ' '));
+        }
 
         source.setText(story.getSource());
         source.setCompoundDrawables(null, null, null, null);
@@ -168,6 +170,7 @@ public class StoryView extends RelativeLayout implements Checkable {
     public void reset() {
         if (!isLocal) bookmarked.setVisibility(INVISIBLE);
 
+        description.setVisibility(GONE);
         title.setText(getContext().getString(R.string.loading_text));
         posted.setText(R.string.loading_text);
         source.setText(R.string.loading_text);
