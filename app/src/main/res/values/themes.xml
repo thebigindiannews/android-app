@@ -90,12 +90,12 @@
     </style>
 
     <style name="AppTheme.Solarized">
-        <item name="colorPrimary">@color/red500</item>
-        <item name="colorPrimaryDark">@color/red700</item>
-        <item name="colorAccent">@color/red300</item>
+        <item name="colorPrimary">@color/solarizedBase02</item>
+        <item name="colorPrimaryDark">@color/solarizedBase03</item>
+        <item name="colorAccent">@color/solarizedRed</item>
         <item name="colorCardBackground">@color/solarizedBase3</item>
         <item name="colorCardHighlight">@color/solarizedBase2</item>
-        <item name="android:textColorPrimary">@color/solarizedBase01</item>
+        <item name="android:textColorPrimary">@color/solarizedBase0</item>
         <item name="android:textColorSecondary">@color/solarizedBase1</item>
         <item name="alertDialogTheme">@style/AppAlertDialog.Solarized</item>
     </style>
@@ -103,7 +103,7 @@
     <style name="AppTheme.Dark.Solarized">
         <item name="colorPrimary">@color/grey900</item>
         <item name="colorPrimaryDark">@color/blackT87</item>
-        <item name="colorAccent">@color/solarizedOrange</item>
+        <item name="colorAccent">@color/solarizedRed</item>
         <item name="colorCardBackground">@color/solarizedBase03</item>
         <item name="colorCardHighlight">@color/solarizedBase02</item>
         <item name="android:textColorPrimary">@color/solarizedBase1</item>
