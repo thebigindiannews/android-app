@@ -51,6 +51,8 @@ import com.enamakel.thebigindiannews.data.clients.AlgoliaPopularClient;
 import com.enamakel.thebigindiannews.data.clients.BigIndianClient;
 import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
 import com.enamakel.thebigindiannews.data.clients.ReadabilityClient;
+import com.enamakel.thebigindiannews.data.clients.bigindian.ReportsClient;
+import com.enamakel.thebigindiannews.data.clients.bigindian.StoriesClient;
 import com.enamakel.thebigindiannews.fragments.DrawerFragment;
 import com.enamakel.thebigindiannews.fragments.FavoriteFragment;
 import com.enamakel.thebigindiannews.fragments.ItemFragment;
@@ -87,6 +89,8 @@ import dagger.Provides;
                 ItemFragment.class,
                 ListFragment.class,
                 BigIndianClient.class,
+                StoriesClient.class,
+                ReportsClient.class,
                 WebFragment.class,
                 DrawerFragment.class,
                 ReadabilityFragment.class,

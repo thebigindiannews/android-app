@@ -176,7 +176,7 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
 
         if (story != null) bindData();
         else if (!TextUtils.isEmpty(itemId))
-            bigIndianClient.getItem(itemId, new StoryResponseListener(this));
+            bigIndianClient.stories.getItem(itemId, new StoryResponseListener(this));
     }
 
 
@@ -283,8 +283,7 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
     void bindData() {
         if (story == null) return;
 
-        bigIndianClient.readStory(story);
-
+        bigIndianClient.stories.read(story);
         bindFavorite();
         sessionManager.view(this, story.getId());
 

@@ -189,7 +189,7 @@ public class ListFragment extends BaseListFragment {
     void refresh() {
         adapter.setShowAll(true);
         currentPage = 1;
-        bigIndianClient.getStories(fetchMode, currentPage, new RefreshListener(this));
+        bigIndianClient.stories.get(fetchMode, currentPage, new RefreshListener(this));
     }
 
 
@@ -199,7 +199,7 @@ public class ListFragment extends BaseListFragment {
 
         isLoading = true;
         currentPage++;
-        bigIndianClient.getStories(fetchMode, currentPage, new NextPageListener(this));
+        bigIndianClient.stories.get(fetchMode, currentPage, new RefreshListener(this));
     }
 
 

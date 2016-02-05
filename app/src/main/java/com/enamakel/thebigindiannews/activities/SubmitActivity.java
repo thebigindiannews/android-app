@@ -169,7 +169,7 @@ public class SubmitActivity extends InjectableActivity {
             StoryModel storyModel = new StoryModel(titleEditText.getText().toString(),
                     contentEditText.getText().toString());
 
-            bigIndianClient.submit(storyModel, new SubmitCallback(this));
+            bigIndianClient.stories.submit(storyModel, new SubmitCallback(this));
         }
     }
 
