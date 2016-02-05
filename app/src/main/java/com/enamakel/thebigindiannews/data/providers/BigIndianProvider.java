@@ -25,14 +25,18 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
-import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.enamakel.thebigindiannews.data.providers.entries.FavoriteEntry;
+import com.enamakel.thebigindiannews.data.providers.entries.ReadabilityEntry;
+import com.enamakel.thebigindiannews.data.providers.entries.ReportEntry;
+import com.enamakel.thebigindiannews.data.providers.entries.ViewedEntry;
+
 
 public class BigIndianProvider extends ContentProvider {
-    static final String PROVIDER_AUTHORITY = "com.enamakel.thebigindiannews.provider";
-    static final Uri BASE_URI = Uri.parse("content://" + PROVIDER_AUTHORITY);
+    public static final String PROVIDER_AUTHORITY = "com.enamakel.thebigindiannews.provider";
+    public static final Uri BASE_URI = Uri.parse("content://" + PROVIDER_AUTHORITY);
 
     public static final Uri URI_FAVORITE = BASE_URI.buildUpon()
             .appendPath(FavoriteEntry.TABLE_NAME)
@@ -161,32 +165,6 @@ public class BigIndianProvider extends ContentProvider {
     }
 
 
-    public interface FavoriteEntry extends BaseColumns {
-        String TABLE_NAME = "favorite";
-        String MIME_TYPE = "vnd.android.cursor.dir/vnd." + PROVIDER_AUTHORITY + "." + TABLE_NAME;
-        String COLUMN_NAME_ITEMJSON = "json";
-        //        String COLUMN_NAME_URL = "url";
-        String COLUMN_NAME_TITLE = "title";
-        String COLUMN_NAME_EXCERPT = "excerpt";
-        String COLUMN_NAME_TIME = "time";
-    }
-
-
-    public interface ViewedEntry extends BaseColumns {
-        String TABLE_NAME = "viewed";
-        String MIME_TYPE = "vnd.android.cursor.dir/vnd." + PROVIDER_AUTHORITY + "." + TABLE_NAME;
-        String COLUMN_NAME_ITEM_ID = "itemid";
-    }
-
-
-    public interface ReadabilityEntry extends BaseColumns {
-        String TABLE_NAME = "readability";
-        String MIME_TYPE = "vnd.android.cursor.dir/vnd." + PROVIDER_AUTHORITY + "." + TABLE_NAME;
-        String COLUMN_NAME_ITEM_ID = "itemid";
-        String COLUMN_NAME_CONTENT = "content";
-    }
-
-
     static class DbHelper extends SQLiteOpenHelper {
         static final String DB_NAME = "Materialistic.db";
         static final int DB_VERSION = 4;
@@ -195,6 +173,7 @@ public class BigIndianProvider extends ContentProvider {
         static final String PRIMARY_KEY = " PRIMARY KEY";
         static final String COMMA_SEP = ",";
         static final String ORDER_DESC = " DESC";
+
         static final String SQL_CREATE_FAVORITE_TABLE =
                 "CREATE TABLE " + FavoriteEntry.TABLE_NAME + " (" +
                         FavoriteEntry._ID + TEXT_TYPE + PRIMARY_KEY + COMMA_SEP +
@@ -203,11 +182,13 @@ public class BigIndianProvider extends ContentProvider {
                         FavoriteEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
                         FavoriteEntry.COLUMN_NAME_TIME + TEXT_TYPE +
                         " )";
+
         static final String SQL_CREATE_VIEWED_TABLE =
                 "CREATE TABLE " + ViewedEntry.TABLE_NAME + " (" +
                         ViewedEntry._ID + TEXT_TYPE + PRIMARY_KEY + COMMA_SEP +
                         ViewedEntry.COLUMN_NAME_ITEM_ID + TEXT_TYPE +
                         " )";
+
         static final String SQL_CREATE_READABILITY_TABLE =
                 "CREATE TABLE " + ReadabilityEntry.TABLE_NAME + " (" +
                         ReadabilityEntry._ID + TEXT_TYPE + PRIMARY_KEY + COMMA_SEP +
@@ -215,12 +196,23 @@ public class BigIndianProvider extends ContentProvider {
                         ReadabilityEntry.COLUMN_NAME_CONTENT + TEXT_TYPE +
                         " )";
 
+        static final String SQL_CREATE_REPORTS_TABLE =
+                "CREATE TABLE " + ReportEntry.TABLE_NAME + " (" +
+                        ReportEntry._ID + TEXT_TYPE + PRIMARY_KEY + COMMA_SEP +
+                        ReportEntry.COLUMN_NAME_JSON + TEXT_TYPE +
+                        " )";
+
         static final String SQL_DROP_FAVORITE_TABLE =
                 "DROP TABLE IF EXISTS " + FavoriteEntry.TABLE_NAME;
+
         static final String SQL_DROP_VIEWED_TABLE =
                 "DROP TABLE IF EXISTS " + ViewedEntry.TABLE_NAME;
+
         static final String SQL_DROP_READABILITY_TABLE =
                 "DROP TABLE IF EXISTS " + ReadabilityEntry.TABLE_NAME;
+
+        static final String SQL_DROP_REPORTS_TABLE =
+                "DROP TABLE IF EXISTS " + ReportEntry.TABLE_NAME;
 
         static final String SQL_WHERE_READABILITY_TRUNCATE = ReadabilityEntry._ID + " IN " +
                 "(SELECT " + ReadabilityEntry._ID + " FROM " + ReadabilityEntry.TABLE_NAME +
@@ -238,12 +230,16 @@ public class BigIndianProvider extends ContentProvider {
             db.execSQL(SQL_CREATE_FAVORITE_TABLE);
             db.execSQL(SQL_CREATE_VIEWED_TABLE);
             db.execSQL(SQL_CREATE_READABILITY_TABLE);
+            db.execSQL(SQL_CREATE_REPORTS_TABLE);
         }
 
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             switch (oldVersion) {
+                case 3:
+                    db.execSQL(SQL_CREATE_REPORTS_TABLE);
+                    break;
                 case 2:
                     db.execSQL(SQL_CREATE_READABILITY_TABLE);
                     break;
@@ -255,6 +251,7 @@ public class BigIndianProvider extends ContentProvider {
                         db.execSQL(SQL_DROP_FAVORITE_TABLE);
                         db.execSQL(SQL_DROP_VIEWED_TABLE);
                         db.execSQL(SQL_DROP_READABILITY_TABLE);
+                        db.execSQL(SQL_DROP_REPORTS_TABLE);
                         onCreate(db);
                     }
                     break;

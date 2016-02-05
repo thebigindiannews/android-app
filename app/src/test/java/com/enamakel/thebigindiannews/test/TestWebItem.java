@@ -5,7 +5,7 @@ import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.text.Spannable;
 
-import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.managers.ItemManager;
 
 public abstract class TestWebItem implements ItemManager.WebItem {
     @Override

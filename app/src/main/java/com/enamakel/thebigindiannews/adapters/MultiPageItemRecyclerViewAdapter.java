@@ -25,7 +25,7 @@ import android.widget.Button;
 
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
-import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.managers.ItemManager;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 
 public class MultiPageItemRecyclerViewAdapter

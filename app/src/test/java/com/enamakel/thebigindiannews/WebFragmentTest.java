@@ -30,8 +30,8 @@ import org.robolectric.util.ActivityController;
 import javax.inject.Inject;
 
 import com.enamakel.thebigindiannews.activities.ListActivity;
-import com.enamakel.thebigindiannews.data.FavoriteManager;
-import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.managers.FavoriteManager;
+import com.enamakel.thebigindiannews.data.managers.ItemManager;
 import com.enamakel.thebigindiannews.test.ShadowNestedScrollView;
 import com.enamakel.thebigindiannews.test.ShadowSupportPreferenceManager;
 import com.enamakel.thebigindiannews.test.ShadowWebView;

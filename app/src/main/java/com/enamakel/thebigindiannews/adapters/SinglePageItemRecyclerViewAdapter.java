@@ -27,7 +27,7 @@ import android.view.ViewGroup;
 
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.managers.ItemManager;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.widgets.ToggleItemViewHolder;
 

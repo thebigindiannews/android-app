@@ -19,7 +19,7 @@ package com.enamakel.thebigindiannews.data.clients;
 import android.content.Context;
 
 import com.enamakel.thebigindiannews.ActivityModule;
-import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.managers.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.RestServiceFactory;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
@@ -32,8 +32,6 @@ import javax.inject.Named;
 
 import retrofit.Call;
 import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
 import retrofit.http.GET;
 import retrofit.http.Headers;
 import retrofit.http.Query;

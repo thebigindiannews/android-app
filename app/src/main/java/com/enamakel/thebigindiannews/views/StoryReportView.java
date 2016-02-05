@@ -12,6 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.data.ResponseListener;
+import com.enamakel.thebigindiannews.data.clients.BigIndianClient;
 import com.enamakel.thebigindiannews.data.models.ReportModel;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 
@@ -25,14 +27,19 @@ public class StoryReportView extends RelativeLayout implements
     EditText reportReason;
     Context context;
 
+    BigIndianClient bigIndianClient;
 
-    public StoryReportView(Context context, StoryModel story, final AlertDialog dialog) {
+
+    public StoryReportView(Context context, StoryModel story, final AlertDialog dialog, BigIndianClient client) {
         super(context);
         inflate(context, R.layout.story_report_view, this);
+
+        // Check if a story has been reported before or not.
 
         this.context = context;
         this.story = story;
         this.dialog = dialog;
+        bigIndianClient = client;
 
         initializeViews();
         initializeDialog();
@@ -138,11 +145,21 @@ public class StoryReportView extends RelativeLayout implements
         report.setStory(story.getId());
 
         // send to server
+        bigIndianClient.reports.submit(report, new ResponseListener<ReportModel>() {
+            @Override
+            public void onResponse(ReportModel response) {
+                Toast.makeText(context, "Thank you, Your report has been sent!", Toast.LENGTH_LONG)
+                        .show();
+                dialog.dismiss();
+            }
 
-        // Notify the user
-        Toast.makeText(context, "Thank you, Your report has been sent!", Toast.LENGTH_LONG)
-                .show();
-        dialog.dismiss();
+
+            @Override
+            public void onError(String errorMessage) {
+                Toast.makeText(context, "Your report could not be sent.", Toast.LENGTH_LONG)
+                        .show();
+            }
+        });
     }
 
 
@@ -153,7 +170,8 @@ public class StoryReportView extends RelativeLayout implements
      * @param story   Story data to create the view around.
      * @return An {@link AlertDialog} instance which is ready to be displayed to the user.
      */
-    public static AlertDialog buildDialog(Context context, StoryModel story) {
+    public static AlertDialog buildDialog(Context context, StoryModel story,
+                                          BigIndianClient client) {
         final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle(R.string.report_dialog_title)
                 .setPositiveButton(R.string.submit, new DialogInterface.OnClickListener() {
@@ -166,7 +184,7 @@ public class StoryReportView extends RelativeLayout implements
                 .create();
 
         // Attach the report view to the dialog.
-        StoryReportView.attachToDialog(context, story, dialog);
+        StoryReportView.attachToDialog(context, story, dialog, client);
 
         return dialog;
     }
@@ -179,7 +197,8 @@ public class StoryReportView extends RelativeLayout implements
      * @param story   Story data to create the view around.
      * @param dialog  The dialog to put the view in.
      */
-    public static void attachToDialog(Context context, StoryModel story, AlertDialog dialog) {
-        new StoryReportView(context, story, dialog);
+    public static void attachToDialog(Context context, StoryModel story, AlertDialog dialog,
+                                      BigIndianClient client) {
+        new StoryReportView(context, story, dialog, client);
     }
 }

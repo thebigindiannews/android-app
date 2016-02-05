@@ -34,12 +34,12 @@ import android.text.style.StrikethroughSpan;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.BuildConfig;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.data.FavoriteManager;
-import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.managers.FavoriteManager;
+import com.enamakel.thebigindiannews.data.managers.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.RestServiceFactory;
-import com.enamakel.thebigindiannews.data.SessionManager;
-import com.enamakel.thebigindiannews.data.UserManager;
+import com.enamakel.thebigindiannews.data.managers.SessionManager;
+import com.enamakel.thebigindiannews.data.managers.UserManager;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 
 import java.util.List;

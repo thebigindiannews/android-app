@@ -3,6 +3,7 @@ package com.enamakel.thebigindiannews.data;
 import android.content.ContentValues;
 import android.content.ShadowAsyncQueryHandler;
 
+import com.enamakel.thebigindiannews.data.managers.SessionManager;
 import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
 
 import org.junit.Before;

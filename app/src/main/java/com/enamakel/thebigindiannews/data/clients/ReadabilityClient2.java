@@ -12,6 +12,7 @@ import com.enamakel.thebigindiannews.BuildConfig;
 import com.enamakel.thebigindiannews.NewsApplication;
 import com.enamakel.thebigindiannews.data.RetrofitFactory;
 import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
+import com.enamakel.thebigindiannews.data.providers.entries.ReadabilityEntry;
 import com.google.gson.annotations.Expose;
 
 import retrofit2.Call;
@@ -51,8 +52,8 @@ public class ReadabilityClient2 {
                 })
 
                 .startQuery(0, itemId, BigIndianProvider.URI_READABILITY,
-                        new String[]{BigIndianProvider.ReadabilityEntry.COLUMN_NAME_CONTENT},
-                        BigIndianProvider.ReadabilityEntry.COLUMN_NAME_ITEM_ID + " = ?",
+                        new String[]{ReadabilityEntry.COLUMN_NAME_CONTENT},
+                        ReadabilityEntry.COLUMN_NAME_ITEM_ID + " = ?",
                         new String[]{itemId}, null);
     }
 
@@ -88,8 +89,8 @@ public class ReadabilityClient2 {
 
     static void cache(String itemId, String content) {
         final ContentValues contentValues = new ContentValues();
-        contentValues.put(BigIndianProvider.ReadabilityEntry.COLUMN_NAME_ITEM_ID, itemId);
-        contentValues.put(BigIndianProvider.ReadabilityEntry.COLUMN_NAME_CONTENT, content);
+        contentValues.put(ReadabilityEntry.COLUMN_NAME_ITEM_ID, itemId);
+        contentValues.put(ReadabilityEntry.COLUMN_NAME_CONTENT, content);
         new ReadabilityHandler(contentResolver, itemId).startInsert(0, itemId,
                 BigIndianProvider.URI_READABILITY, contentValues);
     }
@@ -124,7 +125,7 @@ public class ReadabilityClient2 {
 
             if (!cursor.moveToFirst()) callback.onQueryComplete(null);
             else callback.onQueryComplete(cursor.getString(cursor.getColumnIndexOrThrow(
-                    BigIndianProvider.ReadabilityEntry.COLUMN_NAME_CONTENT)));
+                    ReadabilityEntry.COLUMN_NAME_CONTENT)));
             callback = null;
         }
 

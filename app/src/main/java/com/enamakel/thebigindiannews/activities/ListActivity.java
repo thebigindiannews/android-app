@@ -23,7 +23,7 @@ import android.support.annotation.NonNull;
 
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.base.BaseStoriesActivity;
-import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.managers.ItemManager;
 import com.enamakel.thebigindiannews.data.clients.FetchMode;
 
 

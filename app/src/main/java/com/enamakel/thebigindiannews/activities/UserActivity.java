@@ -34,9 +34,9 @@ import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.BuildConfig;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.base.InjectableActivity;
-import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.managers.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
-import com.enamakel.thebigindiannews.data.UserManager;
+import com.enamakel.thebigindiannews.data.managers.UserManager;
 import com.enamakel.thebigindiannews.util.Scrollable;
 import com.enamakel.thebigindiannews.widgets.CommentItemDecoration;
 

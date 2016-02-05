@@ -28,6 +28,7 @@ import android.text.TextUtils;
 import com.enamakel.thebigindiannews.BuildConfig;
 import com.enamakel.thebigindiannews.data.RestServiceFactory;
 import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
+import com.enamakel.thebigindiannews.data.providers.entries.ReadabilityEntry;
 
 import javax.inject.Inject;
 
@@ -77,8 +78,8 @@ public interface ReadabilityClient {
                         }
                     })
                     .startQuery(0, itemId, BigIndianProvider.URI_READABILITY,
-                            new String[]{BigIndianProvider.ReadabilityEntry.COLUMN_NAME_CONTENT},
-                            BigIndianProvider.ReadabilityEntry.COLUMN_NAME_ITEM_ID + " = ?",
+                            new String[]{ReadabilityEntry.COLUMN_NAME_CONTENT},
+                            ReadabilityEntry.COLUMN_NAME_ITEM_ID + " = ?",
                             new String[]{itemId}, null);
         }
 
@@ -114,8 +115,8 @@ public interface ReadabilityClient {
 
         void cache(String itemId, String content) {
             final ContentValues contentValues = new ContentValues();
-            contentValues.put(BigIndianProvider.ReadabilityEntry.COLUMN_NAME_ITEM_ID, itemId);
-            contentValues.put(BigIndianProvider.ReadabilityEntry.COLUMN_NAME_CONTENT, content);
+            contentValues.put(ReadabilityEntry.COLUMN_NAME_ITEM_ID, itemId);
+            contentValues.put(ReadabilityEntry.COLUMN_NAME_CONTENT, content);
             new ReadabilityHandler(mContentResolver, itemId).startInsert(0, itemId,
                     BigIndianProvider.URI_READABILITY, contentValues);
         }
@@ -166,7 +167,7 @@ public interface ReadabilityClient {
                     callback.onQueryComplete(null);
                 } else {
                     callback.onQueryComplete(cursor.getString(cursor.getColumnIndexOrThrow(
-                            BigIndianProvider.ReadabilityEntry.COLUMN_NAME_CONTENT)));
+                            ReadabilityEntry.COLUMN_NAME_CONTENT)));
                 }
                 callback = null;
             }

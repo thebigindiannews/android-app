@@ -29,7 +29,7 @@ import android.util.Log;
 
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.base.BaseListActivity;
-import com.enamakel.thebigindiannews.data.FavoriteManager;
+import com.enamakel.thebigindiannews.data.managers.FavoriteManager;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
 import com.enamakel.thebigindiannews.fragments.FavoriteFragment;

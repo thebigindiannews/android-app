@@ -3,16 +3,19 @@ package com.enamakel.thebigindiannews.data.clients.bigindian;
 
 import android.content.Context;
 
-import com.enamakel.thebigindiannews.data.FavoriteManager;
+import com.enamakel.thebigindiannews.data.managers.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.RetrofitFactory;
-import com.enamakel.thebigindiannews.data.SessionManager;
+import com.enamakel.thebigindiannews.data.managers.SessionManager;
 import com.enamakel.thebigindiannews.data.clients.RestService;
 import com.enamakel.thebigindiannews.data.models.ReportModel;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 
 import javax.inject.Inject;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 
@@ -22,7 +25,7 @@ public class ReportsClient extends Base {
 
     @Inject
     public ReportsClient(Context context, SessionManager sessionManager,
-                  FavoriteManager favoriteManager) {
+                         FavoriteManager favoriteManager) {
         super(context, sessionManager, favoriteManager);
 
         // Initialize retrofit
@@ -52,19 +55,18 @@ public class ReportsClient extends Base {
     public void submit(ReportModel report, final ResponseListener<ReportModel> listener) {
         if (listener == null) return;
 
-//        Call<StoryModel> call = storyService.create(story);
-//        call.enqueue(new Callback<StoryModel>() {
-//            @Override
-//            public void onResponse(Response<StoryModel> response) {
-//                listener.onResponse(response.body());
-//            }
-//
-//
-//            @Override
-//            public void onFailure(Throwable t) {
-//                listener.onError(t != null ? t.getMessage() : "");
-//            }
-//        });
-//    }
+        Call<ReportModel> call = reportService.create(report);
+        call.enqueue(new Callback<ReportModel>() {
+            @Override
+            public void onResponse(Response<ReportModel> response) {
+                listener.onResponse(response.body());
+            }
+
+
+            @Override
+            public void onFailure(Throwable t) {
+                listener.onError(t != null ? t.getMessage() : "");
+            }
+        });
     }
 }

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import com.enamakel.thebigindiannews.activities.base.InjectableActivity;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.fragments.WebFragment;
-import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.managers.ItemManager;
 
 public class WebActivity extends InjectableActivity {
     public static final String EXTRA_ITEM = WebActivity.class.getName() + ".EXTRA_ITEM";

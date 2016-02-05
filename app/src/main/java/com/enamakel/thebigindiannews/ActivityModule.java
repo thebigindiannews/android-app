@@ -41,11 +41,11 @@ import com.enamakel.thebigindiannews.adapters.SinglePageItemRecyclerViewAdapter;
 import com.enamakel.thebigindiannews.adapters.StoryRecyclerViewAdapter;
 import com.enamakel.thebigindiannews.adapters.SubmissionRecyclerViewAdapter;
 import com.enamakel.thebigindiannews.adapters.ThreadPreviewRecyclerViewAdapter;
-import com.enamakel.thebigindiannews.data.FavoriteManager;
-import com.enamakel.thebigindiannews.data.ItemManager;
+import com.enamakel.thebigindiannews.data.managers.FavoriteManager;
+import com.enamakel.thebigindiannews.data.managers.ItemManager;
 import com.enamakel.thebigindiannews.data.RestServiceFactory;
-import com.enamakel.thebigindiannews.data.SessionManager;
-import com.enamakel.thebigindiannews.data.UserManager;
+import com.enamakel.thebigindiannews.data.managers.SessionManager;
+import com.enamakel.thebigindiannews.data.managers.UserManager;
 import com.enamakel.thebigindiannews.data.clients.AlgoliaClient;
 import com.enamakel.thebigindiannews.data.clients.AlgoliaPopularClient;
 import com.enamakel.thebigindiannews.data.clients.BigIndianClient;
@@ -60,6 +60,7 @@ import com.enamakel.thebigindiannews.fragments.ListFragment;
 import com.enamakel.thebigindiannews.fragments.ReadabilityFragment;
 import com.enamakel.thebigindiannews.fragments.WebFragment;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
+import com.enamakel.thebigindiannews.views.StoryReportView;
 import com.enamakel.thebigindiannews.widgets.PopupMenu;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -72,34 +73,35 @@ import dagger.Provides;
 
 @Module(
         injects = {
-                SettingsActivity.class,
                 AboutActivity.class,
-                FavoriteActivity.class,
-                SingleStoryActivity.class,
-                ListActivity.class,
-                NewActivity.class,
-                SearchActivity.class,
-                PopularActivity.class,
-                LoginActivity.class,
-                ComposeActivity.class,
-                SubmitActivity.class,
-                UserActivity.class,
-                ThreadPreviewActivity.class,
-                FavoriteFragment.class,
-                ItemFragment.class,
-                ListFragment.class,
                 BigIndianClient.class,
-                StoriesClient.class,
-                ReportsClient.class,
-                WebFragment.class,
+                ComposeActivity.class,
                 DrawerFragment.class,
-                ReadabilityFragment.class,
-                StoryRecyclerViewAdapter.class,
+                FavoriteActivity.class,
+                FavoriteFragment.class,
                 FavoriteRecyclerViewAdapter.class,
-                SinglePageItemRecyclerViewAdapter.class,
+                ItemFragment.class,
+                ListActivity.class,
+                ListFragment.class,
+                LoginActivity.class,
                 MultiPageItemRecyclerViewAdapter.class,
+                NewActivity.class,
+                PopularActivity.class,
+                ReadabilityFragment.class,
+                ReportsClient.class,
+                SearchActivity.class,
+                SettingsActivity.class,
+                SinglePageItemRecyclerViewAdapter.class,
+                SingleStoryActivity.class,
+                StoriesClient.class,
+                StoryRecyclerViewAdapter.class,
+                StoryReportView.class,
                 SubmissionRecyclerViewAdapter.class,
-                ThreadPreviewRecyclerViewAdapter.class
+                SubmitActivity.class,
+                ThreadPreviewActivity.class,
+                ThreadPreviewRecyclerViewAdapter.class,
+                UserActivity.class,
+                WebFragment.class
         },
         library = true
 )

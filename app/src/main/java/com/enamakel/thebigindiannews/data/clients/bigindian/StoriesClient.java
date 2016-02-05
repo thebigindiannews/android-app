@@ -3,10 +3,10 @@ package com.enamakel.thebigindiannews.data.clients.bigindian;
 
 import android.content.Context;
 
-import com.enamakel.thebigindiannews.data.FavoriteManager;
+import com.enamakel.thebigindiannews.data.managers.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.RetrofitFactory;
-import com.enamakel.thebigindiannews.data.SessionManager;
+import com.enamakel.thebigindiannews.data.managers.SessionManager;
 import com.enamakel.thebigindiannews.data.clients.FetchMode;
 import com.enamakel.thebigindiannews.data.clients.RestService;
 import com.enamakel.thebigindiannews.data.models.StoryHits;
@@ -44,8 +44,7 @@ public class StoriesClient extends Base {
         Callback<StoryHits> callback = new Callback<StoryHits>() {
             @Override
             public void onResponse(Response<StoryHits> response) {
-                StoryHits storyHits = response.body();
-                listener.onResponse(storyHits.getDocs());
+                listener.onResponse(response.body().getDocs());
             }
 
 

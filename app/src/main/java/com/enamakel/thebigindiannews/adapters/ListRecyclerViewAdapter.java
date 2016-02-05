@@ -27,7 +27,8 @@ import android.view.View;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
-import com.enamakel.thebigindiannews.data.FavoriteManager;
+import com.enamakel.thebigindiannews.data.managers.FavoriteManager;
+import com.enamakel.thebigindiannews.data.clients.BigIndianClient;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.util.Injectable;
@@ -63,6 +64,7 @@ public abstract class ListRecyclerViewAdapter
     @Inject AlertDialogBuilder alertDialogBuilder;
     @Inject UserServices userServices;
     @Inject FavoriteManager favoriteManager;
+    @Inject BigIndianClient bigIndianClient;
 
 
     public ListRecyclerViewAdapter() {

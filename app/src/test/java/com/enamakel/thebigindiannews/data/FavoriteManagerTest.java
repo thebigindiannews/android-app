@@ -19,6 +19,8 @@ import org.robolectric.shadows.support.v4.ShadowLocalBroadcastManager;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.enamakel.thebigindiannews.data.managers.FavoriteManager;
+import com.enamakel.thebigindiannews.data.managers.ItemManager;
 import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
 import com.enamakel.thebigindiannews.test.TestWebItem;
 

@@ -3,6 +3,10 @@ package com.enamakel.thebigindiannews.data;
 import android.content.ContentResolver;
 
 import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
+import com.enamakel.thebigindiannews.data.managers.FavoriteManager;
+import com.enamakel.thebigindiannews.data.managers.ItemManager;
+import com.enamakel.thebigindiannews.data.managers.SessionManager;
+import com.enamakel.thebigindiannews.data.managers.UserManager;
 
 import org.junit.Before;
 import org.junit.Test;
