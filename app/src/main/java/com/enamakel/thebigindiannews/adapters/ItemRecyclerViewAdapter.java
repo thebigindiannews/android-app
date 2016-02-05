@@ -249,7 +249,7 @@ public abstract class ItemRecyclerViewAdapter<VH extends MultiPageItemRecyclerVi
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         if (menuItem.getItemId() == R.id.menu_contextual_vote) {
-                            vote(item);
+//                            vote(item);
                             return true;
                         }
                         if (menuItem.getItemId() == R.id.menu_contextual_comment) {
@@ -269,15 +269,6 @@ public abstract class ItemRecyclerViewAdapter<VH extends MultiPageItemRecyclerVi
 
     private void vote(final StoryModel item) {
 //        userServices.voteUp(context, item.getId(), new VoteCallback(this));
-    }
-
-
-    private void onVoted(Boolean successful) {
-        if (successful == null) {
-            Toast.makeText(context, R.string.vote_failed, Toast.LENGTH_SHORT).show();
-        } else if (successful) {
-            Toast.makeText(context, R.string.voted, Toast.LENGTH_SHORT).show();
-        } else AppUtils.showLogin(context, alertDialogBuilder);
     }
 
 
@@ -308,29 +299,6 @@ public abstract class ItemRecyclerViewAdapter<VH extends MultiPageItemRecyclerVi
         @Override
         public void onError(String errorMessage) {
             // do nothing
-        }
-    }
-
-    private static class VoteCallback extends UserServices.Callback {
-        private final WeakReference<ItemRecyclerViewAdapter> weakReference;
-
-
-        public VoteCallback(ItemRecyclerViewAdapter adapter) {
-            weakReference = new WeakReference<>(adapter);
-        }
-
-
-        @Override
-        public void onDone(boolean successful) {
-            if (weakReference.get() != null && weakReference.get().isAttached())
-                weakReference.get().onVoted(successful);
-        }
-
-
-        @Override
-        public void onError() {
-            if (weakReference.get() != null && weakReference.get().isAttached())
-                weakReference.get().onVoted(null);
         }
     }
 }

@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.views;
 
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -27,32 +28,38 @@ import android.widget.TextView;
 
 import com.enamakel.thebigindiannews.AppUtils;
 
-public class TintableTextView extends TextView {
 
-    private final int mTextColor;
+public class TintableTextView extends TextView {
+    final int textColor;
+
 
     public TintableTextView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
+
     public TintableTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         int defaultTextColor = ContextCompat.getColor(getContext(),
                 AppUtils.getThemedResId(getContext(), android.R.attr.textColorTertiary));
-        TypedArray ta = context.obtainStyledAttributes(attrs,
+
+        TypedArray typedArray = context.obtainStyledAttributes(attrs,
                 new int[]{android.R.attr.textAppearance, android.R.attr.textColor});
-        int ap = ta.getResourceId(0, 0);
-        if (ap == 0) {
-            mTextColor = ta.getColor(1, defaultTextColor);
-        } else {
+
+        int ap = typedArray.getResourceId(0, 0);
+
+        if (ap == 0) textColor = typedArray.getColor(1, defaultTextColor);
+        else {
             TypedArray tap = context.obtainStyledAttributes(ap, new int[]{android.R.attr.textColor});
-            mTextColor = tap.getColor(0, defaultTextColor);
+            textColor = tap.getColor(0, defaultTextColor);
             tap.recycle();
         }
-        ta.recycle();
+
+        typedArray.recycle();
         Drawable[] drawables = getCompoundDrawables();
         setCompoundDrawablesWithIntrinsicBounds(drawables[0], drawables[1], drawables[2], drawables[3]);
     }
+
 
     @Override
     public void setCompoundDrawables(Drawable left, Drawable top, Drawable right, Drawable bottom) {
@@ -63,11 +70,11 @@ public class TintableTextView extends TextView {
         super.setCompoundDrawables(left, top, right, bottom);
     }
 
+
     private void tint(@Nullable Drawable drawable) {
-        if (drawable == null) {
-            return;
-        }
+        if (drawable == null) return;
+
         drawable = DrawableCompat.wrap(drawable);
-        DrawableCompat.setTint(drawable, mTextColor);
+        DrawableCompat.setTint(drawable, textColor);
     }
 }
