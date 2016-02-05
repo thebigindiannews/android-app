@@ -213,13 +213,16 @@ public class BigIndianClient {
 
 
     interface RestService {
+        @Headers("Cache-Control: max-age=600")
         @GET("news/stories")
         Call<StoryHits> latest(@Query("recent") String recent, @Query("page") int page);
 
+        @Headers("Cache-Control: max-age=600")
         @GET("news/stories")
         Call<StoryHits> top(@Query("page") int page);
 
 
+        @Headers("Cache-Control: max-age=600")
         @GET("news/stories/{id}")
         Call<StoryModel> getById(@Path("id") String id);
 
