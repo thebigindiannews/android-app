@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:padding="15dp">
+
+    <RadioGroup
+        android:id="@+id/radio_report_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RadioButton
+            android:id="@+id/radio_irrelevant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Irrelevant content"/>
+
+        <RadioButton
+            android:id="@+id/radio_junk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Junk/Spam"/>
+
+        <RadioButton
+            android:id="@+id/radio_vulgur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Threatening/Vulgur/Violent"/>
+
+        <RadioButton
+            android:id="@+id/radio_confidential"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Personal/Confidential Information"/>
+
+        <RadioButton
+            android:id="@+id/radio_language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Bad language"/>
+
+        <RadioButton
+            android:id="@+id/radio_others"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Other (please specify)"
+            />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/report_reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Type your reason here"
+        android:minLines="2"/>
+</LinearLayout>

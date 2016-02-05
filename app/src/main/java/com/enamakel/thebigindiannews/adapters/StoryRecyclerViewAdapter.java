@@ -42,6 +42,7 @@ import com.enamakel.thebigindiannews.data.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
+import com.enamakel.thebigindiannews.views.StoryReportView;
 import com.enamakel.thebigindiannews.widgets.PopupMenu;
 
 import java.lang.ref.WeakReference;
@@ -336,6 +337,19 @@ public class StoryRecyclerViewAdapter extends
                                         .putExtra(SingleStoryActivity.EXTRA_ITEM, story)
                                         .putExtra(SingleStoryActivity.EXTRA_OPEN_COMMENTS, true));
                         return true;
+                    case R.id.menu_contextual_report:
+                        StoryReportView.buildDialog(context, story).show();
+//                        StoryReportView reportView = new StoryReportView(context, story);
+//                        alertDialogBuilder
+//                                .init(context)
+//                                .setTitle(R.string.report_dialog_title)
+//                                .setView(reportView)
+//                                .setPositiveButton(R.string.submit, reportView)
+//                                .setNegativeButton(R.string.cancel, null).create()
+//                                .show();
+
+                        return true;
+
                 }
 
 //                if (item.getItemId() == R.id.menu_contextual_comment) {
