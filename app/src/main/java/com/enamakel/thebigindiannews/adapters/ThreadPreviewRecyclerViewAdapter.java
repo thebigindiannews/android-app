@@ -35,13 +35,13 @@ public class ThreadPreviewRecyclerViewAdapter extends ItemRecyclerViewAdapter<Su
     final List<StoryModel> stories = new ArrayList<>();
     final List<String> expanded = new ArrayList<>();
     int levelIndicatorWidth;
-    final String mUsername;
+    final String username;
 
 
     public ThreadPreviewRecyclerViewAdapter(ItemManager itemManager, StoryModel item) {
         super(itemManager);
         stories.add(item);
-        mUsername = item.getCreated_by();
+        username = item.getCreated_by();
     }
 
 
@@ -81,7 +81,7 @@ public class ThreadPreviewRecyclerViewAdapter extends ItemRecyclerViewAdapter<Su
     protected void bind(SubmissionViewHolder holder, final StoryModel item) {
         super.bind(holder, item);
 //        holder.postedTextView.setText(item.getDisplayedTime(context, false,
-//                !TextUtils.equals(item.getBy(), mUsername)));
+//                !TextUtils.equals(item.getBy(), username)));
 //        holder.moreButton.setVisibility(View.GONE);
 //        if (TextUtils.equals(item.getType(), ItemManager.Item.COMMENT_TYPE)) {
 //            holder.titleTextView.setText(null);

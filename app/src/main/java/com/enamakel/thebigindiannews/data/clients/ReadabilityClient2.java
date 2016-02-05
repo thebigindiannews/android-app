@@ -20,9 +20,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 
-/**
- * Created by robert on 2/3/16.
- */
 public class ReadabilityClient2 {
     static final ReadabilityService readabilityService;
     static final CharSequence EMPTY_CONTENT = "<div></div>";

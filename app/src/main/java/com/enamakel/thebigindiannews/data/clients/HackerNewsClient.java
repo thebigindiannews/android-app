@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.data.clients;
 
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
@@ -54,6 +55,7 @@ import retrofit.Retrofit;
 import retrofit.http.GET;
 import retrofit.http.Headers;
 import retrofit.http.Path;
+
 
 /**
  * Client to retrieve Hacker News content asynchronously
@@ -132,6 +134,7 @@ public class HackerNewsClient implements ItemManager, UserManager {
 //        favoriteManager.check(contentResolver, itemId, wrapper);
 //        restService.item(itemId).enqueue(wrapper);
 //    }
+
 
     @Override
     public void getItem(String itemId, ResponseListener<StoryModel> listener) {
@@ -213,6 +216,7 @@ public class HackerNewsClient implements ItemManager, UserManager {
         @GET("user/{userId}.json")
         Call<UserItem> user(@Path("userId") String userId);
     }
+
 
     static class HackerNewsItem implements Item {
         static final String FORMAT_LINK_USER = "<a href=\"%1$s://user/%2$s\">%2$s</a>";
@@ -635,6 +639,7 @@ public class HackerNewsClient implements ItemManager, UserManager {
         }
     }
 
+
     static class UserItem implements User {
         public static final Creator<UserItem> CREATOR = new Creator<UserItem>() {
             @Override
@@ -718,6 +723,7 @@ public class HackerNewsClient implements ItemManager, UserManager {
             dest.writeTypedArray(submittedItems, flags);
         }
     }
+
 
     static class ItemCallbackWrapper implements SessionManager.OperationCallbacks,
             FavoriteManager.OperationCallbacks, Callback<HackerNewsItem> {

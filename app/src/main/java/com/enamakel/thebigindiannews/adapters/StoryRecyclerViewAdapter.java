@@ -337,17 +337,9 @@ public class StoryRecyclerViewAdapter extends
                                         .putExtra(SingleStoryActivity.EXTRA_ITEM, story)
                                         .putExtra(SingleStoryActivity.EXTRA_OPEN_COMMENTS, true));
                         return true;
+                    
                     case R.id.menu_contextual_report:
                         StoryReportView.buildDialog(context, story).show();
-//                        StoryReportView reportView = new StoryReportView(context, story);
-//                        alertDialogBuilder
-//                                .init(context)
-//                                .setTitle(R.string.report_dialog_title)
-//                                .setView(reportView)
-//                                .setPositiveButton(R.string.submit, reportView)
-//                                .setNegativeButton(R.string.cancel, null).create()
-//                                .show();
-
                         return true;
 
                 }
