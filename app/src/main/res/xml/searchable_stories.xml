@@ -16,8 +16,8 @@
   -->
 
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
-    android:label="@string/title_activity_search"
-    android:hint="@string/title_activity_search"
-    android:searchSuggestAuthority="com.enamakel.thebigindiannews.recentprovider"
-    android:searchSuggestSelection=" ?"
-    android:voiceSearchMode="showVoiceSearchButton|launchRecognizer" />
+            android:hint="@string/title_activity_search"
+            android:label="@string/title_activity_search"
+            android:searchSuggestAuthority="com.enamakel.thebigindiannews.recentprovider"
+            android:searchSuggestSelection=" ?"
+            android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"/>

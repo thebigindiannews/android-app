@@ -15,109 +15,117 @@
   ~ limitations under the License.
   -->
 
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    style="@style/BaseAppCardView">
+<android.support.v7.widget.CardView style="@style/BaseAppCardView"
+                                    xmlns:android="http://schemas.android.com/apk/res/android"
+                                    xmlns:tools="http://schemas.android.com/tools"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <View
             android:id="@id/level"
-            android:visibility="gone"
-            tools:visibility="visible"
-            tools:background="@color/red500"
             android:layout_width="@dimen/padding_text"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:background="@color/red500"
+            tools:visibility="visible"/>
 
         <LinearLayout
             android:id="@id/content"
-            android:orientation="vertical"
+            style="@style/FlatCardView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:orientation="vertical"
             android:paddingLeft="@dimen/flat_card_horizontal_margin"
-            android:paddingRight="@dimen/flat_card_horizontal_margin"
-            style="@style/FlatCardView">
+            android:paddingRight="@dimen/flat_card_horizontal_margin">
+
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
                 <TextView
                     android:id="@id/posted"
-                    tools:text="2 days ago"
-                    android:text="@string/loading_text"
                     style="@style/textSubtitleStyle.Italic"
-                    android:paddingRight="0dp"
-                    android:layout_gravity="center_vertical"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:paddingRight="0dp"
                     android:singleLine="false"
-                    android:gravity="center_vertical" />
+                    android:text="@string/loading_text"
+                    tools:text="2 days ago"/>
 
                 <com.enamakel.thebigindiannews.views.TintableTextView
                     android:id="@id/parent"
-                    android:visibility="invisible"
-                    tools:visibility="visible"
-                    tools:text="parent"
-                    android:text="@string/parent"
                     style="@style/textSubtitleStyle.Italic"
-                    android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical" />
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:text="@string/parent"
+                    android:visibility="invisible"
+                    tools:text="parent"
+                    tools:visibility="visible"/>
 
-                <include layout="@layout/button_more"
+                <include
                     android:id="@+id/button_more"
+                    layout="@layout/button_more"
                     android:layout_width="36dp"
-                    android:layout_height="36dp" />
+                    android:layout_height="36dp"/>
 
             </LinearLayout>
+
             <com.enamakel.thebigindiannews.views.TextView
                 android:id="@id/text"
-                tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                android:text="@string/loading_text"
+                style="@style/textContentStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/padding_text"
                 android:paddingLeft="@dimen/padding"
                 android:paddingRight="@dimen/padding"
                 android:paddingTop="@dimen/padding_text"
-                android:paddingBottom="@dimen/padding_text"
-                style="@style/textContentStyle"
+                android:text="@string/loading_text"
                 android:textIsSelectable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."/>
+
             <TextView
                 android:id="@+id/more"
-                android:text="@string/read_more"
-                android:visibility="gone"
                 style="@style/textSubtitleStyle"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/padding_text"
                 android:paddingLeft="@dimen/padding"
                 android:paddingTop="@dimen/padding_text"
-                android:paddingBottom="@dimen/padding_text"
-                android:background="?attr/selectableItemBackground"
-                android:gravity="center_vertical" />
+                android:text="@string/read_more"
+                android:visibility="gone"/>
+
             <com.enamakel.thebigindiannews.views.TintableTextView
                 android:id="@+id/toggle"
-                tools:text="Hide comments"
-                tools:drawableRight="@drawable/ic_expand_less_white_24dp"
-                tools:visibility="visible"
-                android:visibility="gone"
                 style="@style/textSubtitleStyle"
-                android:paddingTop="@dimen/padding"
-                android:paddingBottom="@dimen/padding"
                 android:background="?attr/selectableItemBackground"
-                android:gravity="center_vertical|center" />
-            <include layout="@layout/button_comment"
+                android:gravity="center_vertical|center"
+                android:paddingBottom="@dimen/padding"
+                android:paddingTop="@dimen/padding"
+                android:visibility="gone"
+                tools:drawableRight="@drawable/ic_expand_less_white_24dp"
+                tools:text="Hide comments"
+                tools:visibility="visible"/>
+
+            <include
                 android:id="@id/comment"
+                layout="@layout/button_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginRight="@dimen/margin" />
+                android:layout_marginRight="@dimen/margin"/>
         </LinearLayout>
 
     </LinearLayout>

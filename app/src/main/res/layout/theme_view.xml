@@ -16,15 +16,15 @@
   -->
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="HardcodedText">
+       xmlns:tools="http://schemas.android.com/tools"
+       tools:ignore="HardcodedText">
 
     <TextView
         android:id="@id/content"
-        android:text="T"
         style="@style/textTitleStyle"
-        android:gravity="center"
         android:layout_width="?attr/listPreferredItemHeightSmall"
-        android:layout_height="?attr/listPreferredItemHeightSmall" />
+        android:layout_height="?attr/listPreferredItemHeightSmall"
+        android:gravity="center"
+        android:text="T"/>
 
 </merge>

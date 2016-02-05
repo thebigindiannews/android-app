@@ -15,13 +15,13 @@
   ~ limitations under the License.
   -->
 
-<Button xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:text="@string/comments"
-    style="@style/Widget.AppCompat.Button.Borderless.Colored"
-    android:textAllCaps="false"
-    android:minWidth="@null"
-    android:minHeight="@null"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:ignore="UnusedAttribute" />
+<Button style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="@null"
+        android:minWidth="@null"
+        android:text="@string/comments"
+        android:textAllCaps="false"
+        tools:ignore="UnusedAttribute"/>

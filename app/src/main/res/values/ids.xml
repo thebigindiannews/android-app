@@ -18,92 +18,92 @@
 <resources>
 
     <!-- common views -->
-    <item type="id" name="recycler_view" />
-    <item type="id" name="swipe_layout" />
-    <item type="id" name="web_view" />
-    <item type="id" name="progress" />
-    <item type="id" name="toolbar" />
+    <item name="recycler_view" type="id"/>
+    <item name="swipe_layout" type="id"/>
+    <item name="web_view" type="id"/>
+    <item name="progress" type="id"/>
+    <item name="toolbar" type="id"/>
 
     <!-- item views -->
-    <item type="id" name="rank" />
-    <item type="id" name="title" />
-    <item type="id" name="text" />
-    <item type="id" name="posted" />
-    <item type="id" name="comment" />
-    <item type="id" name="bookmarked" />
-    <item type="id" name="source" />
-    <item type="id" name="header_card_view" />
-    <item type="id" name="item_view" />
-    <item type="id" name="sub_item_view" />
-    <item type="id" name="score" />
-    <item type="id" name="level" />
-    <item type="id" name="story_view" />
-    <item type="id" name="parent" />
+    <item name="rank" type="id"/>
+    <item name="title" type="id"/>
+    <item name="text" type="id"/>
+    <item name="posted" type="id"/>
+    <item name="comment" type="id"/>
+    <item name="bookmarked" type="id"/>
+    <item name="source" type="id"/>
+    <item name="header_card_view" type="id"/>
+    <item name="item_view" type="id"/>
+    <item name="sub_item_view" type="id"/>
+    <item name="score" type="id"/>
+    <item name="level" type="id"/>
+    <item name="story_view" type="id"/>
+    <item name="parent" type="id"/>
 
     <!-- drawer -->
-    <item type="id" name="drawer_layout" />
-    <item type="id" name="content_frame"/>
-    <item type="id" name="drawer" />
-    <item type="id" name="drawer_list" />
-    <item type="id" name="drawer_settings" />
-    <item type="id" name="drawer_about" />
-    <item type="id" name="drawer_favorite" />
-    <item type="id" name="drawer_job" />
-    <item type="id" name="drawer_show" />
-    <item type="id" name="drawer_ask" />
-    <item type="id" name="drawer_new" />
-    <item type="id" name="drawer_feedback" />
-    <item type="id" name="drawer_popular" />
-    <item type="id" name="drawer_account" />
-    <item type="id" name="drawer_logout" />
-    <item type="id" name="drawer_submit" />
-    <item type="id" name="drawer_user" />
+    <item name="drawer_layout" type="id"/>
+    <item name="content_frame" type="id"/>
+    <item name="drawer" type="id"/>
+    <item name="drawer_list" type="id"/>
+    <item name="drawer_settings" type="id"/>
+    <item name="drawer_about" type="id"/>
+    <item name="drawer_favorite" type="id"/>
+    <item name="drawer_job" type="id"/>
+    <item name="drawer_show" type="id"/>
+    <item name="drawer_ask" type="id"/>
+    <item name="drawer_new" type="id"/>
+    <item name="drawer_feedback" type="id"/>
+    <item name="drawer_popular" type="id"/>
+    <item name="drawer_account" type="id"/>
+    <item name="drawer_logout" type="id"/>
+    <item name="drawer_submit" type="id"/>
+    <item name="drawer_user" type="id"/>
 
     <!-- menu -->
-    <item type="id" name="menu_share" />
-    <item type="id" name="menu_external" />
-    <item type="id" name="menu_clear" />
-    <item type="id" name="menu_email" />
-    <item type="id" name="menu_search" />
-    <item type="id" name="menu_clear_recent" />
-    <item type="id" name="menu_reset" />
-    <item type="id" name="menu_range" />
-    <item type="id" name="menu_range_day" />
-    <item type="id" name="menu_range_week" />
-    <item type="id" name="menu_range_month" />
-    <item type="id" name="menu_range_year" />
-    <item type="id" name="menu_font_options" />
-    <item type="id" name="menu_font_size" />
-    <item type="id" name="menu_font" />
-    <item type="id" name="menu_font_size_group" />
-    <item type="id" name="menu_font_group" />
-    <item type="id" name="menu_sort" />
-    <item type="id" name="menu_sort_group" />
-    <item type="id" name="menu_sort_recent" />
-    <item type="id" name="menu_sort_popular" />
-    <item type="id" name="menu_list_toggle" />
-    <item type="id" name="menu_color_code" />
-    <item type="id" name="menu_thread" />
-    <item type="id" name="menu_thread_group" />
-    <item type="id" name="menu_max_lines" />
-    <item type="id" name="menu_max_lines_group" />
-    <item type="id" name="menu_contextual_save" />
-    <item type="id" name="menu_contextual_vote" />
-    <item type="id" name="menu_contextual_comment" />
-    <item type="id" name="menu_contextual_profile" />
-    <item type="id" name="menu_send" />
-    <item type="id" name="menu_quote" />
-    <item type="id" name="menu_guidelines" />
+    <item name="menu_share" type="id"/>
+    <item name="menu_external" type="id"/>
+    <item name="menu_clear" type="id"/>
+    <item name="menu_email" type="id"/>
+    <item name="menu_search" type="id"/>
+    <item name="menu_clear_recent" type="id"/>
+    <item name="menu_reset" type="id"/>
+    <item name="menu_range" type="id"/>
+    <item name="menu_range_day" type="id"/>
+    <item name="menu_range_week" type="id"/>
+    <item name="menu_range_month" type="id"/>
+    <item name="menu_range_year" type="id"/>
+    <item name="menu_font_options" type="id"/>
+    <item name="menu_font_size" type="id"/>
+    <item name="menu_font" type="id"/>
+    <item name="menu_font_size_group" type="id"/>
+    <item name="menu_font_group" type="id"/>
+    <item name="menu_sort" type="id"/>
+    <item name="menu_sort_group" type="id"/>
+    <item name="menu_sort_recent" type="id"/>
+    <item name="menu_sort_popular" type="id"/>
+    <item name="menu_list_toggle" type="id"/>
+    <item name="menu_color_code" type="id"/>
+    <item name="menu_thread" type="id"/>
+    <item name="menu_thread_group" type="id"/>
+    <item name="menu_max_lines" type="id"/>
+    <item name="menu_max_lines_group" type="id"/>
+    <item name="menu_contextual_save" type="id"/>
+    <item name="menu_contextual_vote" type="id"/>
+    <item name="menu_contextual_comment" type="id"/>
+    <item name="menu_contextual_profile" type="id"/>
+    <item name="menu_send" type="id"/>
+    <item name="menu_quote" type="id"/>
+    <item name="menu_guidelines" type="id"/>
 
     <!-- others -->
-    <item type="id" name="text_developer_info" />
-    <item type="id" name="text_application_info" />
-    <item type="id" name="text_license" />
-    <item type="id" name="text_3rd_party_licenses" />
-    <item type="id" name="text_libraries" />
-    <item type="id" name="empty" />
-    <item type="id" name="empty_selection" />
-    <item type="id" name="empty_search" />
-    <item type="id" name="content" />
+    <item name="text_developer_info" type="id"/>
+    <item name="text_application_info" type="id"/>
+    <item name="text_license" type="id"/>
+    <item name="text_3rd_party_licenses" type="id"/>
+    <item name="text_libraries" type="id"/>
+    <item name="empty" type="id"/>
+    <item name="empty_selection" type="id"/>
+    <item name="empty_search" type="id"/>
+    <item name="content" type="id"/>
 
 </resources>

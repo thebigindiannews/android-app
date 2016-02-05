@@ -16,7 +16,7 @@
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string translatable="false" name="license_text">
+    <string name="license_text" translatable="false">
         <![CDATA[
             <p>Copyright 2015 Ha Duy Trung, Steven Enamakel</p>
             <p>
@@ -36,7 +36,7 @@
 
         ]]>
     </string>
-    <string translatable="false" name="libraries_text">
+    <string name="libraries_text" translatable="false">
         <![CDATA[
             <a href="https://github.com/square/retrofit">Square Retrofit</a> - Apache License v2.0<br/>
             <a href="https://github.com/square/okhttp">Square OkHttp</a> - Apache License v2.0<br/>
@@ -54,7 +54,7 @@
             &nbsp;&nbsp;&nbsp;&nbsp;Roboto - Apache License v2.0<br/>
         ]]>
     </string>
-    <string translatable="false" name="third_party_licenses_text" tools:ignore="TypographyOther">
+    <string name="third_party_licenses_text" translatable="false" tools:ignore="TypographyOther">
         <![CDATA[
             <a href="https://raw.githubusercontent.com/thebigindiannews/android-app/master/THIRD-PARTY-NOTICES.txt">View full text</a>
         ]]>

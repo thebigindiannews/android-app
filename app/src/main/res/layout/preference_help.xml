@@ -16,20 +16,20 @@
   -->
 
 <com.enamakel.thebigindiannews.views.TintableTextView
+    android:id="@android:id/title"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@android:id/title"
-    tools:text="What's this?"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="15dip"
     android:layout_marginRight="6dip"
-    android:paddingBottom="@dimen/padding"
-    android:gravity="center_vertical"
-    android:focusable="true"
+    android:background="?attr/selectableItemBackground"
     android:drawableLeft="@drawable/ic_help_white_24dp"
     android:drawablePadding="@dimen/padding_text"
-    android:background="?attr/selectableItemBackground"
+    android:focusable="true"
+    android:gravity="center_vertical"
+    android:maxLines="4"
+    android:paddingBottom="@dimen/padding"
     android:textAppearance="?android:attr/textAppearanceSmall"
     android:textColor="?android:attr/textColorSecondary"
-    android:maxLines="4" />
+    tools:text="What's this?"/>

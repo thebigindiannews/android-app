@@ -16,11 +16,11 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@id/menu_font_options"
-        android:title="@string/font_options"
         android:icon="@drawable/ic_format_size_white_24dp"
+        android:title="@string/font_options"
         app:showAsAction="ifRoom">
 
         <menu>
@@ -30,7 +30,7 @@
                 android:title="@string/pref_text_size_title">
 
                 <!-- to be populated in code -->
-                <menu />
+                <menu/>
 
             </item>
 
@@ -39,7 +39,7 @@
                 android:title="@string/pref_font_title">
 
                 <!-- to be populated in code -->
-                <menu />
+                <menu/>
 
             </item>
 

@@ -16,25 +16,27 @@
   -->
 
 <resources>
-    <string translatable="false" name="pref_color_code">pref_color_code</string>
-    <string translatable="false" name="pref_comment_display">pref_comment_display</string>
-    <string translatable="false" name="pref_custom_tab">pref_custom_tab</string>
-    <string translatable="false" name="pref_external">pref_external</string>
-    <string translatable="false" name="pref_font">pref_font</string>
-    <string translatable="false" name="pref_highlight_updated">pref_highlight_updated</string>
-    <string translatable="false" name="pref_highlight_updated_help">pref_highlight_updated_help</string>
-    <string translatable="false" name="pref_item_click">pref_item_click</string> <!-- deprecated -->
-    <string translatable="false" name="pref_item_search_recent">pref_item_search_recent</string> <!-- deprecated -->
-    <string translatable="false" name="pref_lazy_load">pref_lazy_load</string>
-    <string translatable="false" name="pref_lazy_load_help">pref_lazy_load_help</string>
-    <string translatable="false" name="pref_list_item_view">pref_list_item_view</string>
-    <string translatable="false" name="pref_max_lines">pref_max_lines</string>
-    <string translatable="false" name="pref_popular_range">pref_popular_range</string>
-    <string translatable="false" name="pref_readability_font">pref_readability_font</string>
-    <string translatable="false" name="pref_readability_text_size">pref_readability_text_size</string>
-    <string translatable="false" name="pref_search_sort">pref_search_sort</string>
-    <string translatable="false" name="pref_story_display">pref_story_display</string>
-    <string translatable="false" name="pref_text_size">pref_text_size</string>
-    <string translatable="false" name="pref_theme">pref_theme</string>
-    <string translatable="false" name="pref_username">pref_username</string>
+    <string name="pref_color_code" translatable="false">pref_color_code</string>
+    <string name="pref_comment_display" translatable="false">pref_comment_display</string>
+    <string name="pref_custom_tab" translatable="false">pref_custom_tab</string>
+    <string name="pref_external" translatable="false">pref_external</string>
+    <string name="pref_font" translatable="false">pref_font</string>
+    <string name="pref_highlight_updated" translatable="false">pref_highlight_updated</string>
+    <string name="pref_highlight_updated_help" translatable="false">pref_highlight_updated_help</string>
+    <string name="pref_item_click" translatable="false">pref_item_click</string>
+    <!-- deprecated -->
+    <string name="pref_item_search_recent" translatable="false">pref_item_search_recent</string>
+    <!-- deprecated -->
+    <string name="pref_lazy_load" translatable="false">pref_lazy_load</string>
+    <string name="pref_lazy_load_help" translatable="false">pref_lazy_load_help</string>
+    <string name="pref_list_item_view" translatable="false">pref_list_item_view</string>
+    <string name="pref_max_lines" translatable="false">pref_max_lines</string>
+    <string name="pref_popular_range" translatable="false">pref_popular_range</string>
+    <string name="pref_readability_font" translatable="false">pref_readability_font</string>
+    <string name="pref_readability_text_size" translatable="false">pref_readability_text_size</string>
+    <string name="pref_search_sort" translatable="false">pref_search_sort</string>
+    <string name="pref_story_display" translatable="false">pref_story_display</string>
+    <string name="pref_text_size" translatable="false">pref_text_size</string>
+    <string name="pref_theme" translatable="false">pref_theme</string>
+    <string name="pref_username" translatable="false">pref_username</string>
 </resources>

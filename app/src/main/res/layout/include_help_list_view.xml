@@ -16,38 +16,41 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin">
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingTop="@dimen/activity_vertical_margin"
+              android:paddingBottom="@dimen/activity_vertical_margin"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin">
 
     <TextView
         android:text="@string/help_new_story"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
-    <include android:id="@+id/item_new"
-        layout="@layout/item_story" />
+    <include
+        android:id="@+id/item_new"
+        layout="@layout/item_story"/>
 
     <TextView
         android:text="@string/help_promoted_story"
         android:layout_marginTop="@dimen/margin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
-    <include android:id="@+id/item_promoted"
-        layout="@layout/item_story" />
+    <include
+        android:id="@+id/item_promoted"
+        layout="@layout/item_story"/>
 
     <TextView
         android:text="@string/help_new_comments"
         android:layout_marginTop="@dimen/margin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
-    <include android:id="@+id/item_new_comments"
-        layout="@layout/item_story" />
+    <include
+        android:id="@+id/item_new_comments"
+        layout="@layout/item_story"/>
 
 </LinearLayout>

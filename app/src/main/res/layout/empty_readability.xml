@@ -16,11 +16,11 @@
   -->
 
 <com.enamakel.thebigindiannews.views.TintableTextView
+    android:id="@id/empty"
+    style="@style/textEmptyStyle"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@id/empty"
-    android:visibility="gone"
-    tools:visibility="visible"
     android:drawableTop="@drawable/ic_local_hotel_white_48dp"
     android:text="@string/readability_failed"
-    style="@style/textEmptyStyle" />
+    android:visibility="gone"
+    tools:visibility="visible"/>

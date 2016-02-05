@@ -16,6 +16,6 @@
   -->
 
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
-    android:label="@string/title_activity_favorite"
-    android:hint="@string/hint_search_saved_stories"
-    android:voiceSearchMode="showVoiceSearchButton|launchRecognizer" />
+            android:hint="@string/hint_search_saved_stories"
+            android:label="@string/title_activity_favorite"
+            android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"/>

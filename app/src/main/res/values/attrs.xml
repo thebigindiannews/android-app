@@ -16,21 +16,21 @@
   -->
 
 <resources>
-    <attr name="colorCardBackground" format="reference" />
-    <attr name="colorCardHighlight" format="reference" />
-    <attr name="titleTextSize" format="dimension|reference" />
-    <attr name="subtitleTextSize" format="dimension|reference" />
-    <attr name="contentTextSize" format="dimension|reference" />
-    <attr name="preferenceHelpStyle" format="reference" />
+    <attr name="colorCardBackground" format="reference"/>
+    <attr name="colorCardHighlight" format="reference"/>
+    <attr name="titleTextSize" format="dimension|reference"/>
+    <attr name="subtitleTextSize" format="dimension|reference"/>
+    <attr name="contentTextSize" format="dimension|reference"/>
+    <attr name="preferenceHelpStyle" format="reference"/>
     <declare-styleable name="PreferenceHelp">
-        <attr name="dialogTitle" />
-        <attr name="dialogLayout" />
+        <attr name="dialogTitle"/>
+        <attr name="dialogLayout"/>
     </declare-styleable>
     <declare-styleable name="SpinnerPreference">
-        <attr name="entries" />
-        <attr name="entryValues" />
+        <attr name="entries"/>
+        <attr name="entryValues"/>
     </declare-styleable>
     <declare-styleable name="StoryView">
-        <attr name="local" format="boolean" />
+        <attr name="local" format="boolean"/>
     </declare-styleable>
 </resources>

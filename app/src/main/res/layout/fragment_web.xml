@@ -16,13 +16,13 @@
   -->
 
 <android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/nested_scroll_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="?attr/colorCardBackground"
     android:scrollbarStyle="insideOverlay"
-    android:scrollbars="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:scrollbars="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -30,21 +30,21 @@
 
         <WebView
             android:id="@id/web_view"
-            android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
 
         <ViewStub
             android:id="@id/empty"
-            android:inflatedId="@id/empty"
-            android:layout="@layout/button_download"
-            android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:inflatedId="@id/empty"
+            android:layout="@layout/button_download"/>
 
         <ProgressBar
             android:id="@id/progress"
-            style="@style/AppProgressBarHorizontalStyle" />
+            style="@style/AppProgressBarHorizontalStyle"/>
 
     </FrameLayout>
 

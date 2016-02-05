@@ -17,24 +17,24 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
     <com.enamakel.thebigindiannews.views.TintableTextView
-        android:text="@string/file_not_supported"
-        android:drawableTop="@drawable/ic_save_white_48dp"
-        android:padding="@dimen/activity_vertical_margin"
-        android:drawablePadding="@dimen/padding"
         style="@style/textEmptyStyle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:drawablePadding="@dimen/padding"
+        android:drawableTop="@drawable/ic_save_white_48dp"
+        android:padding="@dimen/activity_vertical_margin"
+        android:text="@string/file_not_supported"/>
 
     <Button
         android:id="@+id/download_button"
-        android:text="@string/download_external"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="@string/download_external"/>
 </LinearLayout>

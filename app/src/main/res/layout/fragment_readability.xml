@@ -16,14 +16,14 @@
   -->
 
 <android.support.v4.widget.NestedScrollView
+    android:id="@+id/nested_scroll_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nested_scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="?attr/colorCardBackground"
     android:scrollbarStyle="insideOverlay"
-    android:scrollbars="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:scrollbars="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -32,24 +32,24 @@
         <WebView
             android:id="@id/content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
 
         <include
             layout="@layout/empty_readability"
-            android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"/>
 
         <ProgressBar
             android:id="@id/progress"
-            android:visibility="gone"
-            tools:visibility="visible"
+            style="@style/AppProgressBarHorizontalStyle"
             android:indeterminate="true"
             android:indeterminateTint="@color/lightBlueA700"
             android:indeterminateTintMode="src_in"
             android:scaleY="3"
-            style="@style/AppProgressBarHorizontalStyle"
-            tools:ignore="UnusedAttribute" />
+            android:visibility="gone"
+            tools:ignore="UnusedAttribute"
+            tools:visibility="visible"/>
 
     </FrameLayout>
 

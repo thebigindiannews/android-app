@@ -16,14 +16,14 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:minHeight="?attr/listPreferredItemHeight"
-    android:gravity="center_vertical"
-    android:paddingRight="?android:attr/scrollbarSize"
-    android:background="?attr/selectableItemBackground"
-    android:focusable="true">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="?attr/selectableItemBackground"
+              android:focusable="true"
+              android:gravity="center_vertical"
+              android:minHeight="?attr/listPreferredItemHeight"
+              android:orientation="vertical"
+              android:paddingRight="?android:attr/scrollbarSize">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -32,92 +32,94 @@
         android:layout_marginRight="6dip"
         android:layout_marginTop="6dip">
 
-        <TextView android:id="@android:id/title"
+        <TextView
+            android:id="@android:id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="?android:attr/textColorPrimary"
-            android:ellipsize="marquee"
-            android:fadingEdge="horizontal" />
+            android:textColor="?android:attr/textColorPrimary"/>
 
-        <TextView android:id="@android:id/summary"
+        <TextView
+            android:id="@android:id/summary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@android:id/title"
             android:layout_alignLeft="@android:id/title"
+            android:layout_below="@android:id/title"
+            android:maxLines="4"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="?android:attr/textColorSecondary"
-            android:maxLines="4" />
+            android:textColor="?android:attr/textColorSecondary"/>
 
     </RelativeLayout>
 
     <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dip"
         android:layout_marginLeft="15dip"
         android:layout_marginRight="6dip"
         android:layout_marginTop="6dip"
-        android:layout_marginBottom="6dip"
-        android:scrollbarStyle="outsideInset"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:scrollbarStyle="outsideInset">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <com.enamakel.thebigindiannews.widgets.preference.ThemeView
                 android:id="@+id/theme_light"
-                android:theme="@style/AppTheme"
-                android:layout_marginTop="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin"
                 android:layout_marginRight="@dimen/margin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_marginTop="@dimen/margin"
+                android:theme="@style/AppTheme"/>
 
             <com.enamakel.thebigindiannews.widgets.preference.ThemeView
                 android:id="@+id/theme_dark"
-                android:theme="@style/AppTheme.Dark"
-                android:layout_marginTop="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin"
                 android:layout_marginRight="@dimen/margin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_marginTop="@dimen/margin"
+                android:theme="@style/AppTheme.Dark"/>
 
             <com.enamakel.thebigindiannews.widgets.preference.ThemeView
                 android:id="@+id/theme_sepia"
-                android:theme="@style/AppTheme.Sepia"
-                android:layout_marginTop="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin"
                 android:layout_marginRight="@dimen/margin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_marginTop="@dimen/margin"
+                android:theme="@style/AppTheme.Sepia"/>
 
             <com.enamakel.thebigindiannews.widgets.preference.ThemeView
                 android:id="@+id/theme_green"
-                android:theme="@style/AppTheme.Green"
-                android:layout_marginTop="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin"
                 android:layout_marginRight="@dimen/margin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_marginTop="@dimen/margin"
+                android:theme="@style/AppTheme.Green"/>
 
             <com.enamakel.thebigindiannews.widgets.preference.ThemeView
                 android:id="@+id/theme_solarized"
-                android:theme="@style/AppTheme.Solarized"
-                android:layout_marginTop="@dimen/margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin"
                 android:layout_marginRight="@dimen/margin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_marginTop="@dimen/margin"
+                android:theme="@style/AppTheme.Solarized"/>
 
             <com.enamakel.thebigindiannews.widgets.preference.ThemeView
                 android:id="@+id/theme_solarized_dark"
-                android:theme="@style/AppTheme.Dark.Solarized"
-                android:layout_marginTop="@dimen/margin"
-                android:layout_marginBottom="@dimen/margin"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin"
+                android:layout_marginTop="@dimen/margin"
+                android:theme="@style/AppTheme.Dark.Solarized"/>
 
         </LinearLayout>
 

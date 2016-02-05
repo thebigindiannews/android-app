@@ -16,9 +16,9 @@
   -->
 
 <android.support.design.widget.CoordinatorLayout
+    android:id="@id/content_frame"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@id/content_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -28,19 +28,19 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@id/toolbar"
-            android:theme="@style/AppToolbarTheme"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:minHeight="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|snap|enterAlways" />
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/AppToolbarTheme"
+            app:layout_scrollFlags="scroll|snap|enterAlways"/>
 
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
         android:id="@android:id/list"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 </android.support.design.widget.CoordinatorLayout>
