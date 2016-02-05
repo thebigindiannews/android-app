@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.data;
+package com.enamakel.thebigindiannews.data.managers;
 
 import android.content.Context;
 import android.os.Parcelable;
@@ -22,6 +22,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 import android.text.Spannable;
 
+import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 
 import java.lang.annotation.Retention;
@@ -29,7 +30,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 /**
- * Data repository for {@link com.enamakel.thebigindiannews.data.ItemManager.Item}
+ * Data repository for {@link ItemManager.Item}
  */
 public interface ItemManager {
 
@@ -85,7 +86,7 @@ public interface ItemManager {
          * Gets raw item type, used to be parsed by {@link #getType()}
          *
          * @return string type or null
-         * @see com.enamakel.thebigindiannews.data.ItemManager.WebItem.Type
+         * @see ItemManager.WebItem.Type
          */
         String getRawType();
 
@@ -214,7 +215,7 @@ public interface ItemManager {
          *
          * @return current revision
          * @see #setLocalRevision(int)
-         * @see #populate(com.enamakel.thebigindiannews.data.ItemManager.Item)
+         * @see #populate(ItemManager.Item)
          * @see #setFavorite(boolean)
          */
         int getLocalRevision();

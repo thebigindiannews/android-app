@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.data;
+package com.enamakel.thebigindiannews.data.managers;
 
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
@@ -25,6 +25,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
+import com.enamakel.thebigindiannews.data.providers.entries.ViewedEntry;
 
 
 /**
@@ -45,7 +46,7 @@ public class SessionManager {
 
         new SessionHandler(contentResolver, itemId, callbacks).startQuery(0, itemId,
                 BigIndianProvider.URI_VIEWED, null,
-                BigIndianProvider.ViewedEntry.COLUMN_NAME_ITEM_ID + " = ?",
+                ViewedEntry.COLUMN_NAME_ITEM_ID + " = ?",
                 new String[]{itemId}, null);
     }
 
@@ -60,7 +61,7 @@ public class SessionManager {
         if (TextUtils.isEmpty(itemId)) return;
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(BigIndianProvider.ViewedEntry.COLUMN_NAME_ITEM_ID, itemId);
+        contentValues.put(ViewedEntry.COLUMN_NAME_ITEM_ID, itemId);
         ContentResolver cr = context.getContentResolver();
 
         new SessionHandler(cr, itemId).startInsert(0, itemId,

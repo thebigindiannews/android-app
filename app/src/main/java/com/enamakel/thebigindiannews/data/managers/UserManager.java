@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.data;
+package com.enamakel.thebigindiannews.data.managers;
 
 import android.content.Context;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+
+import com.enamakel.thebigindiannews.data.ResponseListener;
+
 
 public interface UserManager {
     void getUser(String username, final ResponseListener<User> listener);

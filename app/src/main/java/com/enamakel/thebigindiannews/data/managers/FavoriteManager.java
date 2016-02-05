@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.data;
+package com.enamakel.thebigindiannews.data.managers;
 
 
 import android.content.AsyncQueryHandler;
@@ -31,8 +31,10 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.enamakel.thebigindiannews.data.FavoriteModel;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
+import com.enamakel.thebigindiannews.data.providers.entries.FavoriteEntry;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -90,7 +92,7 @@ public class FavoriteManager {
             selectionArgs = null;
         } else {
             Log.d(TAG + ":get", query);
-            selection = BigIndianProvider.FavoriteEntry.COLUMN_NAME_TITLE + " LIKE ?";
+            selection = FavoriteEntry.COLUMN_NAME_TITLE + " LIKE ?";
             selectionArgs = new String[]{"%" + query + "%"};
         }
 
@@ -130,11 +132,11 @@ public class FavoriteManager {
         Log.d(TAG + ":add", story.getId());
 
         final ContentValues contentValues = new ContentValues();
-        contentValues.put(BigIndianProvider.FavoriteEntry._ID, story.getId());
-        contentValues.put(BigIndianProvider.FavoriteEntry.COLUMN_NAME_ITEMJSON, story.toJSON());
-        contentValues.put(BigIndianProvider.FavoriteEntry.COLUMN_NAME_TIME, String.valueOf((new Date()).getTime()));
-        contentValues.put(BigIndianProvider.FavoriteEntry.COLUMN_NAME_EXCERPT, story.getExcerpt());
-        contentValues.put(BigIndianProvider.FavoriteEntry.COLUMN_NAME_TITLE, story.getTitle());
+        contentValues.put(FavoriteEntry._ID, story.getId());
+        contentValues.put(FavoriteEntry.COLUMN_NAME_ITEMJSON, story.toJSON());
+        contentValues.put(FavoriteEntry.COLUMN_NAME_TIME, String.valueOf((new Date()).getTime()));
+        contentValues.put(FavoriteEntry.COLUMN_NAME_EXCERPT, story.getExcerpt());
+        contentValues.put(FavoriteEntry.COLUMN_NAME_TITLE, story.getTitle());
 
         ContentResolver contentResolver = context.getContentResolver();
         new FavoriteHandler(contentResolver).startInsert(0, story.getId(),
@@ -160,7 +162,7 @@ public class FavoriteManager {
             selection = null;
             selectionArgs = null;
         } else {
-            selection = BigIndianProvider.FavoriteEntry.COLUMN_NAME_TITLE + " LIKE ?";
+            selection = FavoriteEntry.COLUMN_NAME_TITLE + " LIKE ?";
             selectionArgs = new String[]{"%" + query + "%"};
         }
 
@@ -193,7 +195,7 @@ public class FavoriteManager {
                 callbacks.onCheckFavoriteComplete(isFavorite);
             }
         }).startQuery(0, itemId, BigIndianProvider.URI_FAVORITE, null,
-                BigIndianProvider.FavoriteEntry._ID + " = ?",
+                FavoriteEntry._ID + " = ?",
                 new String[]{itemId}, null);
     }
 
@@ -212,7 +214,7 @@ public class FavoriteManager {
         ContentResolver cr = context.getContentResolver();
         new FavoriteHandler(cr).startDelete(0, story.get_id(),
                 BigIndianProvider.URI_FAVORITE,
-                BigIndianProvider.FavoriteEntry._ID + " = ?",
+                FavoriteEntry._ID + " = ?",
                 new String[]{story.getId()});
 
         favoriteIds.remove(story.getId());
@@ -235,7 +237,7 @@ public class FavoriteManager {
             protected Void doInBackground(String... params) {
                 for (String param : params) {
                     contentResolver.delete(BigIndianProvider.URI_FAVORITE,
-                            BigIndianProvider.FavoriteEntry._ID + " = ?",
+                            FavoriteEntry._ID + " = ?",
                             new String[]{param});
                 }
 
@@ -309,7 +311,7 @@ public class FavoriteManager {
 
         public StoryModel getFavorite() {
             String json = getString(getColumnIndexOrThrow(
-                    BigIndianProvider.FavoriteEntry.COLUMN_NAME_ITEMJSON));
+                    FavoriteEntry.COLUMN_NAME_ITEMJSON));
             StoryModel story = StoryModel.fromJSON(json);
             story.setFavorite(true);
             return story;
@@ -340,7 +342,7 @@ public class FavoriteManager {
          */
         public CursorLoader(Context context, String query) {
             super(context, BigIndianProvider.URI_FAVORITE, null,
-                    BigIndianProvider.FavoriteEntry.COLUMN_NAME_TITLE + " LIKE ?",
+                    FavoriteEntry.COLUMN_NAME_TITLE + " LIKE ?",
                     new String[]{"%" + query + "%"}, null);
         }
     }
