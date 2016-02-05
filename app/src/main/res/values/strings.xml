@@ -24,6 +24,7 @@
     <string name="filter_title_item">Big Indian</string>
     <string name="open_drawer">Open drawer</string>
     <string name="close_drawer">Close drawer</string>
+    <string name="drawer_title">the Big Indian news</string>
     <string name="view_in_browser">View in external browser</string>
     <string name="favorite_email_subject">Your saved stories</string>
     <string name="share">Share</string>
