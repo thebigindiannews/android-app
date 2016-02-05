@@ -96,7 +96,7 @@ public class PopularActivity extends BaseListActivity {
     }
 
 
-    private void filter(@AlgoliaPopularClient.Range String range) {
+    void filter(@AlgoliaPopularClient.Range String range) {
         setRange(range);
         Preferences.setPopularRange(this, range);
         ListFragment listFragment = (ListFragment) getSupportFragmentManager()
@@ -107,7 +107,7 @@ public class PopularActivity extends BaseListActivity {
     }
 
 
-    private void setRange(String range) {
+    void setRange(String range) {
         mRange = range;
         final int stringRes;
         switch (range) {

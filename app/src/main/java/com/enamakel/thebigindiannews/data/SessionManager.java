@@ -88,9 +88,9 @@ public class SessionManager {
     }
 
 
-    private static class SessionHandler extends AsyncQueryHandler {
-        private final String mItemId;
-        private OperationCallbacks mCallback;
+    static class SessionHandler extends AsyncQueryHandler {
+        final String mItemId;
+        OperationCallbacks mCallback;
 
 
         public SessionHandler(ContentResolver cr, @NonNull String itemId) {

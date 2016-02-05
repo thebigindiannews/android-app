@@ -28,7 +28,7 @@ import android.os.Bundle;
 import com.enamakel.thebigindiannews.activities.LoginActivity;
 
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
-    private final Context mContext;
+    final Context mContext;
 
     public AccountAuthenticator(Context context) {
         super(context);

@@ -27,9 +27,9 @@ import com.enamakel.thebigindiannews.util.Preferences;
  * Base fragment that controls load timing depends on WIFI and visibility
  */
 public abstract class LazyLoadFragment extends BaseFragment {
-    private static final String STATE_EAGER_LOAD = "state:eagerLoad";
-    private boolean eagerLoad;
-    private boolean activityCreated;
+    static final String STATE_EAGER_LOAD = "state:eagerLoad";
+    boolean eagerLoad;
+    boolean activityCreated;
 
 
     @Override

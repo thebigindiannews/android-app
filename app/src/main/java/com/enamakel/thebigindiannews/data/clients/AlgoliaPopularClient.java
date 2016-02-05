@@ -31,7 +31,7 @@ import retrofit.Callback;
 
 public class AlgoliaPopularClient extends AlgoliaClient {
 
-    private static final String MIN_CREATED_AT = "created_at_i>";
+    static final String MIN_CREATED_AT = "created_at_i>";
 
     @Inject
     public AlgoliaPopularClient(Context context, RestServiceFactory factory) {

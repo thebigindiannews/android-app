@@ -30,7 +30,7 @@ import com.enamakel.thebigindiannews.AppUtils;
  * Helper to tint menu items for activities and fragments
  */
 public class MenuTintDelegate {
-    private int mTextColorPrimary;
+    int mTextColorPrimary;
 
     /**
      * Callback that should be triggered after activity has been created

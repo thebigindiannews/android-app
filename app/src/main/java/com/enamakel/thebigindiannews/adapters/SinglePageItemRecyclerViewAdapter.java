@@ -35,12 +35,12 @@ import java.util.ArrayList;
 
 public class SinglePageItemRecyclerViewAdapter
         extends ItemRecyclerViewAdapter<ToggleItemViewHolder> {
-    private int levelIndicatorWidth = 0;
-    private final boolean autoExpand;
-    private boolean isColorCoded = true;
-    private TypedArray colors;
-    private RecyclerView recyclerView;
-    private final @NonNull SavedState savedState;
+    int levelIndicatorWidth = 0;
+    final boolean autoExpand;
+    boolean isColorCoded = true;
+    TypedArray colors;
+    RecyclerView recyclerView;
+    final @NonNull SavedState savedState;
 
 
     public SinglePageItemRecyclerViewAdapter(ItemManager itemManager,
@@ -145,7 +145,7 @@ public class SinglePageItemRecyclerViewAdapter
     }
 
 
-    private void bindNavigation(ToggleItemViewHolder holder, final ItemManager.Item item) {
+    void bindNavigation(ToggleItemViewHolder holder, final ItemManager.Item item) {
         if (!savedState.expanded.containsKey(item.getParent())) {
             holder.parent.setVisibility(View.INVISIBLE);
             return;
@@ -162,7 +162,7 @@ public class SinglePageItemRecyclerViewAdapter
     }
 
 
-    private void toggleKids(final ToggleItemViewHolder holder, final ItemManager.Item item) {
+    void toggleKids(final ToggleItemViewHolder holder, final ItemManager.Item item) {
         holder.toggle.setVisibility(item.getKidCount() > 0 ? View.VISIBLE : View.GONE);
 
         if (item.getKidCount() == 0) return;
@@ -182,7 +182,7 @@ public class SinglePageItemRecyclerViewAdapter
     }
 
 
-    private void bindToggle(ToggleItemViewHolder holder, ItemManager.Item item, boolean expanded) {
+    void bindToggle(ToggleItemViewHolder holder, ItemManager.Item item, boolean expanded) {
         if (expanded) {
             holder.toggle.setCompoundDrawablesWithIntrinsicBounds(0, 0,
                     R.drawable.ic_expand_less_white_24dp, 0);
@@ -197,7 +197,7 @@ public class SinglePageItemRecyclerViewAdapter
     }
 
 
-    private void expand(final StoryModel item) {
+    void expand(final StoryModel item) {
 //        if (isExpanded(item)) return;
 
         savedState.expanded.putParcelable(item.getId(), item);
@@ -212,14 +212,14 @@ public class SinglePageItemRecyclerViewAdapter
     }
 
 
-    private void collapse(final ItemManager.Item item) {
+    void collapse(final ItemManager.Item item) {
         int index = savedState.list.indexOf(item) + 1;
         int count = recursiveRemove(item);
         notifyItemRangeRemoved(index, count);
     }
 
 
-    private int recursiveRemove(ItemManager.Item item) {
+    int recursiveRemove(ItemManager.Item item) {
         if (!isExpanded(item)) {
             return 0;
         }
@@ -234,7 +234,7 @@ public class SinglePageItemRecyclerViewAdapter
     }
 
 
-    private boolean isExpanded(ItemManager.Item item) {
+    boolean isExpanded(ItemManager.Item item) {
         return savedState.expanded.containsKey(item.getId());
     }
 
@@ -253,8 +253,8 @@ public class SinglePageItemRecyclerViewAdapter
             }
         };
 
-        private ArrayList<StoryModel> list;
-        private Bundle expanded;
+        ArrayList<StoryModel> list;
+        Bundle expanded;
 
 
         public SavedState(ArrayList<StoryModel> list) {
@@ -264,7 +264,7 @@ public class SinglePageItemRecyclerViewAdapter
 
 
         @SuppressWarnings("unchecked")
-        private SavedState(Parcel source) {
+        SavedState(Parcel source) {
             list = source.readArrayList(ItemManager.Item.class.getClassLoader());
             expanded = source.readBundle(list.isEmpty() ? null :
                     list.get(0).getClass().getClassLoader());

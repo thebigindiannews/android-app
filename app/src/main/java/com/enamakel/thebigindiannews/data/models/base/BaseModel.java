@@ -19,7 +19,7 @@ public abstract class BaseModel<T> implements Parcelable {
     protected @Getter final long longId;
     protected static Gson gson;
 
-    private static AtomicReference<Long> currentTime =
+    static AtomicReference<Long> currentTime =
             new AtomicReference<>(System.currentTimeMillis());
 
 

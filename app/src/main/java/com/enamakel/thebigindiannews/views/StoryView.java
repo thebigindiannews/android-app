@@ -210,7 +210,7 @@ public class StoryView extends RelativeLayout implements Checkable {
     }
 
 
-    private Spannable decorateUpdated(String text, boolean updated) {
+    Spannable decorateUpdated(String text, boolean updated) {
         SpannableStringBuilder stringBuilder = new SpannableStringBuilder(text);
 
         if (updated) {

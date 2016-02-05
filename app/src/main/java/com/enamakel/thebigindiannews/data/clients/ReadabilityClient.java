@@ -83,7 +83,7 @@ public interface ReadabilityClient {
         }
 
 
-        private void readabilityParse(final String itemId, String url, final Callback callback) {
+        void readabilityParse(final String itemId, String url, final Callback callback) {
             readabilityService.parse(url)
                     .enqueue(new retrofit.Callback<Readable>() {
                         @Override
@@ -112,7 +112,7 @@ public interface ReadabilityClient {
         }
 
 
-        private void cache(String itemId, String content) {
+        void cache(String itemId, String content) {
             final ContentValues contentValues = new ContentValues();
             contentValues.put(BigIndianProvider.ReadabilityEntry.COLUMN_NAME_ITEM_ID, itemId);
             contentValues.put(BigIndianProvider.ReadabilityEntry.COLUMN_NAME_CONTENT, content);
@@ -131,7 +131,7 @@ public interface ReadabilityClient {
 
 
         static class Readable {
-            private String content;
+            String content;
         }
 
 
@@ -146,7 +146,7 @@ public interface ReadabilityClient {
             }
 
 
-            private ReadabilityHandler setQueryCallback(@NonNull QueryCallback callback) {
+            ReadabilityHandler setQueryCallback(@NonNull QueryCallback callback) {
                 this.callback = callback;
                 return this;
             }
@@ -173,7 +173,7 @@ public interface ReadabilityClient {
         }
 
 
-        private interface QueryCallback {
+        interface QueryCallback {
             void onQueryComplete(String content);
         }
     }

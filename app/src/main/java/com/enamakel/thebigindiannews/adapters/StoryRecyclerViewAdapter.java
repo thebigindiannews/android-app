@@ -230,7 +230,7 @@ public class StoryRecyclerViewAdapter extends
     }
 
 
-    private void setItemsInternal(ArrayList<StoryModel> items) {
+    void setItemsInternal(ArrayList<StoryModel> items) {
         this.items = items;
         itemPositions.clear();
 
@@ -239,7 +239,7 @@ public class StoryRecyclerViewAdapter extends
     }
 
 
-    private void setUpdated(ArrayList<StoryModel> stories) {
+    void setUpdated(ArrayList<StoryModel> stories) {
         if (!highlightUpdated || getItems() == null) return;
 
         updatedItems.clear();
@@ -262,7 +262,7 @@ public class StoryRecyclerViewAdapter extends
     }
 
 
-    private void notifyUpdated() {
+    void notifyUpdated() {
         if (showAll) {
             Snackbar.make(recyclerView,
                     context.getResources().getQuantityString(R.plurals.new_stories_count,
@@ -295,7 +295,7 @@ public class StoryRecyclerViewAdapter extends
     }
 
 
-    private void onItemLoaded(StoryModel item) {
+    void onItemLoaded(StoryModel item) {
         Integer position = showAll ? itemPositions.get(item.get_id()) :
                 updatedPositions.get(item.get_id());
 
@@ -305,7 +305,7 @@ public class StoryRecyclerViewAdapter extends
     }
 
 
-    private void bindItemUpdated(ItemViewHolder holder, StoryModel story) {
+    void bindItemUpdated(ItemViewHolder holder, StoryModel story) {
         if (highlightUpdated)
             holder.storyView.setUpdated(story,
                     updatedPositions.containsKey(story.get_id()),
@@ -313,7 +313,7 @@ public class StoryRecyclerViewAdapter extends
     }
 
 
-    private void showMoreOptions(View view, final StoryModel story, final ItemViewHolder holder) {
+    void showMoreOptions(View view, final StoryModel story, final ItemViewHolder holder) {
         popupMenu.create(context, view, Gravity.NO_GRAVITY);
         popupMenu.inflate(R.menu.menu_contextual_story);
         popupMenu.getMenu().findItem(R.id.menu_contextual_save)
@@ -358,7 +358,7 @@ public class StoryRecyclerViewAdapter extends
     }
 
 
-    private void toggleSave(final StoryModel story) {
+    void toggleSave(final StoryModel story) {
         final int toastMessageResId;
 
         if (!story.isFavorite()) {
@@ -380,13 +380,13 @@ public class StoryRecyclerViewAdapter extends
     }
 
 
-    private void readStory(final StoryModel story, final ItemViewHolder holder) {
+    void readStory(final StoryModel story, final ItemViewHolder holder) {
         userServices.voteUp(context, story.get_id(),
                 new StoryReadCallback(this, holder.getAdapterPosition(), story));
     }
 
 
-    private void onVoted(int position, Boolean successful) {
+    void onVoted(int position, Boolean successful) {
         if (successful == null) {
             Toast.makeText(context, R.string.vote_failed, Toast.LENGTH_SHORT).show();
         } else if (successful) {
@@ -396,15 +396,15 @@ public class StoryRecyclerViewAdapter extends
     }
 
 
-    private void highlightUserPost(ItemViewHolder holder, StoryModel story) {
+    void highlightUserPost(ItemViewHolder holder, StoryModel story) {
         holder.storyView.setChecked(isSelected(story.get_id()) ||
                 !TextUtils.isEmpty(username) && TextUtils.equals(username, story.getCreated_by()));
     }
 
 
-    private static class ItemResponseListener implements ResponseListener<StoryModel> {
-        private final WeakReference<StoryRecyclerViewAdapter> adapter;
-        private final StoryModel partialItem;
+    static class ItemResponseListener implements ResponseListener<StoryModel> {
+        final WeakReference<StoryRecyclerViewAdapter> adapter;
+        final StoryModel partialItem;
 
 
         public ItemResponseListener(StoryRecyclerViewAdapter adapter, StoryModel partialItem) {
@@ -429,10 +429,10 @@ public class StoryRecyclerViewAdapter extends
     }
 
 
-    private static class StoryReadCallback extends UserServices.Callback {
-        private final WeakReference<StoryRecyclerViewAdapter> adapter;
-        private final int position;
-        private final StoryModel storyModel;
+    static class StoryReadCallback extends UserServices.Callback {
+        final WeakReference<StoryRecyclerViewAdapter> adapter;
+        final int position;
+        final StoryModel storyModel;
 
 
         public StoryReadCallback(StoryRecyclerViewAdapter adapter, int position,

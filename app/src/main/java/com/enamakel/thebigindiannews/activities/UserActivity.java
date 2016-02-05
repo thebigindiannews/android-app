@@ -140,12 +140,12 @@ public class UserActivity extends InjectableActivity implements Scrollable {
     }
 
 
-    private void load() {
+    void load() {
         userManager.getUser(username, new UserResponseListener(this));
     }
 
 
-    private void onUserLoaded(UserManager.User response) {
+    void onUserLoaded(UserManager.User response) {
         if (response != null) {
             user = response;
             bind();
@@ -155,7 +155,7 @@ public class UserActivity extends InjectableActivity implements Scrollable {
     }
 
 
-    private void showEmpty() {
+    void showEmpty() {
         info.setVisibility(View.GONE);
         about.setVisibility(View.GONE);
         emptyView.setVisibility(View.VISIBLE);
@@ -164,7 +164,7 @@ public class UserActivity extends InjectableActivity implements Scrollable {
     }
 
 
-    private void bind() {
+    void bind() {
         info.setText(getString(R.string.user_info, user.getCreated(this), user.getKarma()));
         if (TextUtils.isEmpty(user.getAbout())) about.setVisibility(View.GONE);
         else AppUtils.setTextWithLinks(about, user.getAbout());
@@ -177,8 +177,8 @@ public class UserActivity extends InjectableActivity implements Scrollable {
     }
 
 
-    private static class UserResponseListener implements ResponseListener<UserManager.User> {
-        private final WeakReference<UserActivity> mUserActivity;
+    static class UserResponseListener implements ResponseListener<UserManager.User> {
+        final WeakReference<UserActivity> mUserActivity;
 
 
         public UserResponseListener(UserActivity userActivity) {

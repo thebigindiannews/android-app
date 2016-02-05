@@ -32,10 +32,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ThreadPreviewRecyclerViewAdapter extends ItemRecyclerViewAdapter<SubmissionViewHolder> {
-    private final List<StoryModel> stories = new ArrayList<>();
-    private final List<String> expanded = new ArrayList<>();
-    private int levelIndicatorWidth;
-    private final String mUsername;
+    final List<StoryModel> stories = new ArrayList<>();
+    final List<String> expanded = new ArrayList<>();
+    int levelIndicatorWidth;
+    final String mUsername;
 
 
     public ThreadPreviewRecyclerViewAdapter(ItemManager itemManager, StoryModel item) {
@@ -121,7 +121,7 @@ public class ThreadPreviewRecyclerViewAdapter extends ItemRecyclerViewAdapter<Su
     }
 
 
-    private void openItem(ItemManager.Item item) {
+    void openItem(ItemManager.Item item) {
         context.startActivity(new Intent(context, SingleStoryActivity.class)
                 .putExtra(SingleStoryActivity.EXTRA_ITEM, item));
     }

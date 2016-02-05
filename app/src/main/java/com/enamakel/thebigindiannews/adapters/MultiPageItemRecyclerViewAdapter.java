@@ -30,7 +30,7 @@ import com.enamakel.thebigindiannews.data.models.StoryModel;
 
 public class MultiPageItemRecyclerViewAdapter
         extends ItemRecyclerViewAdapter<MultiPageItemRecyclerViewAdapter.ItemViewHolder> {
-    private final StoryModel[] mItems;
+    final StoryModel[] mItems;
 
 
     public MultiPageItemRecyclerViewAdapter(ItemManager itemManager,
@@ -78,7 +78,7 @@ public class MultiPageItemRecyclerViewAdapter
     }
 
 
-    private void openItem(ItemManager.Item item) {
+    void openItem(ItemManager.Item item) {
         context.startActivity(new Intent(context, SingleStoryActivity.class)
                 .putExtra(SingleStoryActivity.EXTRA_ITEM, item)
                 .putExtra(SingleStoryActivity.EXTRA_OPEN_COMMENTS, true));

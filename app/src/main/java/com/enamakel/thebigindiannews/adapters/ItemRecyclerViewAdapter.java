@@ -172,7 +172,7 @@ public abstract class ItemRecyclerViewAdapter<VH extends MultiPageItemRecyclerVi
     }
 
 
-    private void load(int adapterPosition, StoryModel item) {
+    void load(int adapterPosition, StoryModel item) {
         itemManager.getItem(item.getId(), new ItemResponseListener(this, adapterPosition, item));
     }
 
@@ -184,7 +184,7 @@ public abstract class ItemRecyclerViewAdapter<VH extends MultiPageItemRecyclerVi
     }
 
 
-    private void highlightUserItem(VH holder, StoryModel item) {
+    void highlightUserItem(VH holder, StoryModel item) {
         boolean highlight = !TextUtils.isEmpty(username) &&
                 TextUtils.equals(username, item.getCreated_by());
         holder.contentView.setBackgroundColor(highlight ?
@@ -192,13 +192,13 @@ public abstract class ItemRecyclerViewAdapter<VH extends MultiPageItemRecyclerVi
     }
 
 
-    private void decorateDead(VH holder, StoryModel item) {
+    void decorateDead(VH holder, StoryModel item) {
         holder.contentTextView.setTextColor(item.isDead() ?
                 secondaryTextColorResId : tertiaryTextColorResId);
     }
 
 
-    private void toggleCollapsibleContent(final VH holder, final StoryModel item) {
+    void toggleCollapsibleContent(final VH holder, final StoryModel item) {
         final int lineCount = holder.contentTextView.getLineCount();
 //        if (item.isContentExpanded() || lineCount <= contentMaxLines) {
 //            holder.contentTextView.setMaxLines(Integer.MAX_VALUE);
@@ -227,13 +227,13 @@ public abstract class ItemRecyclerViewAdapter<VH extends MultiPageItemRecyclerVi
     }
 
 
-    private void setTextIsSelectable(TextView textView, boolean isSelectable) {
+    void setTextIsSelectable(TextView textView, boolean isSelectable) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
             textView.setTextIsSelectable(isSelectable);
     }
 
 
-    private void bindActions(final VH holder, final StoryModel item) {
+    void bindActions(final VH holder, final StoryModel item) {
         if (item.isDead() || item.isDeleted()) {
             holder.moreButton.setVisibility(View.GONE);
             return;
@@ -267,15 +267,15 @@ public abstract class ItemRecyclerViewAdapter<VH extends MultiPageItemRecyclerVi
     }
 
 
-    private void vote(final StoryModel item) {
+    void vote(final StoryModel item) {
 //        userServices.voteUp(context, item.getId(), new VoteCallback(this));
     }
 
 
-    private static class ItemResponseListener implements ResponseListener<StoryModel> {
-        private final WeakReference<ItemRecyclerViewAdapter> weakReference;
-        private final int position;
-        private final StoryModel partialItem;
+    static class ItemResponseListener implements ResponseListener<StoryModel> {
+        final WeakReference<ItemRecyclerViewAdapter> weakReference;
+        final int position;
+        final StoryModel partialItem;
 
 
         public ItemResponseListener(ItemRecyclerViewAdapter adapter, int position,

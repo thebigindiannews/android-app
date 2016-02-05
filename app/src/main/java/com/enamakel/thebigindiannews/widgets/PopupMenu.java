@@ -88,7 +88,7 @@ public interface PopupMenu {
 
 
     class Impl implements PopupMenu {
-        private android.support.v7.widget.PopupMenu supportPopupMenu;
+        android.support.v7.widget.PopupMenu supportPopupMenu;
 
 
         @Override

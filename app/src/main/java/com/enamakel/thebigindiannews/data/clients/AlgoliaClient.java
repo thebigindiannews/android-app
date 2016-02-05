@@ -40,7 +40,7 @@ import retrofit.http.Query;
 
 public class AlgoliaClient implements ItemManager {
     public static boolean sSortByTime = true;
-    private static final String BASE_API_URL = "https://hn.algolia.com/api/v1/";
+    static final String BASE_API_URL = "https://hn.algolia.com/api/v1/";
     protected RestService restService;
 
     @Inject @Named(ActivityModule.HN) ItemManager hackerNewsClient;
@@ -127,7 +127,7 @@ public class AlgoliaClient implements ItemManager {
     }
 
 
-    private static class Hit {
+    static class Hit {
         String objectID;
     }
 }

@@ -50,7 +50,7 @@ public class HelpListView extends ScrollView {
         comments.setText(sb);
     }
 
-    private Spannable makeAsteriskSpan() {
+    Spannable makeAsteriskSpan() {
         SpannableString sb = new SpannableString("*");
         sb.setSpan(new AsteriskSpan(getContext()), sb.length() - 1, sb.length(),
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

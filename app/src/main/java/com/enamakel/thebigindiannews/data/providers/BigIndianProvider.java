@@ -31,8 +31,8 @@ import android.text.TextUtils;
 
 
 public class BigIndianProvider extends ContentProvider {
-    private static final String PROVIDER_AUTHORITY = "com.enamakel.thebigindiannews.provider";
-    private static final Uri BASE_URI = Uri.parse("content://" + PROVIDER_AUTHORITY);
+    static final String PROVIDER_AUTHORITY = "com.enamakel.thebigindiannews.provider";
+    static final Uri BASE_URI = Uri.parse("content://" + PROVIDER_AUTHORITY);
 
     public static final Uri URI_FAVORITE = BASE_URI.buildUpon()
             .appendPath(FavoriteEntry.TABLE_NAME)

@@ -29,7 +29,7 @@ import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.widgets.SubmissionViewHolder;
 
 public class SubmissionRecyclerViewAdapter extends ItemRecyclerViewAdapter<SubmissionViewHolder> {
-    private final StoryModel[] mItems;
+    final StoryModel[] mItems;
 
 
     public SubmissionRecyclerViewAdapter(ItemManager itemManager, @NonNull StoryModel[] items) {
@@ -88,13 +88,13 @@ public class SubmissionRecyclerViewAdapter extends ItemRecyclerViewAdapter<Submi
     }
 
 
-    private void openItem(StoryModel item) {
+    void openItem(StoryModel item) {
         context.startActivity(new Intent(context, SingleStoryActivity.class)
                 .putExtra(SingleStoryActivity.EXTRA_ITEM, item));
     }
 
 
-    private void openPreview(StoryModel item) {
+    void openPreview(StoryModel item) {
         context.startActivity(new Intent(context, ThreadPreviewActivity.class)
                 .putExtra(ThreadPreviewActivity.EXTRA_ITEM, item));
     }

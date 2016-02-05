@@ -71,7 +71,7 @@ public class TintableTextView extends TextView {
     }
 
 
-    private void tint(@Nullable Drawable drawable) {
+    void tint(@Nullable Drawable drawable) {
         if (drawable == null) return;
 
         drawable = DrawableCompat.wrap(drawable);

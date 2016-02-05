@@ -200,7 +200,7 @@ public class ReadabilityFragment extends LazyLoadFragment implements Scrollable 
     }
 
 
-    private void parse() {
+    void parse() {
         story = getArguments().getParcelable(EXTRA_ITEM);
         if (story == null) return;
         progressBar.setVisibility(View.VISIBLE);
@@ -208,13 +208,13 @@ public class ReadabilityFragment extends LazyLoadFragment implements Scrollable 
     }
 
 
-    private void onParsed(String content) {
+    void onParsed(String content) {
         this.content = content;
         bind();
     }
 
 
-    private void bind() {
+    void bind() {
         if (!isAttached) return;
 
         progressBar.setVisibility(View.GONE);
@@ -224,11 +224,11 @@ public class ReadabilityFragment extends LazyLoadFragment implements Scrollable 
     }
 
 
-    private void render() {
+    void render() {
         String host = "/";
         if (story != null) host = getDomainName(story.getUrl());
 
-        Log.d("fuck",  wrap(content));
+        Log.d("fuck", wrap(content));
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedError(WebView view, int errorCode,
@@ -264,7 +264,7 @@ public class ReadabilityFragment extends LazyLoadFragment implements Scrollable 
     }
 
 
-    private String wrap(String html) {
+    String wrap(String html) {
         return getString(R.string.readability_html,
                 typefaceName,
                 textSize,
@@ -276,24 +276,24 @@ public class ReadabilityFragment extends LazyLoadFragment implements Scrollable 
     }
 
 
-    private String toHtmlColor(@AttrRes int colorAttr) {
+    String toHtmlColor(@AttrRes int colorAttr) {
         return String.format(FORMAT_HTML_COLOR, 0xFFFFFF & ContextCompat.getColor(getActivity(),
                 AppUtils.getThemedResId(getActivity(), colorAttr)));
     }
 
 
-    private float toHtmlPx(@StyleRes int textStyleAttr) {
+    float toHtmlPx(@StyleRes int textStyleAttr) {
         return toHtmlPx(AppUtils.getDimension(getActivity(), textStyleAttr, R.attr.contentTextSize));
     }
 
 
-    private float toHtmlPx(float dimen) {
+    float toHtmlPx(float dimen) {
         return dimen / getResources().getDisplayMetrics().density;
     }
 
 
-    private static class ReadabilityCallback implements ReadabilityClient2.Callback {
-        private final WeakReference<ReadabilityFragment> readabilityFragment;
+    static class ReadabilityCallback implements ReadabilityClient2.Callback {
+        final WeakReference<ReadabilityFragment> readabilityFragment;
 
 
         public ReadabilityCallback(ReadabilityFragment readabilityFragment) {

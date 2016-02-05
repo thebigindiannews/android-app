@@ -49,7 +49,7 @@ public class AboutActivity extends DrawerActivity {
         setTextWithLinks(R.id.text_3rd_party_licenses, getString(R.string.third_party_licenses_text));
     }
 
-    private void setTextWithLinks(@IdRes int textViewResId, String htmlText) {
+    void setTextWithLinks(@IdRes int textViewResId, String htmlText) {
         AppUtils.setTextWithLinks((TextView) findViewById(textViewResId), htmlText);
     }
 }

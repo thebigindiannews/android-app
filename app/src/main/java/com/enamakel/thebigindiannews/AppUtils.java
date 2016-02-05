@@ -418,7 +418,7 @@ public class AppUtils {
     }
 
 
-    private static CharSequence trim(CharSequence charSequence) {
+    static CharSequence trim(CharSequence charSequence) {
         if (TextUtils.isEmpty(charSequence)) return charSequence;
         int end = charSequence.length() - 1;
 
@@ -427,7 +427,7 @@ public class AppUtils {
     }
 
 
-    private static Intent makeShareIntent(String subject, String text) {
+    static Intent makeShareIntent(String subject, String text) {
         final Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
@@ -436,7 +436,7 @@ public class AppUtils {
     }
 
 
-    private static Intent makeChooserShareIntent(Context context, String subject, String text) {
+    static Intent makeChooserShareIntent(Context context, String subject, String text) {
         Intent shareIntent = AppUtils.makeShareIntent(subject, text);
         Intent chooserIntent = Intent.createChooser(shareIntent, context.getString(R.string.share));
         chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -445,7 +445,7 @@ public class AppUtils {
 
 
     @NonNull
-    private static Intent createViewIntent(Context context, String title, String url) {
+    static Intent createViewIntent(Context context, String title, String url) {
         if (Preferences.customChromeTabEnabled(context)) {
             Intent shareIntent = new Intent(context, ShareBroadcastReceiver.class);
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, title);

@@ -77,7 +77,7 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
     TabLayout tabLayout;
     FloatingActionButton replyButton;
 
-    private final SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener
+    final SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener
             = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -274,7 +274,7 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
     protected abstract Fragment instantiateListFragment();
 
 
-    private void openSinglePaneItem(BaseCardModel item) {
+    void openSinglePaneItem(BaseCardModel item) {
         if (item instanceof StoryModel) {
             if (false && useExternalBrowser) {
                 StoryModel story = (StoryModel) item;
@@ -287,7 +287,7 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
     }
 
 
-    private void openMultiPaneItem(final StoryModel item) {
+    void openMultiPaneItem(final StoryModel item) {
         if (item == null) {
             setTitle(getDefaultTitle());
             findViewById(R.id.empty_selection).setVisibility(View.VISIBLE);
@@ -315,7 +315,7 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
     }
 
 
-    private void bindViewPager(StoryModel item) {
+    void bindViewPager(StoryModel item) {
         final StoryPagerAdapter adapter = new StoryPagerAdapter(this,
                 getSupportFragmentManager(), item, true);
         viewPager.setAdapter(adapter);
@@ -340,7 +340,7 @@ public abstract class BaseListActivity extends DrawerActivity implements MultiPa
     }
 
 
-    private void unbindViewPager() {
+    void unbindViewPager() {
         // fragment manager always restores view pager fragments,
         // even when view pager no longer exists (e.g. after rotation),
         // so we have to explicitly remove those with view pager ID

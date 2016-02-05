@@ -123,7 +123,7 @@ public interface AlertDialogBuilder<T extends Dialog> {
      * {@link android.support.v7.app.AlertDialog.Builder} wrapper
      */
     class Impl implements AlertDialogBuilder<AlertDialog> {
-        private AlertDialog.Builder mBuilder;
+        AlertDialog.Builder mBuilder;
 
         public Impl() {
         }

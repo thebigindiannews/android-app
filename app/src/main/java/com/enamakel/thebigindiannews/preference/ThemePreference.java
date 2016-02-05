@@ -139,7 +139,7 @@ public class ThemePreference extends Preference {
         public final @StyleRes int dialogTheme;
 
 
-        private ThemeSpec(@StringRes int summary, @StyleRes int theme, @StyleRes int dialogTheme) {
+        ThemeSpec(@StringRes int summary, @StyleRes int theme, @StyleRes int dialogTheme) {
             this.summary = summary;
             this.theme = theme;
             this.dialogTheme = dialogTheme;

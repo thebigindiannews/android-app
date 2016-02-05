@@ -43,17 +43,17 @@ import com.enamakel.thebigindiannews.accounts.UserServices;
 public class ComposeActivity extends InjectableActivity {
     public static final String EXTRA_PARENT_ID = ComposeActivity.class.getName() + ".EXTRA_PARENT_ID";
     public static final String EXTRA_PARENT_TEXT = ComposeActivity.class.getName() + ".EXTRA_PARENT_TEXT";
-    private static final String HN_FORMAT_DOC_URL = "https://news.ycombinator.com/formatdoc";
-    private static final String FORMAT_QUOTE = "> %s\n\n";
-    private static final String PARAGRAPH_QUOTE = "\n\n> ";
-    private static final String PARAGRAPH_BREAK_REGEX = "[\\n]{2,}";
+    static final String HN_FORMAT_DOC_URL = "https://news.ycombinator.com/formatdoc";
+    static final String FORMAT_QUOTE = "> %s\n\n";
+    static final String PARAGRAPH_QUOTE = "\n\n> ";
+    static final String PARAGRAPH_BREAK_REGEX = "[\\n]{2,}";
     @Inject UserServices mUserServices;
     @Inject AlertDialogBuilder mAlertDialogBuilder;
-    private EditText mEditText;
-    private String mParentText;
-    private String mQuoteText;
-    private String mParentId;
-    private boolean mSending;
+    EditText mEditText;
+    String mParentText;
+    String mQuoteText;
+    String mParentId;
+    boolean mSending;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,14 +173,14 @@ public class ComposeActivity extends InjectableActivity {
                 .show();
     }
 
-    private void send() {
+    void send() {
         toggleControls(true);
         Toast.makeText(this, R.string.sending, Toast.LENGTH_SHORT).show();
         mUserServices.reply(this, mParentId, mEditText.getText().toString(),
                 new ComposeCallback(this));
     }
 
-    private void onSent(Boolean successful) {
+    void onSent(Boolean successful) {
         if (successful == null) {
             Toast.makeText(this, R.string.comment_failed, Toast.LENGTH_SHORT).show();
             toggleControls(false);
@@ -198,7 +198,7 @@ public class ComposeActivity extends InjectableActivity {
         }
     }
 
-    private String createQuote() {
+    String createQuote() {
         if (mQuoteText == null) {
             mQuoteText = String.format(FORMAT_QUOTE, Html.fromHtml(mParentText)
                     .toString()
@@ -208,7 +208,7 @@ public class ComposeActivity extends InjectableActivity {
         return mQuoteText;
     }
 
-    private void toggleControls(boolean sending) {
+    void toggleControls(boolean sending) {
         if (isFinishing()) {
             return;
         }
@@ -217,8 +217,8 @@ public class ComposeActivity extends InjectableActivity {
         supportInvalidateOptionsMenu();
     }
 
-    private static class ComposeCallback extends UserServices.Callback {
-        private final WeakReference<ComposeActivity> mComposeActivity;
+    static class ComposeCallback extends UserServices.Callback {
+        final WeakReference<ComposeActivity> mComposeActivity;
 
         public ComposeCallback(ComposeActivity composeActivity) {
             mComposeActivity = new WeakReference<>(composeActivity);

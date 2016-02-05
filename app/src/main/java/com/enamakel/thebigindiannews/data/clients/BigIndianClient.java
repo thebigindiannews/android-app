@@ -152,16 +152,16 @@ public class BigIndianClient {
     class ItemCallbackWrapper implements SessionManager.OperationCallbacks,
             FavoriteManager.OperationCallbacks,
             Callback<StoryModel> {
-        private final ResponseListener<StoryModel> responseListener;
-        private Boolean isViewed;
-        private Boolean isFavorite;
-        private StoryModel story;
-        private String errorMessage;
-        private boolean hasError;
-        private boolean hasResponse;
+        final ResponseListener<StoryModel> responseListener;
+        Boolean isViewed;
+        Boolean isFavorite;
+        StoryModel story;
+        String errorMessage;
+        boolean hasError;
+        boolean hasResponse;
 
 
-        private ItemCallbackWrapper(@NonNull ResponseListener<StoryModel> responseListener) {
+        ItemCallbackWrapper(@NonNull ResponseListener<StoryModel> responseListener) {
             this.responseListener = responseListener;
         }
 

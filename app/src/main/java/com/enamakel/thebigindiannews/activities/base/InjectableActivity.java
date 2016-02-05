@@ -25,8 +25,8 @@ import com.enamakel.thebigindiannews.util.Injectable;
 import dagger.ObjectGraph;
 
 public abstract class InjectableActivity extends ThemedActivity implements Injectable {
-    private ObjectGraph mActivityGraph;
-    private boolean mDestroyed;
+    ObjectGraph mActivityGraph;
+    boolean mDestroyed;
 
 
     @Override

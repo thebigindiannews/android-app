@@ -41,14 +41,14 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     public static final String EXTRA_ADD_ACCOUNT = LoginActivity.class.getName() + ".EXTRA_ADD_ACCOUNT";
     @Inject UserServices mUserServices;
     @Inject AccountManager mAccountManager;
-    private View mLoginButton;
-    private View mRegisterButton;
-    private TextInputLayout mUsernameLayout;
-    private TextInputLayout mPasswordLayout;
-    private EditText mUsernameEditText;
-    private EditText mPasswordEditText;
-    private String mUsername;
-    private String mPassword;
+    View mLoginButton;
+    View mRegisterButton;
+    TextInputLayout mUsernameLayout;
+    TextInputLayout mPasswordLayout;
+    EditText mUsernameEditText;
+    EditText mPasswordEditText;
+    String mUsername;
+    String mPassword;
 
 
     @Override
@@ -103,7 +103,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     }
 
 
-    private boolean validate() {
+    boolean validate() {
         mUsernameLayout.setErrorEnabled(false);
         mPasswordLayout.setErrorEnabled(false);
         if (mUsernameEditText.length() == 0) {
@@ -116,14 +116,14 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     }
 
 
-    private void login(String username, String password, boolean createAccount) {
+    void login(String username, String password, boolean createAccount) {
         mUsername = username;
         mPassword = password;
         mUserServices.login(username, password, createAccount, new LoginCallback(this));
     }
 
 
-    private void onLoggedIn(Boolean successful) {
+    void onLoggedIn(Boolean successful) {
         if (successful == null) {
             mLoginButton.setEnabled(true);
             mRegisterButton.setEnabled(true);
@@ -141,7 +141,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     }
 
 
-    private void addAccount(String username, String password) {
+    void addAccount(String username, String password) {
         Account account = new Account(username, BuildConfig.APPLICATION_ID);
         mAccountManager.addAccountExplicitly(account, password, null);
         mAccountManager.setPassword(account, password); // for re-login with updated password
@@ -154,8 +154,8 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     }
 
 
-    private static class LoginCallback extends UserServices.Callback {
-        private final WeakReference<LoginActivity> mLoginActivity;
+    static class LoginCallback extends UserServices.Callback {
+        final WeakReference<LoginActivity> mLoginActivity;
 
 
         public LoginCallback(LoginActivity loginActivity) {

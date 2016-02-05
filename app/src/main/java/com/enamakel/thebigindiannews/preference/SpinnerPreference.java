@@ -56,7 +56,7 @@ public abstract class SpinnerPreference extends Preference {
     }
 
 
-    private void init(Context context, AttributeSet attrs) {
+    void init(Context context, AttributeSet attrs) {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.SpinnerPreference);
         int entriesResId = ta.getResourceId(R.styleable.SpinnerPreference_entries, 0);
         if (entriesResId != 0) {

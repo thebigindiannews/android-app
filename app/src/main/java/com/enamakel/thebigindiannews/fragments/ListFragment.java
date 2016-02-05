@@ -24,7 +24,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +80,7 @@ public class ListFragment extends BaseListFragment {
     int currentPage = 1;
 
     @Inject BigIndianClient bigIndianClient;
+
 
     public interface RefreshCallback {
         void onRefreshed();
@@ -186,7 +186,7 @@ public class ListFragment extends BaseListFragment {
     }
 
 
-    private void refresh() {
+    void refresh() {
         adapter.setShowAll(true);
         currentPage = 1;
         bigIndianClient.getStories(fetchMode, currentPage, new RefreshListener(this));
@@ -203,7 +203,7 @@ public class ListFragment extends BaseListFragment {
     }
 
 
-    private void onItemsLoaded(ArrayList<StoryModel> items) {
+    void onItemsLoaded(ArrayList<StoryModel> items) {
         if (!isAttached()) return;
 
         if (items == null) {
@@ -238,7 +238,7 @@ public class ListFragment extends BaseListFragment {
 
 
     class RefreshListener implements ResponseListener<List<StoryModel>> {
-        private final WeakReference<ListFragment> listFragment;
+        final WeakReference<ListFragment> listFragment;
 
 
         public RefreshListener(ListFragment listFragment) {

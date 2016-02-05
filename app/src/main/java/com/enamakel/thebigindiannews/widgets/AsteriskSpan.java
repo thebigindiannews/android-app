@@ -25,9 +25,9 @@ import android.text.style.ReplacementSpan;
 import com.enamakel.thebigindiannews.R;
 
 public class AsteriskSpan extends ReplacementSpan {
-    private final int backgroundColor;
-    private final int textColor;
-    private final float padding;
+    final int backgroundColor;
+    final int textColor;
+    final float padding;
 
 
     public AsteriskSpan(Context context) {

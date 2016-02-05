@@ -61,12 +61,12 @@ import retrofit.http.Path;
 public class HackerNewsClient implements ItemManager, UserManager {
     public static final String BASE_WEB_URL = "https://news.ycombinator.com";
     public static final String WEB_ITEM_PATH = BASE_WEB_URL + "/item?id=%s";
-    private static final String BASE_API_URL = "https://hacker-news.firebaseio.com/v0/";
+    static final String BASE_API_URL = "https://hacker-news.firebaseio.com/v0/";
 
-    private final RestService restService;
-    private final SessionManager sessionManager;
-    private final FavoriteManager favoriteManager;
-    private final ContentResolver contentResolver;
+    final RestService restService;
+    final SessionManager sessionManager;
+    final FavoriteManager favoriteManager;
+    final ContentResolver contentResolver;
 
 
     @Inject
@@ -167,7 +167,7 @@ public class HackerNewsClient implements ItemManager, UserManager {
 
 
     @NonNull
-    private HackerNewsItem[] toItems(int[] ids) {
+    HackerNewsItem[] toItems(int[] ids) {
         HackerNewsItem[] items = new HackerNewsItem[ids == null ? 0 : ids.length];
         for (int i = 0; i < items.length; i++) {
             HackerNewsItem item = new HackerNewsItem(ids[i]);
@@ -215,51 +215,51 @@ public class HackerNewsClient implements ItemManager, UserManager {
     }
 
     static class HackerNewsItem implements Item {
-        private static final String FORMAT_LINK_USER = "<a href=\"%1$s://user/%2$s\">%2$s</a>";
+        static final String FORMAT_LINK_USER = "<a href=\"%1$s://user/%2$s\">%2$s</a>";
 
         // The item's unique id. Required.
-        @Getter private long id;
+        @Getter long id;
         // true if the item is deleted.
-        @Getter private boolean deleted;
+        @Getter boolean deleted;
         // The type of item. One of "job", "story", "comment", "poll", or "pollopt".
-        @Getter private String type;
+        @Getter String type;
         // The username of the item's author.
-        @Getter private String by;
+        @Getter String by;
         // Creation date of the item, in Unix Time.
-        @Getter private long time;
+        @Getter long time;
         // The comment, Ask HN, or poll text. HTML.
-        @Getter private String text;
+        @Getter String text;
         // true if the item is dead.
-        @Getter private boolean dead;
+        @Getter boolean dead;
         // The item's parent. For comments, either another comment or the relevant story. For
         // pollopts, the relevant poll.
-        @Getter private long parent;
+        @Getter long parent;
         // The ids of the item's comments, in ranked display order.
-        @Getter @Setter private long[] kids;
+        @Getter @Setter long[] kids;
         // The URL of the story.
-        @Getter private String url;
+        @Getter String url;
         // The story's score, or the votes for a pollopt.
-        @Getter private int score;
+        @Getter int score;
         // The title of the story or poll.
-        @Getter private String title;
+        @Getter String title;
         // A list of related pollopts, in display order.
-        @Getter private long[] parts;
+        @Getter long[] parts;
         // In the case of stories or polls, the total comment count.
-        @Getter private int descendants = -1;
+        @Getter int descendants = -1;
 
         // view state
-        private HackerNewsItem[] kidItems;
-        @Getter @Setter private boolean favorite;
-        @Getter @Setter private boolean viewed;
-        @Getter @Setter private int localRevision = -1;
-        private int level = 0;
-        private boolean collapsed;
-        private boolean contentExpanded;
+        HackerNewsItem[] kidItems;
+        @Getter @Setter boolean favorite;
+        @Getter @Setter boolean viewed;
+        @Getter @Setter int localRevision = -1;
+        int level = 0;
+        boolean collapsed;
+        boolean contentExpanded;
         int rank;
-        @Setter @Getter private int lastKidCount = -1;
-        private boolean hasNewDescendants = false;
-        private HackerNewsItem parentItem;
-        private boolean voted;
+        @Setter @Getter int lastKidCount = -1;
+        boolean hasNewDescendants = false;
+        HackerNewsItem parentItem;
+        boolean voted;
 
         public static final Creator<HackerNewsItem> CREATOR = new Creator<HackerNewsItem>() {
             @Override
@@ -280,13 +280,13 @@ public class HackerNewsClient implements ItemManager, UserManager {
         }
 
 
-        private HackerNewsItem(long id, int level) {
+        HackerNewsItem(long id, int level) {
             this(id);
             this.level = level;
         }
 
 
-        private HackerNewsItem(Parcel source) {
+        HackerNewsItem(Parcel source) {
             id = source.readLong();
             title = source.readString();
             time = source.readLong();
@@ -480,7 +480,7 @@ public class HackerNewsClient implements ItemManager, UserManager {
         }
 
 
-        private String getItemUrl(String itemId) {
+        String getItemUrl(String itemId) {
             return String.format(WEB_ITEM_PATH, itemId);
         }
 
@@ -648,18 +648,18 @@ public class HackerNewsClient implements ItemManager, UserManager {
                 return new UserItem[size];
             }
         };
-        private String id;
-        private long delay;
-        private long created;
-        private long karma;
-        private String about;
-        private int[] submitted;
+        String id;
+        long delay;
+        long created;
+        long karma;
+        String about;
+        int[] submitted;
 
         // view state
-        private HackerNewsItem[] submittedItems = new HackerNewsItem[0];
+        HackerNewsItem[] submittedItems = new HackerNewsItem[0];
 
 
-        private UserItem(Parcel source) {
+        UserItem(Parcel source) {
             id = source.readString();
             delay = source.readLong();
             created = source.readLong();
@@ -719,18 +719,18 @@ public class HackerNewsClient implements ItemManager, UserManager {
         }
     }
 
-    private static class ItemCallbackWrapper implements SessionManager.OperationCallbacks,
+    static class ItemCallbackWrapper implements SessionManager.OperationCallbacks,
             FavoriteManager.OperationCallbacks, Callback<HackerNewsItem> {
-        private final ResponseListener<Item> responseListener;
-        private Boolean isViewed;
-        private Boolean isFavorite;
-        private Item item;
-        private String errorMessage;
-        private boolean hasError;
-        private boolean hasResponse;
+        final ResponseListener<Item> responseListener;
+        Boolean isViewed;
+        Boolean isFavorite;
+        Item item;
+        String errorMessage;
+        boolean hasError;
+        boolean hasResponse;
 
 
-        private ItemCallbackWrapper(@NonNull ResponseListener<Item> responseListener) {
+        ItemCallbackWrapper(@NonNull ResponseListener<Item> responseListener) {
             this.responseListener = responseListener;
         }
 
@@ -765,7 +765,7 @@ public class HackerNewsClient implements ItemManager, UserManager {
         }
 
 
-        private void done() {
+        void done() {
             if (isViewed == null) return;
             if (isFavorite == null) return;
             if (!(hasResponse || hasError)) return;

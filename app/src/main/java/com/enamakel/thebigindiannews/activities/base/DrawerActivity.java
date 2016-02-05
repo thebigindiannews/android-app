@@ -46,12 +46,12 @@ import javax.inject.Inject;
 public abstract class DrawerActivity extends InjectableActivity {
     @Inject AlertDialogBuilder alertDialogBuilder;
 
-    private ActionBarDrawerToggle drawerToggle;
-    private DrawerLayout drawerLayout;
-    private View drawer;
-    private Class<? extends Activity> pendingNavigation;
-    private Bundle pendingNavigationExtras;
-    private Dialog feedbackDialog;
+    ActionBarDrawerToggle drawerToggle;
+    DrawerLayout drawerLayout;
+    View drawer;
+    Class<? extends Activity> pendingNavigation;
+    Bundle pendingNavigationExtras;
+    Dialog feedbackDialog;
 
 
     @Override
@@ -130,12 +130,12 @@ public abstract class DrawerActivity extends InjectableActivity {
     }
 
 
-    private void closeDrawers() {
+    void closeDrawers() {
         drawerLayout.closeDrawers();
     }
 
 
-    private void showFeedbackDialog(View dialogView) {
+    void showFeedbackDialog(View dialogView) {
         AppUtils.setTextWithLinks((TextView) dialogView.findViewById(R.id.feedback_note),
                 getString(R.string.feedback_note));
         final TextInputLayout titleLayout = (TextInputLayout)
@@ -175,7 +175,7 @@ public abstract class DrawerActivity extends InjectableActivity {
     }
 
 
-    private void onFeedbackSent(boolean success) {
+    void onFeedbackSent(boolean success) {
         Toast.makeText(DrawerActivity.this,
                 success ? R.string.feedback_sent : R.string.feedback_failed,
                 Toast.LENGTH_SHORT)
@@ -190,7 +190,7 @@ public abstract class DrawerActivity extends InjectableActivity {
 
 
     class FeedbackCallback implements FeedbackClient.Callback {
-        private final WeakReference<DrawerActivity> weakReference;
+        final WeakReference<DrawerActivity> weakReference;
 
 
         public FeedbackCallback(DrawerActivity drawerActivity) {

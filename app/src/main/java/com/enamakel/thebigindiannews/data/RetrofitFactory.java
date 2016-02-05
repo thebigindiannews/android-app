@@ -19,7 +19,7 @@ import retrofit2.Retrofit;
 
 
 public class RetrofitFactory {
-    private static String TAG = "okhttp";
+    static String TAG = "okhttp";
 
 
     static OkHttpClient createClient() {

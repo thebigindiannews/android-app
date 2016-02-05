@@ -34,8 +34,8 @@ import com.enamakel.thebigindiannews.data.providers.SearchRecentSuggestionsProvi
 
 public class SearchActivity extends BaseListActivity {
 
-    private static final int MAX_RECENT_SUGGESTIONS = 10;
-    private String mQuery;
+    static final int MAX_RECENT_SUGGESTIONS = 10;
+    String mQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +98,7 @@ public class SearchActivity extends BaseListActivity {
         return Fragment.instantiate(this, ListFragment.class.getName(), args);
     }
 
-    private void sort(boolean byTime) {
+    void sort(boolean byTime) {
         if (AlgoliaClient.sSortByTime == byTime) {
             return;
         }

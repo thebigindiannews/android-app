@@ -235,7 +235,7 @@ public abstract class ListRecyclerViewAdapter
     }
 
 
-    private void openItem(T item) {
+    void openItem(T item) {
         context.startActivity(new Intent(context, SingleStoryActivity.class)
                 .putExtra(SingleStoryActivity.EXTRA_ITEM, item)
                 .putExtra(SingleStoryActivity.EXTRA_OPEN_COMMENTS, true));

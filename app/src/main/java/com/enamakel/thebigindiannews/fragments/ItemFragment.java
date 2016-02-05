@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.fragments;
 
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -50,6 +51,7 @@ import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
 
 public class ItemFragment extends LazyLoadFragment implements Scrollable {
     public static final String EXTRA_ITEM = ItemFragment.class.getName() + ".EXTRA_ITEM";
@@ -260,12 +262,12 @@ public class ItemFragment extends LazyLoadFragment implements Scrollable {
     }
 
 
-    private void loadKidData() {
+    void loadKidData() {
 //        itemManager.getItem(itemId, new StoryResponseListener(this));
     }
 
 
-    private void onItemLoaded(StoryModel item) {
+    void onItemLoaded(StoryModel item) {
         swipeRefreshLayout.setRefreshing(false);
         if (item != null) {
             adapterItems = null;
@@ -275,7 +277,7 @@ public class ItemFragment extends LazyLoadFragment implements Scrollable {
     }
 
 
-    private void bindKidData() {
+    void bindKidData() {
         if (story == null /*|| story.getKidCount() == 0*/) {
             emptyView.setVisibility(View.VISIBLE);
             return;
@@ -302,7 +304,7 @@ public class ItemFragment extends LazyLoadFragment implements Scrollable {
     }
 
 
-    private void toggleColorCode() {
+    void toggleColorCode() {
         if (adapter == null || !(adapter instanceof SinglePageItemRecyclerViewAdapter)) return;
 
         invalidateOptionsMenu();
@@ -310,27 +312,27 @@ public class ItemFragment extends LazyLoadFragment implements Scrollable {
     }
 
 
-    private void setMaxLines() {
+    void setMaxLines() {
         if (adapter == null) return;
         invalidateOptionsMenu();
         adapter.setMaxLines(maxLines);
     }
 
 
-    private void setHighlightUsername() {
+    void setHighlightUsername() {
         if (adapter == null) return;
         adapter.setHighlightUsername(username);
     }
 
 
-    private void invalidateOptionsMenu() {
+    void invalidateOptionsMenu() {
         if (!isAttached()) return;
         getActivity().supportInvalidateOptionsMenu();
     }
 
 
-    private static class ItemResponseListener implements ResponseListener<StoryModel> {
-        private WeakReference<ItemFragment> weakReference;
+    static class ItemResponseListener implements ResponseListener<StoryModel> {
+        WeakReference<ItemFragment> weakReference;
 
 
         public ItemResponseListener(ItemFragment itemFragment) {

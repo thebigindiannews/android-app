@@ -98,7 +98,7 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
     ImageButton voteButton;
     FloatingActionButton replyButton;
 
-    private final ContentObserver contentObserver = new ContentObserver(new Handler()) {
+    final ContentObserver contentObserver = new ContentObserver(new Handler()) {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
             if (story == null) return;
@@ -236,14 +236,14 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
     }
 
 
-    private void onItemLoaded(StoryModel response) {
+    void onItemLoaded(StoryModel response) {
         story = response;
         supportInvalidateOptionsMenu();
         bindData();
     }
 
 
-    private void bindFavorite() {
+    void bindFavorite() {
         if (story == null) return;
 
         bookmarked.setVisibility(View.VISIBLE);
@@ -280,7 +280,7 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
     }
 
 
-    private void bindData() {
+    void bindData() {
         if (story == null) return;
 
         bigIndianClient.readStory(story);
@@ -358,7 +358,7 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
     }
 
 
-    private void decorateFavorite(boolean isFavorite) {
+    void decorateFavorite(boolean isFavorite) {
         bookmarked.setImageResource(isFavorite ?
                 R.drawable.ic_bookmark_white_24dp : R.drawable.ic_bookmark_border_white_24dp);
     }
@@ -379,7 +379,7 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
     }
 
 
-    private void onVoted(Boolean successful) {
+    void onVoted(Boolean successful) {
         if (successful == null) {
             Toast.makeText(this, R.string.vote_failed, Toast.LENGTH_SHORT).show();
         } else if (successful) {
@@ -391,8 +391,8 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
     }
 
 
-    private static class StoryResponseListener implements ResponseListener<StoryModel> {
-        private final WeakReference<SingleStoryActivity> weakReference;
+    static class StoryResponseListener implements ResponseListener<StoryModel> {
+        final WeakReference<SingleStoryActivity> weakReference;
 
 
         public StoryResponseListener(SingleStoryActivity singleStoryActivity) {
@@ -414,8 +414,8 @@ public class SingleStoryActivity extends InjectableActivity implements Scrollabl
     }
 
 
-    private static class VoteCallback extends UserServices.Callback {
-        private final WeakReference<SingleStoryActivity> weakReference;
+    static class VoteCallback extends UserServices.Callback {
+        final WeakReference<SingleStoryActivity> weakReference;
 
 
         public VoteCallback(SingleStoryActivity singleStoryActivity) {

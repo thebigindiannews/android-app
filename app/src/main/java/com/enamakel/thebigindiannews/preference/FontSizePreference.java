@@ -31,7 +31,7 @@ import com.enamakel.thebigindiannews.util.Preferences;
 
 
 public class FontSizePreference extends SpinnerPreference {
-    private final LayoutInflater layoutInflater;
+    final LayoutInflater layoutInflater;
 
 
     public FontSizePreference(Context context, AttributeSet attrs) {

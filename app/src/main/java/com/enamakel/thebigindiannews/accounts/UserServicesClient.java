@@ -44,37 +44,37 @@ import com.enamakel.thebigindiannews.BuildConfig;
 import com.enamakel.thebigindiannews.R;
 
 public class UserServicesClient implements UserServices {
-    private static final String TAG_OK_HTTP = "OkHttp";
-    private static final String BASE_WEB_URL = "https://news.ycombinator.com";
-    private static final String LOGIN_PATH = "login";
-    private static final String VOTE_PATH = "vote";
-    private static final String COMMENT_PATH = "comment";
-    private static final String SUBMIT_PATH = "submit";
-    private static final String SUBMIT_POST_PATH = "r";
-    private static final String LOGIN_PARAM_ACCT = "acct";
-    private static final String LOGIN_PARAM_PW = "pw";
-    private static final String LOGIN_PARAM_CREATING = "creating";
-    private static final String LOGIN_PARAM_GOTO = "goto";
-    private static final String VOTE_PARAM_FOR = "for";
-    private static final String VOTE_PARAM_WHENCE = "whence";
-    private static final String VOTE_PARAM_DIR = "dir";
-    private static final String COMMENT_PARAM_PARENT = "parent";
-    private static final String COMMENT_PARAM_TEXT = "text";
-    private static final String SUBMIT_PARAM_TITLE = "title";
-    private static final String SUBMIT_PARAM_URL = "url";
-    private static final String SUBMIT_PARAM_TEXT = "text";
-    private static final String SUBMIT_PARAM_FNID = "fnid";
-    private static final String SUBMIT_PARAM_FNOP = "fnop";
-    private static final String VOTE_DIR_UP = "up";
-    private static final String DEFAULT_REDIRECT = "news";
-    private static final String CREATING_TRUE = "t";
-    private static final String DEFAULT_FNOP = "submit-page";
-    private static final String DEFAULT_SUBMIT_REDIRECT = "newest";
-    private static final String REGEX_INPUT = "<\\s*input[^>]*>";
-    private static final String REGEX_VALUE = "value[^\"]*\"([^\"]*)\"";
-    private static final String HEADER_LOCATION = "location";
-    private final Handler mUiHandler = new Handler(Looper.getMainLooper());
-    private final OkHttpClient mClient;
+    static final String TAG_OK_HTTP = "OkHttp";
+    static final String BASE_WEB_URL = "https://news.ycombinator.com";
+    static final String LOGIN_PATH = "login";
+    static final String VOTE_PATH = "vote";
+    static final String COMMENT_PATH = "comment";
+    static final String SUBMIT_PATH = "submit";
+    static final String SUBMIT_POST_PATH = "r";
+    static final String LOGIN_PARAM_ACCT = "acct";
+    static final String LOGIN_PARAM_PW = "pw";
+    static final String LOGIN_PARAM_CREATING = "creating";
+    static final String LOGIN_PARAM_GOTO = "goto";
+    static final String VOTE_PARAM_FOR = "for";
+    static final String VOTE_PARAM_WHENCE = "whence";
+    static final String VOTE_PARAM_DIR = "dir";
+    static final String COMMENT_PARAM_PARENT = "parent";
+    static final String COMMENT_PARAM_TEXT = "text";
+    static final String SUBMIT_PARAM_TITLE = "title";
+    static final String SUBMIT_PARAM_URL = "url";
+    static final String SUBMIT_PARAM_TEXT = "text";
+    static final String SUBMIT_PARAM_FNID = "fnid";
+    static final String SUBMIT_PARAM_FNOP = "fnop";
+    static final String VOTE_DIR_UP = "up";
+    static final String DEFAULT_REDIRECT = "news";
+    static final String CREATING_TRUE = "t";
+    static final String DEFAULT_FNOP = "submit-page";
+    static final String DEFAULT_SUBMIT_REDIRECT = "newest";
+    static final String REGEX_INPUT = "<\\s*input[^>]*>";
+    static final String REGEX_VALUE = "value[^\"]*\"([^\"]*)\"";
+    static final String HEADER_LOCATION = "location";
+    final Handler mUiHandler = new Handler(Looper.getMainLooper());
+    final OkHttpClient mClient;
 
     public UserServicesClient(OkHttpClient okHttpClient) {
         mClient = okHttpClient;
@@ -213,7 +213,7 @@ public class UserServicesClient implements UserServices {
     }
 
     @WorkerThread
-    private void doSubmit(String title, String content, String fnid, boolean isUrl, final Callback callback) {
+    void doSubmit(String title, String content, String fnid, boolean isUrl, final Callback callback) {
         if (TextUtils.isEmpty(fnid)) {
             postError(callback);
             return;
@@ -256,7 +256,7 @@ public class UserServicesClient implements UserServices {
                 });
     }
 
-    private com.squareup.okhttp.Callback wrap(final Callback callback) {
+    com.squareup.okhttp.Callback wrap(final Callback callback) {
         return new com.squareup.okhttp.Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
@@ -271,7 +271,7 @@ public class UserServicesClient implements UserServices {
         };
     }
 
-    private void postResult(final Callback callback, final boolean successful) {
+    void postResult(final Callback callback, final boolean successful) {
         mUiHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -280,7 +280,7 @@ public class UserServicesClient implements UserServices {
         });
     }
 
-    private void postError(final Callback callback) {
+    void postError(final Callback callback) {
         mUiHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -289,7 +289,7 @@ public class UserServicesClient implements UserServices {
         });
     }
 
-    private String getInputValue(String html, String name) {
+    String getInputValue(String html, String name) {
         // extract <input ... >
         Matcher matcherInput = Pattern.compile(REGEX_INPUT).matcher(html);
         while (matcherInput.find()) {

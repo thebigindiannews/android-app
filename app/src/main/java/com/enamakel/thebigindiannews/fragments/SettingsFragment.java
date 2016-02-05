@@ -16,18 +16,21 @@
 
 package com.enamakel.thebigindiannews.fragments;
 
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 import com.enamakel.thebigindiannews.AppUtils;
-import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.util.Preferences;
+
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     @VisibleForTesting
     protected SharedPreferences.OnSharedPreferenceChangeListener listener;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,10 +38,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Preferences.sync(getPreferenceManager());
     }
 
+
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.preferences);
     }
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -56,11 +61,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         };
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(listener);
     }
+
 
     @Override
     public void onPause() {

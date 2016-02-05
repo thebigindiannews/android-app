@@ -31,9 +31,9 @@ public interface RestServiceFactory {
     <T> T create(String baseUrl, Class<T> clazz);
 
     class Impl implements RestServiceFactory {
-        private static final String TAG_OK_HTTP = "OkHttp";
-        private static final long CACHE_SIZE = 1024 * 1024;
-        private final OkHttpClient okHttpClient;
+        static final String TAG_OK_HTTP = "OkHttp";
+        static final long CACHE_SIZE = 1024 * 1024;
+        final OkHttpClient okHttpClient;
 
         public Impl(Context context) {
             okHttpClient = new OkHttpClient();

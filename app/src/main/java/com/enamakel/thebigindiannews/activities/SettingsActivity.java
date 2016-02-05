@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.activities;
 
+
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.provider.SearchRecentSuggestions;
@@ -24,17 +25,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.enamakel.thebigindiannews.AppUtils;
+import com.enamakel.thebigindiannews.R;
+import com.enamakel.thebigindiannews.activities.base.DrawerActivity;
+import com.enamakel.thebigindiannews.data.providers.SearchRecentSuggestionsProvider;
+import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
+import com.enamakel.thebigindiannews.util.Preferences;
+
 import javax.inject.Inject;
 
-import com.enamakel.thebigindiannews.activities.base.DrawerActivity;
-import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
-import com.enamakel.thebigindiannews.AppUtils;
-import com.enamakel.thebigindiannews.util.Preferences;
-import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.data.providers.SearchRecentSuggestionsProvider;
 
 public class SettingsActivity extends DrawerActivity {
     @Inject AlertDialogBuilder alertDialogBuilder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +48,13 @@ public class SettingsActivity extends DrawerActivity {
                 ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_TITLE);
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_settings, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

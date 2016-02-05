@@ -22,7 +22,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 public class AuthenticatorService extends Service {
-    private AccountAuthenticator mAuthenticator;
+    AccountAuthenticator mAuthenticator;
 
     @Override
     public void onCreate() {

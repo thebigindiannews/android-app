@@ -45,14 +45,14 @@ import javax.inject.Inject;
 
 
 public class SubmitActivity extends InjectableActivity {
-    private static final String HN_GUIDELINES_URL = "https://news.ycombinator.com/newsguidelines.html";
+    static final String HN_GUIDELINES_URL = "https://news.ycombinator.com/newsguidelines.html";
     @Inject UserServices mUserServices;
     @Inject AlertDialogBuilder alertDialogBuilder;
-    private TextView titleEditText;
-    private TextView contentEditText;
-    private TextInputLayout titleLayout;
-    private TextInputLayout contentLayout;
-    private boolean sending, loading;
+    TextView titleEditText;
+    TextView contentEditText;
+    TextInputLayout titleLayout;
+    TextInputLayout contentLayout;
+    boolean sending, loading;
 
     @Inject BigIndianClient bigIndianClient;
 
@@ -147,7 +147,7 @@ public class SubmitActivity extends InjectableActivity {
     }
 
 
-    private boolean validate() {
+    boolean validate() {
         titleLayout.setErrorEnabled(false);
         contentLayout.setErrorEnabled(false);
 
@@ -159,7 +159,7 @@ public class SubmitActivity extends InjectableActivity {
     }
 
 
-    private void submit(boolean isUrl) {
+    void submit(boolean isUrl) {
         if (sending) {
             Toast.makeText(this, R.string.submit_ongoing, Toast.LENGTH_SHORT).show();
         } else {
@@ -174,7 +174,7 @@ public class SubmitActivity extends InjectableActivity {
     }
 
 
-    private void onSubmitted(Boolean successful) {
+    void onSubmitted(Boolean successful) {
         toggleControls(false);
 
         if (successful == null || !successful) {
@@ -195,7 +195,7 @@ public class SubmitActivity extends InjectableActivity {
     }
 
 
-    private boolean isUrl() {
+    boolean isUrl() {
         try {
             new URL(contentEditText.getText().toString()); // try parsing
         } catch (MalformedURLException e) {
@@ -205,7 +205,7 @@ public class SubmitActivity extends InjectableActivity {
     }
 
 
-    private void toggleControls(boolean sending) {
+    void toggleControls(boolean sending) {
         if (isFinishing()) return;
 
         this.sending = sending;
@@ -216,7 +216,7 @@ public class SubmitActivity extends InjectableActivity {
 
 
     class SubmitCallback implements ResponseListener<StoryModel> {
-        private final WeakReference<SubmitActivity> weakReference;
+        final WeakReference<SubmitActivity> weakReference;
 
 
         public SubmitCallback(SubmitActivity submitActivity) {

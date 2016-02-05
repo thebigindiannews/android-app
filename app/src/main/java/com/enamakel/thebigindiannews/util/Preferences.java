@@ -42,7 +42,7 @@ public class Preferences {
     }
 
 
-    private static final BoolToStringPref[] PREF_MIGRATION = new BoolToStringPref[]{
+    static final BoolToStringPref[] PREF_MIGRATION = new BoolToStringPref[]{
             new BoolToStringPref(R.string.pref_item_click, false,
                     R.string.pref_story_display, R.string.pref_story_display_value_article),
             new BoolToStringPref(R.string.pref_item_search_recent, true,
@@ -261,14 +261,14 @@ public class Preferences {
     }
 
 
-    private static class BoolToStringPref {
-        private final int oldKey;
-        private final boolean oldDefault;
-        private final int newKey;
-        private final int newValue;
+    static class BoolToStringPref {
+        final int oldKey;
+        final boolean oldDefault;
+        final int newKey;
+        final int newValue;
 
 
-        private BoolToStringPref(@StringRes int oldKey, boolean oldDefault,
+        BoolToStringPref(@StringRes int oldKey, boolean oldDefault,
                                  @StringRes int newKey, @StringRes int newValue) {
             this.oldKey = oldKey;
             this.oldDefault = oldDefault;
@@ -277,13 +277,13 @@ public class Preferences {
         }
 
 
-        private boolean isChanged(Context context, SharedPreferences sp) {
+        boolean isChanged(Context context, SharedPreferences sp) {
             return hasOldValue(context, sp) &&
                     sp.getBoolean(context.getString(oldKey), oldDefault) != oldDefault;
         }
 
 
-        private boolean hasOldValue(Context context, SharedPreferences sp) {
+        boolean hasOldValue(Context context, SharedPreferences sp) {
             return sp.contains(context.getString(oldKey));
         }
     }
@@ -381,7 +381,7 @@ public class Preferences {
         }
 
 
-        private static
+        static
         @NonNull
         String getPreferredTextSize(Context context) {
             return PreferenceManager.getDefaultSharedPreferences(context)
@@ -389,7 +389,7 @@ public class Preferences {
         }
 
 
-        private static
+        static
         @StyleRes
         int getTheme(Context context, boolean dialogTheme) {
             String choice = PreferenceManager.getDefaultSharedPreferences(context)

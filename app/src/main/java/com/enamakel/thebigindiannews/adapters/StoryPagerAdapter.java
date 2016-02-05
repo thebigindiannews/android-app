@@ -31,10 +31,10 @@ import com.enamakel.thebigindiannews.fragments.WebFragment;
 
 
 public class StoryPagerAdapter extends FragmentStatePagerAdapter {
-    private final Fragment[] fragments = new Fragment[3];
-    private final Context context;
-    private final StoryModel story;
-    private final boolean showArticle;
+    final Fragment[] fragments = new Fragment[3];
+    final Context context;
+    final StoryModel story;
+    final boolean showArticle;
 
 
     public StoryPagerAdapter(Context context, FragmentManager fm,

@@ -24,8 +24,8 @@ import android.os.Bundle;
  * Simple copy of {@link android.accounts.AccountAuthenticatorActivity} that swaps base class
  */
 public abstract class AccountAuthenticatorActivity extends InjectableActivity {
-    private AccountAuthenticatorResponse mAccountAuthenticatorResponse = null;
-    private Bundle mResultBundle = null;
+    AccountAuthenticatorResponse mAccountAuthenticatorResponse = null;
+    Bundle mResultBundle = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

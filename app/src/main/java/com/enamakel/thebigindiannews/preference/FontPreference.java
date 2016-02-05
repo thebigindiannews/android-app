@@ -32,7 +32,7 @@ import com.enamakel.thebigindiannews.util.FontCache;
 
 
 public class FontPreference extends SpinnerPreference {
-    private final LayoutInflater layoutInflater;
+    final LayoutInflater layoutInflater;
 
 
     public FontPreference(Context context, AttributeSet attrs) {

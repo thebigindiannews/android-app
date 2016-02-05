@@ -16,6 +16,7 @@
 
 package com.enamakel.thebigindiannews.fragments;
 
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -32,38 +33,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.enamakel.thebigindiannews.activities.FavoriteActivity;
-import com.enamakel.thebigindiannews.activities.SubmitActivity;
-import com.enamakel.thebigindiannews.fragments.base.BaseFragment;
-import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.BuildConfig;
-import com.enamakel.thebigindiannews.util.Preferences;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.AboutActivity;
-import com.enamakel.thebigindiannews.activities.base.DrawerActivity;
+import com.enamakel.thebigindiannews.activities.FavoriteActivity;
 import com.enamakel.thebigindiannews.activities.ListActivity;
 import com.enamakel.thebigindiannews.activities.LoginActivity;
 import com.enamakel.thebigindiannews.activities.NewActivity;
 import com.enamakel.thebigindiannews.activities.SettingsActivity;
+import com.enamakel.thebigindiannews.activities.SubmitActivity;
+import com.enamakel.thebigindiannews.activities.base.DrawerActivity;
+import com.enamakel.thebigindiannews.fragments.base.BaseFragment;
+import com.enamakel.thebigindiannews.util.AlertDialogBuilder;
+import com.enamakel.thebigindiannews.util.Preferences;
 
 import javax.inject.Inject;
 
+
 public class DrawerFragment extends BaseFragment {
-    @Inject AlertDialogBuilder mAlertDialogBuilder;
-    private TextView drawerAccount;
-    private View drawerLogout;
-    private View drawerUser;
-    private final SharedPreferences.OnSharedPreferenceChangeListener mLoginListener
+    @Inject AlertDialogBuilder alertDialogBuilder;
+    TextView drawerAccount;
+    View drawerLogout;
+    View drawerUser;
+    final SharedPreferences.OnSharedPreferenceChangeListener mLoginListener
             = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (getActivity() == null) {
-                return;
-            }
-            if (TextUtils.equals(key, getActivity().getString(R.string.pref_username))) {
+            if (getActivity() == null) return;
+
+            if (TextUtils.equals(key, getActivity().getString(R.string.pref_username)))
                 setUsername();
-            }
         }
     };
 
@@ -85,19 +85,20 @@ public class DrawerFragment extends BaseFragment {
             public void onClick(View v) {
                 Account[] accounts = AccountManager.get(getActivity())
                         .getAccountsByType(BuildConfig.APPLICATION_ID);
-                if (accounts.length == 0) { // no accounts, ask to login or re-login
+                // no accounts, ask to login or re-login
+                if (accounts.length == 0)
                     startActivity(new Intent(getActivity(), LoginActivity.class));
-                } else { // has accounts, show account chooser regardless of login status
-                    AppUtils.showAccountChooser(getActivity(), mAlertDialogBuilder,
+                else // has accounts, show account chooser regardless of login status
+                    AppUtils.showAccountChooser(getActivity(), alertDialogBuilder,
                             accounts);
-                }
             }
         });
+
         drawerLogout = view.findViewById(R.id.drawer_logout);
         drawerLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAlertDialogBuilder
+                alertDialogBuilder
                         .init(getActivity())
                         .setMessage(R.string.logout_confirm)
                         .setNegativeButton(android.R.string.cancel, null)
@@ -110,6 +111,7 @@ public class DrawerFragment extends BaseFragment {
                         .show();
             }
         });
+
         drawerUser = view.findViewById(R.id.drawer_user);
 
         view.findViewById(R.id.drawer_list).setOnClickListener(new View.OnClickListener() {
@@ -184,20 +186,19 @@ public class DrawerFragment extends BaseFragment {
     }
 
 
-    private void navigate(Class<? extends Activity> activityClass) {
+    void navigate(Class<? extends Activity> activityClass) {
         navigate(activityClass, null);
     }
 
 
-    private void navigate(Class<? extends Activity> activityClass, Bundle extras) {
+    void navigate(Class<? extends Activity> activityClass, Bundle extras) {
         ((DrawerActivity) getActivity()).navigate(activityClass, extras);
     }
 
 
-    private void setUsername() {
-        if (getView() == null) {
-            return;
-        }
+    void setUsername() {
+        if (getView() == null) return;
+
         String username = Preferences.getUsername(getActivity());
         if (!TextUtils.isEmpty(username)) {
             drawerAccount.setText(username);

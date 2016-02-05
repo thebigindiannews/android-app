@@ -104,7 +104,7 @@ public class ActivityModule {
     public static final String POPULAR = "popular";
     public static final String HN = "hn";
 
-    private final Context context;
+    final Context context;
 
 
     public ActivityModule(Context context) {
