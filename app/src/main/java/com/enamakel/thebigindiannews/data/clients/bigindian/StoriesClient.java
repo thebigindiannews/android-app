@@ -1,13 +1,14 @@
-package com.enamakel.thebigindiannews.data.clients;
+package com.enamakel.thebigindiannews.data.clients.bigindian;
 
 
-import android.content.ContentResolver;
 import android.content.Context;
 
 import com.enamakel.thebigindiannews.data.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.RetrofitFactory;
 import com.enamakel.thebigindiannews.data.SessionManager;
+import com.enamakel.thebigindiannews.data.clients.FetchMode;
+import com.enamakel.thebigindiannews.data.clients.RestService;
 import com.enamakel.thebigindiannews.data.models.StoryHits;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 
@@ -22,40 +23,22 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 
-public class BigIndianClient {
+public class StoriesClient extends Base {
     static RestService.Story storyService;
-    static RestService.Report reportService;
-    static String TAG = "BigIndianClient";
-
-    public static final String BASE_WEB_URL = "https://thebigindian.news";
-    public static final String BASE_CDN_URL = "https://cdn.thebigindian.news";
-    //    public static final String BASE_WEB_URL = "http://192.168.1.106:3000";
-    public static final String BASE_API_URL = BASE_WEB_URL + "/api/";
-    public static final String WEB_STORY_PATH = BASE_WEB_URL + "/story/%s";
-
-    final SessionManager sessionManager;
-    final FavoriteManager favoriteManager;
-    final ContentResolver contentResolver;
 
 
     @Inject
-    public BigIndianClient(Context context, SessionManager sessionManager,
-                           FavoriteManager favoriteManager) {
+    public StoriesClient(Context context, SessionManager sessionManager,
+                 FavoriteManager favoriteManager) {
+        super(context, sessionManager, favoriteManager);
+
         // Initialize retrofit
         Retrofit retrofit = RetrofitFactory.build(BASE_API_URL);
-
-        // Create the different services
-        reportService = retrofit.create(RestService.Report.class);
         storyService = retrofit.create(RestService.Story.class);
-
-        // Initialize other stuff
-        this.sessionManager = sessionManager;
-        this.favoriteManager = favoriteManager;
-        contentResolver = context.getApplicationContext().getContentResolver();
     }
 
 
-    public void getStories(FetchMode mode, int page, final ResponseListener<List<StoryModel>> listener) {
+    public void get(FetchMode mode, int page, final ResponseListener<List<StoryModel>> listener) {
         if (listener == null) return;
 
         Callback<StoryHits> callback = new Callback<StoryHits>() {
@@ -128,7 +111,7 @@ public class BigIndianClient {
     }
 
 
-    public void readStory(final StoryModel story) {
+    public void read(final StoryModel story) {
         story.setClicks_count(story.getClicks_count() + 1);
         Call<Object> call = storyService.read(story.getId());
         call.enqueue(new Callback<Object>() {
