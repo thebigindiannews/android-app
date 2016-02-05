@@ -55,12 +55,13 @@
     </RelativeLayout>
 
     <HorizontalScrollView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="6dip"
-        android:layout_marginLeft="15dip"
-        android:layout_marginRight="6dip"
         android:layout_marginTop="6dip"
+        android:scrollbarSize="5dp"
         android:scrollbarStyle="outsideInset">
 
         <LinearLayout
@@ -68,7 +69,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <com.enamakel.thebigindiannews.widgets.preference.ThemeView
+            <com.enamakel.thebigindiannews.views.preference.ThemeView
                 android:id="@+id/theme_light"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -77,7 +78,7 @@
                 android:layout_marginTop="@dimen/margin"
                 android:theme="@style/AppTheme"/>
 
-            <com.enamakel.thebigindiannews.widgets.preference.ThemeView
+            <com.enamakel.thebigindiannews.views.preference.ThemeView
                 android:id="@+id/theme_dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -86,7 +87,7 @@
                 android:layout_marginTop="@dimen/margin"
                 android:theme="@style/AppTheme.Dark"/>
 
-            <com.enamakel.thebigindiannews.widgets.preference.ThemeView
+            <com.enamakel.thebigindiannews.views.preference.ThemeView
                 android:id="@+id/theme_sepia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -95,7 +96,7 @@
                 android:layout_marginTop="@dimen/margin"
                 android:theme="@style/AppTheme.Sepia"/>
 
-            <com.enamakel.thebigindiannews.widgets.preference.ThemeView
+            <com.enamakel.thebigindiannews.views.preference.ThemeView
                 android:id="@+id/theme_green"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -104,7 +105,7 @@
                 android:layout_marginTop="@dimen/margin"
                 android:theme="@style/AppTheme.Green"/>
 
-            <com.enamakel.thebigindiannews.widgets.preference.ThemeView
+            <com.enamakel.thebigindiannews.views.preference.ThemeView
                 android:id="@+id/theme_solarized"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -113,16 +114,33 @@
                 android:layout_marginTop="@dimen/margin"
                 android:theme="@style/AppTheme.Solarized"/>
 
-            <com.enamakel.thebigindiannews.widgets.preference.ThemeView
+            <com.enamakel.thebigindiannews.views.preference.ThemeView
                 android:id="@+id/theme_solarized_dark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
                 android:layout_marginTop="@dimen/margin"
                 android:theme="@style/AppTheme.Dark.Solarized"/>
 
+            <com.enamakel.thebigindiannews.views.preference.ThemeView
+                android:id="@+id/theme_blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_marginTop="@dimen/margin"
+                android:theme="@style/AppTheme.Blue"/>
+
+            <com.enamakel.thebigindiannews.views.preference.ThemeView
+                android:id="@+id/theme_orange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:layout_marginTop="@dimen/margin"
+                android:theme="@style/AppTheme.Orange"/>
+
         </LinearLayout>
-
     </HorizontalScrollView>
-
 </LinearLayout>

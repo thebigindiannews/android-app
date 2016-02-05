@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.widgets.preference;
+package com.enamakel.thebigindiannews.views.preference;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;

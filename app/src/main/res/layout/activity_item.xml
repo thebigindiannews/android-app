@@ -47,10 +47,11 @@
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/colorPrimaryDark"
             app:layout_scrollFlags="scroll|snap|enterAlways"
-            app:tabIndicatorColor="@color/black1000"
-            app:tabTextColor="@color/black1000"/>
+            app:tabBackground="?attr/colorPrimaryDark"
+            app:tabIndicatorColor="?android:textColorPrimary"
+            app:tabIndicatorHeight="@dimen/tab_indicator_height"
+            app:tabTextColor="?android:textColorPrimary"/>
 
     </android.support.design.widget.AppBarLayout>
 

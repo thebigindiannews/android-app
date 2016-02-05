@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.widgets.preference;
+package com.enamakel.thebigindiannews.views.preference;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -40,7 +40,7 @@ public class ThemeView extends CardView {
         TypedArray ta = context.obtainStyledAttributes(attrs, new int[]{android.R.attr.theme});
         ContextThemeWrapper wrapper = new ContextThemeWrapper(context, ta.getResourceId(0, R.style.AppTheme));
         ta.recycle();
-        int cardBackgroundColor = AppUtils.getThemedResId(wrapper, R.attr.colorCardBackground);
+        int cardBackgroundColor = AppUtils.getThemedResId(wrapper, R.attr.colorPrimary);
         int textColor = AppUtils.getThemedResId(wrapper, android.R.attr.textColorTertiary);
         setCardBackgroundColor(ContextCompat.getColor(wrapper, cardBackgroundColor));
         ((TextView) findViewById(R.id.content)).setTextColor(ContextCompat.getColor(wrapper, textColor));
