@@ -91,23 +91,33 @@ public class StoryModel extends BaseCardModel<StoryModel> {
 
 
     public StoryModel(String title, String url) {
-        super();
         this.title = title;
         this.url = url;
     }
 
 
     public StoryModel(String _id, String title, String url) {
-        super();
+        this(title, url);
         this._id = _id;
-        this.title = title;
-        this.url = url;
     }
 
 
     public void populate(StoryModel source) {
         _id = source._id;
-        excerpt = source.excerpt;
+        this.excerpt = source.excerpt;
+        this.image_url = source.image_url;
+        this.kind = source.kind;
+        this.merged_story = source.merged_story;
+        this.slug = source.slug;
+        this.story_cache = source.story_cache;
+        this.title = source.title;
+        this.url = source.url;
+        this.thumbnail = source.thumbnail;
+        this.expired = source.expired;
+        this.moderated = source.moderated;
+        this.clicks_count = source.clicks_count;
+        this.comments_count = source.comments_count;
+        this.words_count = source.words_count;
     }
 
 
