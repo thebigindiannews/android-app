@@ -42,6 +42,8 @@ public class ThemePreference extends Preference {
     static final String VALUE_GREEN = "green";
     static final String VALUE_SOLARIZED = "solarized";
     static final String VALUE_SOLARIZED_DARK = "solarized_dark";
+    static final String VALUE_BLUE = "blue";
+    static final String VALUE_ORANGE = "orange";
     static final ArrayMap<Integer, String> BUTTON_VALUE = new ArrayMap<>();
     static final ArrayMap<String, ThemeSpec> VALUE_THEME = new ArrayMap<>();
 
@@ -53,6 +55,8 @@ public class ThemePreference extends Preference {
         BUTTON_VALUE.put(R.id.theme_green, VALUE_GREEN);
         BUTTON_VALUE.put(R.id.theme_solarized, VALUE_SOLARIZED);
         BUTTON_VALUE.put(R.id.theme_solarized_dark, VALUE_SOLARIZED_DARK);
+        BUTTON_VALUE.put(R.id.theme_blue, VALUE_BLUE);
+        BUTTON_VALUE.put(R.id.theme_orange, VALUE_ORANGE);
 
         VALUE_THEME.put(VALUE_LIGHT,
                 new ThemeSpec(R.string.theme_light, R.style.AppTheme, R.style.AppAlertDialog));
@@ -66,6 +70,10 @@ public class ThemePreference extends Preference {
                 new ThemeSpec(R.string.theme_solarized, R.style.AppTheme_Solarized, R.style.AppAlertDialog_Solarized));
         VALUE_THEME.put(VALUE_SOLARIZED_DARK,
                 new ThemeSpec(R.string.theme_solarized_dark, R.style.AppTheme_Dark_Solarized, R.style.AppAlertDialog_Dark_Solarized));
+        VALUE_THEME.put(VALUE_BLUE,
+                new ThemeSpec(R.string.theme_blue, R.style.AppTheme_Blue, R.style.AppAlertDialog_Dark_Solarized));
+        VALUE_THEME.put(VALUE_ORANGE,
+                new ThemeSpec(R.string.theme_orange, R.style.AppTheme_Orange, R.style.AppAlertDialog_Dark_Solarized));
     }
 
 

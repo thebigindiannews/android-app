@@ -32,7 +32,7 @@ public abstract class BaseModel<T> implements Parcelable {
     }
 
 
-    BaseModel() {
+    public BaseModel() {
         longId = nextId();
     }
 

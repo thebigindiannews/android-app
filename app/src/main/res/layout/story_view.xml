@@ -88,7 +88,8 @@
                 android:maxLines="4"
                 android:padding="@dimen/padding"
                 android:text="@string/loading_text"
-                android:textColor="#999"/>
+                android:textColor="#999"
+                android:visibility="gone"/>
 
 
             <LinearLayout
