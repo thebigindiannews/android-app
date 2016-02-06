@@ -3,14 +3,15 @@ package com.enamakel.thebigindiannews.data.clients.bigindian;
 
 import android.content.Context;
 
-import com.enamakel.thebigindiannews.data.providers.managers.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.RetrofitFactory;
-import com.enamakel.thebigindiannews.data.providers.managers.SessionManager;
 import com.enamakel.thebigindiannews.data.clients.FetchMode;
 import com.enamakel.thebigindiannews.data.clients.RestService;
 import com.enamakel.thebigindiannews.data.models.StoryHits;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
+import com.enamakel.thebigindiannews.data.providers.managers.FavoriteManager;
+import com.enamakel.thebigindiannews.data.providers.managers.SessionManager;
+import com.google.gson.annotations.Expose;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class StoriesClient extends Base {
 
     @Inject
     public StoriesClient(Context context, SessionManager sessionManager,
-                 FavoriteManager favoriteManager) {
+                         FavoriteManager favoriteManager) {
         super(context, sessionManager, favoriteManager);
 
         // Initialize retrofit
