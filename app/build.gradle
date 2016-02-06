@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId "com.enamakel.thebigindiannews"
-        minSdkVersion 9
+        minSdkVersion 11
         targetSdkVersion 23
         versionCode 49
         versionName "1.0.0"
