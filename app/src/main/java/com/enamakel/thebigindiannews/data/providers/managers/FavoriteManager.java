@@ -133,7 +133,7 @@ public class FavoriteManager {
 
         final ContentValues contentValues = new ContentValues();
         contentValues.put(FavoriteEntry._ID, story.getId());
-        contentValues.put(FavoriteEntry.COLUMN_NAME_ITEMJSON, story.toJSON());
+        contentValues.put(FavoriteEntry.COLUMN_NAME_JSON, story.toJSON());
         contentValues.put(FavoriteEntry.COLUMN_NAME_TIME, String.valueOf((new Date()).getTime()));
         contentValues.put(FavoriteEntry.COLUMN_NAME_EXCERPT, story.getExcerpt());
         contentValues.put(FavoriteEntry.COLUMN_NAME_TITLE, story.getTitle());
@@ -311,7 +311,7 @@ public class FavoriteManager {
 
         public StoryModel getFavorite() {
             String json = getString(getColumnIndexOrThrow(
-                    FavoriteEntry.COLUMN_NAME_ITEMJSON));
+                    FavoriteEntry.COLUMN_NAME_JSON));
             StoryModel story = StoryModel.fromJSON(json);
             story.setFavorite(true);
             return story;
