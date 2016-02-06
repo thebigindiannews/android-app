@@ -115,7 +115,7 @@ public class FavoriteManager {
         new FavoriteHandler(context.getContentResolver(), new FavoriteCallback() {
             @Override
             void onQueryComplete(ArrayList<StoryModel> favorites) {
-                favorites.clear();
+                favoriteIds.clear();
                 for (StoryModel story : favorites) favoriteIds.add(story.getId());
             }
         }).startQuery(0, null, BigIndianProvider.URI_FAVORITE, null, null, null, null);
