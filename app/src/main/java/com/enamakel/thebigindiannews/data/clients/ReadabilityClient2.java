@@ -70,6 +70,8 @@ public class ReadabilityClient2 {
                             return;
                         }
 
+                        readable.content = fixedContent(readable.content);
+
                         cache(itemId, readable.content);
 
                         if (TextUtils.equals(EMPTY_CONTENT, readable.content))
@@ -134,6 +136,22 @@ public class ReadabilityClient2 {
             this.callback = callback;
             return this;
         }
+    }
+
+
+    /**
+     * Sometimes Readability has parsing issues and messes up the image 'src' attributes. This
+     * function takes the content and gets rid of all the junk text..
+     *
+     * @param content The content from the Readability API
+     * @return Fixed content.
+     */
+    static String fixedContent(String content) {
+        content = content.replaceAll("[.]jpg[^\"']+", ".jpg");
+        content = content.replaceAll("[.]jpeg[^\"']+", ".jpeg");
+        content = content.replaceAll("[.]gif[^\"']+", ".gif");
+        content = content.replaceAll("[.]png[^\"']+", ".png");
+        return content;
     }
 
 
