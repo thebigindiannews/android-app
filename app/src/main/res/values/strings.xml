@@ -41,16 +41,14 @@
         <![CDATA[
             <p>Version: %1$s</p>
             <p>
-                <b>The Big Indian News</b> is a crowd-sourced link aggregator made specially for startups in India.
-                It brings you the most relevant and lastest news from many different sources.
+                <b>The Big Indian News</b> is a news aggregator made specially for startups in India.
+                It brings you both crowd-sourced and rss-feed articles from many different sources, giving more priority to crowd-sourced articles.
                 <br/><br/>
-                Articles come from people who post it on the app or on the site. Articles are moderated so that only
-                relevant articles are published.
+                Articles come from people who post it on the app or on the site and are actively moderated.
                 <br/><br/>
-                The app was created by <b>Steven Enamakel</b> just for fun, and was released on
-                Feburary 2016. It is free, open-source and will never run ads.
+                The app was created by <b>Steven Enamakel</b>, and was released on
+                Feburary 2016. It is free to use and will never run ads.
             </p>
-            <p>This Application is open source at <a href="https://github.com/thebigindiannews/android-app">github.com/thebigindiannews/android-app</a></p>
         ]]>
     </string>
     <string name="libraries_title">Libraries &amp; Resources</string>

@@ -18,22 +18,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="license_text" translatable="false">
         <![CDATA[
-            <p>Copyright 2015 Ha Duy Trung, Steven Enamakel</p>
-            <p>
-                This program is free software: you can redistribute it and/or modify
-                it under the terms of the GNU General Public License as published by
-                the Free Software Foundation, either version 3 of the License, or
-                (at your option) any later version.
-
-                This program is distributed in the hope that it will be useful,
-                but WITHOUT ANY WARRANTY; without even the implied warranty of
-                MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-                GNU General Public License for more details.
-
-                You should have received a copy of the GNU General Public License
-                along with this program.  If not, see http://www.gnu.org/licenses/.
-            </p>
-
+            <p>Copyright 2015 Steven Enamakel. </p>
         ]]>
     </string>
     <string name="libraries_text" translatable="false">
@@ -52,6 +37,7 @@
             &nbsp;&nbsp;&nbsp;&nbsp;Libre Baskerville - OFL License v1.1<br/>
             &nbsp;&nbsp;&nbsp;&nbsp;Roboto Slab - Apache License v2.0<br/>
             &nbsp;&nbsp;&nbsp;&nbsp;Roboto - Apache License v2.0<br/>
+
         ]]>
     </string>
     <string name="third_party_licenses_text" translatable="false" tools:ignore="TypographyOther">
