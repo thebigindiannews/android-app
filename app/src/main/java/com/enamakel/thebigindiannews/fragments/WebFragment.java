@@ -43,7 +43,7 @@ import android.widget.TextView;
 import com.enamakel.thebigindiannews.ActivityModule;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.data.managers.ItemManager;
+import com.enamakel.thebigindiannews.data.providers.managers.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.fragments.base.LazyLoadFragment;

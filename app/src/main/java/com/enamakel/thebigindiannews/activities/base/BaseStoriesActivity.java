@@ -25,7 +25,7 @@ import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
 
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.data.managers.ItemManager;
+import com.enamakel.thebigindiannews.data.providers.managers.ItemManager;
 import com.enamakel.thebigindiannews.data.clients.FetchMode;
 import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
 import com.enamakel.thebigindiannews.fragments.ListFragment;

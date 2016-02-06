@@ -33,7 +33,7 @@ import android.view.ViewGroup;
 import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
-import com.enamakel.thebigindiannews.data.managers.FavoriteManager;
+import com.enamakel.thebigindiannews.data.providers.managers.FavoriteManager;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.util.MenuTintDelegate;
 import com.enamakel.thebigindiannews.widgets.PopupMenu;

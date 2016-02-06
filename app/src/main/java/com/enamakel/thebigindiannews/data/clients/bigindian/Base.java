@@ -4,8 +4,8 @@ package com.enamakel.thebigindiannews.data.clients.bigindian;
 import android.content.ContentResolver;
 import android.content.Context;
 
-import com.enamakel.thebigindiannews.data.managers.FavoriteManager;
-import com.enamakel.thebigindiannews.data.managers.SessionManager;
+import com.enamakel.thebigindiannews.data.providers.managers.FavoriteManager;
+import com.enamakel.thebigindiannews.data.providers.managers.SessionManager;
 import com.enamakel.thebigindiannews.data.clients.BigIndianClient;
 
 

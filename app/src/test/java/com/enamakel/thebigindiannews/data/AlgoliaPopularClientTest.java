@@ -17,7 +17,7 @@ import dagger.ObjectGraph;
 import dagger.Provides;
 
 import com.enamakel.thebigindiannews.data.clients.AlgoliaPopularClient;
-import com.enamakel.thebigindiannews.data.managers.ItemManager;
+import com.enamakel.thebigindiannews.data.providers.managers.ItemManager;
 import com.enamakel.thebigindiannews.test.ParameterizedRobolectricGradleTestRunner;
 import retrofit.Call;
 import retrofit.Callback;

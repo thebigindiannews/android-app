@@ -5,7 +5,7 @@ import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.text.Spannable;
 
-import com.enamakel.thebigindiannews.data.managers.ItemManager;
+import com.enamakel.thebigindiannews.data.providers.managers.ItemManager;
 
 public abstract class TestItem implements ItemManager.Item {
     private boolean favorite;

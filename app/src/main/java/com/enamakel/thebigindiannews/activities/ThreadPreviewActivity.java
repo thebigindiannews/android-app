@@ -30,7 +30,7 @@ import javax.inject.Named;
 import com.enamakel.thebigindiannews.ActivityModule;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.base.InjectableActivity;
-import com.enamakel.thebigindiannews.data.managers.ItemManager;
+import com.enamakel.thebigindiannews.data.providers.managers.ItemManager;
 import com.enamakel.thebigindiannews.widgets.CommentItemDecoration;
 
 

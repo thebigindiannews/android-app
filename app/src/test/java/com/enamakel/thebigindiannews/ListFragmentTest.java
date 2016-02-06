@@ -26,7 +26,7 @@ import javax.inject.Named;
 
 import com.enamakel.thebigindiannews.activities.ListActivity;
 import com.enamakel.thebigindiannews.data.clients.HackerNewsClient;
-import com.enamakel.thebigindiannews.data.managers.ItemManager;
+import com.enamakel.thebigindiannews.data.providers.managers.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.TestHnItem;
 import com.enamakel.thebigindiannews.fragments.ListFragment;

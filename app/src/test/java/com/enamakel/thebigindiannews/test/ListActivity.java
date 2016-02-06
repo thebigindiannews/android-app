@@ -6,7 +6,7 @@ import android.support.v7.widget.Toolbar;
 import com.enamakel.thebigindiannews.activities.base.InjectableActivity;
 import com.enamakel.thebigindiannews.util.MultiPaneListener;
 import com.enamakel.thebigindiannews.R;
-import com.enamakel.thebigindiannews.data.managers.ItemManager;
+import com.enamakel.thebigindiannews.data.providers.managers.ItemManager;
 
 import static org.mockito.Mockito.mock;
 

@@ -45,7 +45,7 @@ import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.SearchActivity;
 import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
 import com.enamakel.thebigindiannews.adapters.StoryPagerAdapter;
-import com.enamakel.thebigindiannews.data.managers.SessionManager;
+import com.enamakel.thebigindiannews.data.providers.managers.SessionManager;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.data.models.base.BaseCardModel;
 import com.enamakel.thebigindiannews.util.AlertDialogBuilder;

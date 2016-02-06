@@ -36,7 +36,7 @@ import javax.inject.Named;
 import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.activities.ComposeActivity;
 import com.enamakel.thebigindiannews.activities.LoginActivity;
-import com.enamakel.thebigindiannews.data.managers.ItemManager;
+import com.enamakel.thebigindiannews.data.providers.managers.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.fragments.ItemFragment;
 import com.enamakel.thebigindiannews.test.ShadowRecyclerView;

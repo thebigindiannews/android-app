@@ -24,7 +24,7 @@ import android.view.ViewGroup;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
 import com.enamakel.thebigindiannews.activities.ThreadPreviewActivity;
-import com.enamakel.thebigindiannews.data.managers.ItemManager;
+import com.enamakel.thebigindiannews.data.providers.managers.ItemManager;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.widgets.SubmissionViewHolder;
 

@@ -3,10 +3,10 @@ package com.enamakel.thebigindiannews.data.clients.bigindian;
 
 import android.content.Context;
 
-import com.enamakel.thebigindiannews.data.managers.FavoriteManager;
+import com.enamakel.thebigindiannews.data.providers.managers.FavoriteManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.RetrofitFactory;
-import com.enamakel.thebigindiannews.data.managers.SessionManager;
+import com.enamakel.thebigindiannews.data.providers.managers.SessionManager;
 import com.enamakel.thebigindiannews.data.clients.FetchMode;
 import com.enamakel.thebigindiannews.data.clients.RestService;
 import com.enamakel.thebigindiannews.data.models.StoryHits;
