@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.enamakel.thebigindiannews.data.managers;
+package com.enamakel.thebigindiannews.data.providers.managers;
 
 import android.content.Context;
 import android.os.Parcelable;
