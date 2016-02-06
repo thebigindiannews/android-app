@@ -78,6 +78,7 @@ public class ReportManager {
     public void check(ContentResolver contentResolver, final String itemId,
                       final OperationCallbacks callbacks) {
         Log.d(TAG + ":check", itemId);
+        Log.d(TAG + ":check", BigIndianProvider.URI_REPORT.toString());
         if (itemId == null) return;
         if (callbacks == null) return;
 
@@ -107,10 +108,8 @@ public class ReportManager {
 
 
         public ReportModel getReport() {
-            String json = getString(getColumnIndexOrThrow(
-                    ReportEntry.COLUMN_NAME_JSON));
-            ReportModel report = ReportModel.fromJSON(json);
-            return report;
+            String json = getString(getColumnIndexOrThrow(ReportEntry.COLUMN_NAME_JSON));
+            return ReportModel.fromJSON(json);
         }
     }
 
@@ -119,8 +118,8 @@ public class ReportManager {
         ReportCallback callback;
 
 
-        public ReportHandler(ContentResolver cr, @NonNull ReportCallback callback) {
-            this(cr);
+        public ReportHandler(ContentResolver contentResolver, @NonNull ReportCallback callback) {
+            this(contentResolver);
             this.callback = callback;
         }
 

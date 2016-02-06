@@ -37,11 +37,12 @@ import com.enamakel.thebigindiannews.AppUtils;
 import com.enamakel.thebigindiannews.R;
 import com.enamakel.thebigindiannews.accounts.UserServices;
 import com.enamakel.thebigindiannews.activities.SingleStoryActivity;
-import com.enamakel.thebigindiannews.data.providers.managers.FavoriteManager;
-import com.enamakel.thebigindiannews.data.providers.managers.ItemManager;
 import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.data.providers.BigIndianProvider;
+import com.enamakel.thebigindiannews.data.providers.managers.FavoriteManager;
+import com.enamakel.thebigindiannews.data.providers.managers.ItemManager;
+import com.enamakel.thebigindiannews.data.providers.managers.ReportManager;
 import com.enamakel.thebigindiannews.views.StoryReportView;
 import com.enamakel.thebigindiannews.widgets.PopupMenu;
 
@@ -68,6 +69,7 @@ public class StoryRecyclerViewAdapter extends
     static final String STATE_USERNAME = "state:username";
 
     @Inject @Named(ActivityModule.HN) ItemManager itemManager;
+    @Inject ReportManager reportManager;
 
     @Getter ArrayList<StoryModel> items;
     @Setter String username;
@@ -339,7 +341,7 @@ public class StoryRecyclerViewAdapter extends
                         return true;
 
                     case R.id.menu_contextual_report:
-                        StoryReportView.buildDialog(context, story, bigIndianClient).show();
+                        StoryReportView.buildDialog(context, story, bigIndianClient, reportManager).show();
                         return true;
 
                 }

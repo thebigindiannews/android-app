@@ -18,8 +18,6 @@ import com.enamakel.thebigindiannews.data.models.ReportModel;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
 import com.enamakel.thebigindiannews.data.providers.managers.ReportManager;
 
-import javax.inject.Inject;
-
 
 public class StoryReportView extends RelativeLayout implements
         View.OnClickListener,
@@ -29,13 +27,13 @@ public class StoryReportView extends RelativeLayout implements
     RadioGroup radioGroup;
     EditText reportReason;
     Context context;
-    BigIndianClient bigIndianClient;
 
-    @Inject ReportManager reportManager;
+    BigIndianClient bigIndianClient;
+    ReportManager reportManager;
 
 
     public StoryReportView(final Context context, StoryModel story, final AlertDialog dialog,
-                           BigIndianClient bigIndianClient) {
+                           BigIndianClient bigIndianClient, ReportManager reportManager) {
         super(context);
         inflate(context, R.layout.story_report_view, this);
 
@@ -57,6 +55,7 @@ public class StoryReportView extends RelativeLayout implements
         this.story = story;
         this.dialog = dialog;
         this.bigIndianClient = bigIndianClient;
+        this.reportManager = reportManager;
         initializeViews();
         initializeDialog();
     }
@@ -156,7 +155,7 @@ public class StoryReportView extends RelativeLayout implements
      *
      * @param report The {@link ReportModel} to send to the server.
      */
-    void submit(ReportModel report) {
+    void submit(final ReportModel report) {
         // Set the story id in the report.
         report.setStory(story.getId());
 
@@ -166,6 +165,7 @@ public class StoryReportView extends RelativeLayout implements
             public void onResponse(ReportModel response) {
                 Toast.makeText(context, R.string.report_dialog_sent, Toast.LENGTH_LONG)
                         .show();
+                reportManager.add(context, report);
                 dialog.dismiss();
             }
 
@@ -187,7 +187,7 @@ public class StoryReportView extends RelativeLayout implements
      * @return An {@link AlertDialog} instance which is ready to be displayed to the user.
      */
     public static AlertDialog buildDialog(Context context, StoryModel story,
-                                          BigIndianClient client) {
+                                          BigIndianClient client, ReportManager reportManager) {
         final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle(R.string.report_dialog_title)
                 .setPositiveButton(R.string.submit, new DialogInterface.OnClickListener() {
@@ -200,7 +200,7 @@ public class StoryReportView extends RelativeLayout implements
                 .create();
 
         // Attach the report view to the dialog.
-        StoryReportView.attachToDialog(context, story, dialog, client);
+        StoryReportView.attachToDialog(context, story, dialog, client, reportManager);
 
         return dialog;
     }
@@ -214,7 +214,7 @@ public class StoryReportView extends RelativeLayout implements
      * @param dialog  The dialog to put the view in.
      */
     public static void attachToDialog(Context context, StoryModel story, AlertDialog dialog,
-                                      BigIndianClient client) {
-        new StoryReportView(context, story, dialog, client);
+                                      BigIndianClient client, ReportManager reportManager) {
+        new StoryReportView(context, story, dialog, client, reportManager);
     }
 }
