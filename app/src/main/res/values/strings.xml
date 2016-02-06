@@ -250,6 +250,11 @@
     <string name="submission_guidelines">Submission guidelines</string>
     <string name="title_activity_user">My Profile</string>
     <string name="user_info">Created: %1$s - karma: %2$s</string>
+    <string name="reported_error">You have already reported this story</string>
+    <string name="report_dialog_choose_error">You need to choose at least one option</string>
+    <string name="report_dialog_reason_error">You must give a reason</string>
+    <string name="report_dialog_sent_error">Your report could not be sent</string>
+    <string name="report_dialog_sent">Thank you, Your report has been sent!</string>
     <plurals name="submissions_count">
         <item quantity="zero">%1$s submission</item>
         <item quantity="one">%1$s submission</item>

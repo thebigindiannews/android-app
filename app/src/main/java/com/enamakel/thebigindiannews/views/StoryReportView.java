@@ -16,6 +16,9 @@ import com.enamakel.thebigindiannews.data.ResponseListener;
 import com.enamakel.thebigindiannews.data.clients.BigIndianClient;
 import com.enamakel.thebigindiannews.data.models.ReportModel;
 import com.enamakel.thebigindiannews.data.models.StoryModel;
+import com.enamakel.thebigindiannews.data.providers.managers.ReportManager;
+
+import javax.inject.Inject;
 
 
 public class StoryReportView extends RelativeLayout implements
@@ -26,21 +29,34 @@ public class StoryReportView extends RelativeLayout implements
     RadioGroup radioGroup;
     EditText reportReason;
     Context context;
-
     BigIndianClient bigIndianClient;
 
+    @Inject ReportManager reportManager;
 
-    public StoryReportView(Context context, StoryModel story, final AlertDialog dialog, BigIndianClient client) {
+
+    public StoryReportView(final Context context, StoryModel story, final AlertDialog dialog,
+                           BigIndianClient bigIndianClient) {
         super(context);
         inflate(context, R.layout.story_report_view, this);
 
         // Check if a story has been reported before or not.
+        reportManager.check(context.getContentResolver(), story.getId(),
+                new ReportManager.OperationCallbacks() {
+                    @Override
+                    public void onCheckReportComplete(boolean isReported) {
+                        if (isReported) {
+                            Toast.makeText(context, R.string.reported_error, Toast.LENGTH_LONG)
+                                    .show();
+                            dialog.dismiss();
+                        }
+                    }
+                });
 
+        // Initialize the different variables
         this.context = context;
         this.story = story;
         this.dialog = dialog;
-        bigIndianClient = client;
-
+        this.bigIndianClient = bigIndianClient;
         initializeViews();
         initializeDialog();
     }
@@ -90,7 +106,7 @@ public class StoryReportView extends RelativeLayout implements
 
         switch (radioGroup.getCheckedRadioButtonId()) {
             case -1:
-                Toast.makeText(context, "You need to choose at least one optio", Toast.LENGTH_LONG)
+                Toast.makeText(context, R.string.report_dialog_choose_error, Toast.LENGTH_LONG)
                         .show();
                 break;
             case R.id.radio_confidential:
@@ -121,7 +137,7 @@ public class StoryReportView extends RelativeLayout implements
             case R.id.radio_others:
                 String reason = reportReason.getText().toString();
                 if (reason.isEmpty()) {
-                    Toast.makeText(context, "You need to give a report reason", Toast.LENGTH_LONG)
+                    Toast.makeText(context, R.string.report_dialog_reason_error, Toast.LENGTH_LONG)
                             .show();
                 } else {
                     report.setType(ReportModel.Type.OTHER);
@@ -144,11 +160,11 @@ public class StoryReportView extends RelativeLayout implements
         // Set the story id in the report.
         report.setStory(story.getId());
 
-        // send to server
+        // Send to server
         bigIndianClient.reports.submit(report, new ResponseListener<ReportModel>() {
             @Override
             public void onResponse(ReportModel response) {
-                Toast.makeText(context, "Thank you, Your report has been sent!", Toast.LENGTH_LONG)
+                Toast.makeText(context, R.string.report_dialog_sent, Toast.LENGTH_LONG)
                         .show();
                 dialog.dismiss();
             }
@@ -156,7 +172,7 @@ public class StoryReportView extends RelativeLayout implements
 
             @Override
             public void onError(String errorMessage) {
-                Toast.makeText(context, "Your report could not be sent.", Toast.LENGTH_LONG)
+                Toast.makeText(context, R.string.report_dialog_sent_error, Toast.LENGTH_LONG)
                         .show();
             }
         });
