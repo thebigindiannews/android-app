@@ -22,4 +22,9 @@ public class ReportModel extends BaseModel<ReportModel> {
         VULGUR,
         OTHER
     }
+
+
+    public static ReportModel fromJSON(String json) {
+        return gson.fromJson(json, ReportModel.class);
+    }
 }

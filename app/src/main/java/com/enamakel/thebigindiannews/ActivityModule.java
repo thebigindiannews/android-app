@@ -44,6 +44,7 @@ import com.enamakel.thebigindiannews.adapters.ThreadPreviewRecyclerViewAdapter;
 import com.enamakel.thebigindiannews.data.providers.managers.FavoriteManager;
 import com.enamakel.thebigindiannews.data.providers.managers.ItemManager;
 import com.enamakel.thebigindiannews.data.RestServiceFactory;
+import com.enamakel.thebigindiannews.data.providers.managers.ReportManager;
 import com.enamakel.thebigindiannews.data.providers.managers.SessionManager;
 import com.enamakel.thebigindiannews.data.providers.managers.UserManager;
 import com.enamakel.thebigindiannews.data.clients.AlgoliaClient;
@@ -89,6 +90,7 @@ import dagger.Provides;
                 PopularActivity.class,
                 ReadabilityFragment.class,
                 ReportsClient.class,
+                ReportManager.class,
                 SearchActivity.class,
                 SettingsActivity.class,
                 SinglePageItemRecyclerViewAdapter.class,

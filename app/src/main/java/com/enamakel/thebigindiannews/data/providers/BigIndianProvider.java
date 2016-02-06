@@ -50,6 +50,11 @@ public class BigIndianProvider extends ContentProvider {
             .appendPath(ReadabilityEntry.TABLE_NAME)
             .build();
 
+    public static final Uri URI_REPORT = BASE_URI.buildUpon()
+            .appendPath(ReportEntry.TABLE_NAME)
+            .build();
+
+
     static final String READABILITY_MAX_ENTRIES = "50";
     DbHelper dbHelper;
 
